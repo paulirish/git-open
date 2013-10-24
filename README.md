@@ -15,9 +15,9 @@ A command-line script to open the GitHub page for a repository.
     > open https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/master
 
 ## Installation
-On Unix systems you have a several options. Namely creating an alias or a symlink to `gh.sh`.
+On Unix systems you have several options. Namely creating an alias or a symbolic link to `gh.sh`.
 
-I prefer to create a symlink within `/usr/local/bin/`:
+I prefer to create a symbolic link within `/usr/local/bin/`:
 
     ln -s /Users/jason/Documents/workspace/gh/gh.sh /usr/local/bin/gh
 
