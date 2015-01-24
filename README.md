@@ -17,6 +17,9 @@ A command-line script to open the GitHub page for a repository.
 
 ## Installation
 
-Put this in `~/bin` and make sure that's in your PATH.
+Put the bash script in `~/bin/` and make sure that folder's in your PATH.
 
+```sh
+wget -O ~/bin/git-open https://raw.githubusercontent.com/paulirish/git-open/master/git-open
+```
 
