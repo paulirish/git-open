@@ -56,6 +56,14 @@ fi
 # simplify URL for master
 giturl=${giturl/tree\/master/}
 
+# get corrent open browser command
+if [ $(uname -s) == "Darwin" ]
+then
+  open=open
+else
+  open=xdg-open
+fi
+
 # open it in a browser
-open $giturl
+$open $giturl
 exit 0
