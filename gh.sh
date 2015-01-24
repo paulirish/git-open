@@ -4,7 +4,7 @@
 #
 # gh [remote] [branch]
 
-git rev-parse 2>/dev/null
+git rev-parse --is-inside-work-tree 2>/dev/null
 
 if [[ $? != 0 ]]
 then
@@ -32,7 +32,7 @@ giturl=${giturl%\.git}
 
 if [ -z "$2" ]
 then
-    branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+    branch=`git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'`
 else
     branch="$2"
 fi
