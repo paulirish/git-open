@@ -1,4 +1,5 @@
 # git-open
+
 A command-line script to open the GitHub page for a repository.
 
 ## Usage
@@ -23,3 +24,5 @@ Put the bash script in `~/bin/` and make sure that folder's in your PATH.
 wget -O ~/bin/git-open https://raw.githubusercontent.com/paulirish/git-open/master/git-open
 ```
 
+## Thx
+@jasonmccreary did [all the hard work](https://github.com/jasonmccreary/gh)
