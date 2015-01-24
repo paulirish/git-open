@@ -1,6 +1,6 @@
 # git-open
 
-A command-line script to open the GitHub page for a repository.
+A command-line script to open the GitHub page, or website for a repository.
 
 ## Usage
     git open [remote-name] [branch-name]
@@ -26,3 +26,7 @@ wget -O ~/bin/git-open https://raw.githubusercontent.com/paulirish/git-open/mast
 
 ## Thx
 @jasonmccreary did [all the hard work](https://github.com/jasonmccreary/gh)
+
+## We're not done.
+
+Check the issues for ways this could be way better.
