@@ -42,5 +42,8 @@ then
     giturl="${giturl}/tree/${branch}"
 fi
 
+# simplify URL for master
+giturl=${giturl/tree\/master/}
+
 open $giturl
 exit 0
