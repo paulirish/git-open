@@ -1,24 +1,22 @@
-# gh
+# git-open
 A command-line script to open the GitHub page for a repository.
 
 ## Usage
-    gh [remote-name] [branch-name]
+    git open [remote-name] [branch-name]
 
 ### Examples
-    $ gh
+    $ git open
     > open https://github.com/REMOTE_ORIGIN_USER/CURRENT_REPO/tree/CURRENT_BRANCH
 
-    $ gh upstream
+    $ git open upstream
     > open https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/CURRENT_BRANCH
 
-    $ gh upstream master
+    $ git open upstream master
     > open https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/master
 
+
 ## Installation
-On Unix systems you have several options. Namely creating an alias or a symbolic link to `gh.sh`.
 
-I prefer to create a symbolic link within `/usr/local/bin/`:
+Put this in `~/bin` and make sure that's in your PATH.
 
-    ln -s /Users/jason/Documents/workspace/gh/gh.sh /usr/local/bin/gh
 
-**Note:** `open` my not work across all platforms. On some Linux distributions you can replace `open` to `xdg-open`.
