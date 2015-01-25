@@ -36,7 +36,13 @@ fi
 
 
 # URL normalization
-giturl=${giturl/git\@github\.com\:/https://github.com/}
+# Github support
+if grep -q github <<<$giturl; then
+    giturl=${giturl/git\@github\.com\:/https://github.com/}
+# bitbucket support
+elif grep -q bitbucket <<<$giturl; then
+    giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
+fi
 giturl=${giturl%\.git}
 
 
@@ -56,7 +62,7 @@ fi
 # simplify URL for master
 giturl=${giturl/tree\/master/}
 
-# get corrent open browser command
+# get current open browser command
 if [ $(uname -s) == "Darwin" ]
 then
   open=open
