@@ -8,7 +8,7 @@
 
 
 # are we in a git repo?
-git rev-parse --is-inside-work-tree 2>/dev/null
+git rev-parse --is-inside-work-tree &>/dev/null
 
 if [[ $? != 0 ]]
 then
