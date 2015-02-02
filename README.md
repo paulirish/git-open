@@ -30,6 +30,8 @@ chmod +x ~/bin/git-open
 ## Thx
 @jasonmccreary did [all the hard work](https://github.com/jasonmccreary/gh)
 
-## We're not done.
+## License
 
-Check the issues for ways this could be way better.
+Copyright Jason McCreary & Paul Irish. Licsened under MIT.
+
+http://opensource.org/licenses/MIT
