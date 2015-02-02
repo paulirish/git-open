@@ -73,5 +73,5 @@ else
 fi
 
 # open it in a browser
-$open $giturl
+$open $giturl &> /dev/null
 exit 0
