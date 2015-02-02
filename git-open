@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Opens the github page for a repo/branch in your browser.
 # https://github.com/paulirish/git-open/
