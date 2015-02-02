@@ -39,9 +39,11 @@ fi
 # Github support
 if grep -q github <<<$giturl; then
     giturl=${giturl/git\@github\.com\:/https://github.com/}
+    providerUrlDifference=tree
 # bitbucket support
 elif grep -q bitbucket <<<$giturl; then
     giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
+    providerUrlDifference=branch
 fi
 giturl=${giturl%\.git}
 
@@ -56,7 +58,7 @@ fi
 
 if [ ! -z "$branch" ]
 then
-    giturl="${giturl}/tree/${branch}"
+    giturl="${giturl}/${providerUrlDifference}/${branch}"
 fi
 
 # simplify URL for master
