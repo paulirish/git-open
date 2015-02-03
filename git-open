@@ -51,7 +51,7 @@ giturl=${giturl%\.git}
 # get current branch
 if [ -z "$2" ]
 then
-    branch=`git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'`
+    branch=`git symbolic-ref -q --short HEAD`
 else
     branch="$2"
 fi
