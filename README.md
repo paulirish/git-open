@@ -32,6 +32,6 @@ chmod +x ~/bin/git-open
 
 ## License
 
-Copyright Jason McCreary & Paul Irish. Licsened under MIT.
+Copyright Jason McCreary & Paul Irish. Licensed under MIT.
 
 http://opensource.org/licenses/MIT
