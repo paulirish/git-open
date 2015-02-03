@@ -34,6 +34,13 @@ then
     exit 1
 fi
 
+# get current branch
+if [ -z "$2" ]
+then
+    branch=`git symbolic-ref -q --short HEAD`
+else
+    branch="$2"
+fi
 
 # URL normalization
 # Github support
@@ -44,17 +51,18 @@ if grep -q github <<<$giturl; then
 elif grep -q bitbucket <<<$giturl; then
     giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
     providerUrlDifference=branch
+# Atlassian Stash support - Stash URLs always contain the /scm/ part
+elif grep -q "/scm/" <<<$giturl; then
+  re='(.*)/scm/(.*)/(.*)\.git'
+
+  if [[ $giturl =~ $re ]]
+  then
+    giturl=${BASH_REMATCH[1]}/projects/${BASH_REMATCH[2]}/repos/${BASH_REMATCH[3]}
+    providerUrlDifference=browse
+    branch="?at=refs%2Fheads%2F${branch}"
+  fi
 fi
 giturl=${giturl%\.git}
-
-
-# get current branch
-if [ -z "$2" ]
-then
-    branch=`git symbolic-ref -q --short HEAD`
-else
-    branch="$2"
-fi
 
 if [ ! -z "$branch" ]
 then
