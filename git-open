@@ -70,7 +70,12 @@ then
   open=open
 elif [ "$TERM" == "cygwin" ]
 then
-  open=start
+  if [ "$MSYSTEM" == "MINGW32" ]
+  then
+    open=start
+  else
+    open=cygstart
+  fi
 else
   open=xdg-open
 fi
