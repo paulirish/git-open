@@ -19,13 +19,7 @@ fi
 
 # assume origin if not provided
 # fallback to upstream if neither is present.
-remote="origin"
-if [ ! -z "$1" ]
-then
-    remote="$1"
-fi
-
-remote_url="remote.${remote}.url"
+remote_url="remote.${1:-origin}.url"
 
 giturl=$(git config --get $remote_url)
 if [ -z "$giturl" ]
