@@ -61,6 +61,20 @@ elif grep -q "/scm/" <<<$giturl; then
     providerUrlDifference=browse
     branch="?at=refs%2Fheads%2F${branch}"
   fi
+else
+  gitlab_domain=$(git config --get gitopen.gitlab.domain)
+  if [ ! -z "$gitlab_domain" ]; then
+    if grep -q $gitlab_domain <<<$giturl; then
+      giturl=${giturl/git\@${gitlab_domain}:/https://${gitlab_domain}/}
+
+      gitlab_urldifference=$(git config --get gitopen.gitlab.urldifference)
+      if [ -z "$gitlab_urldifference" ]; then
+        providerUrlDifference=tree
+      else
+        providerUrlDifference=$gitlab_urldifference
+      fi
+    fi
+  fi
 fi
 giturl=${giturl%\.git}
 
