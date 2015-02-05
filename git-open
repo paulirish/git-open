@@ -68,6 +68,14 @@ giturl=${giturl/tree\/master/}
 if [ $(uname -s) == "Darwin" ]
 then
   open=open
+elif [ "$TERM" == "cygwin" ]
+then
+  if [ "$MSYSTEM" == "MINGW32" ]
+  then
+    open=start
+  else
+    open=cygstart
+  fi
 else
   open=xdg-open
 fi
