@@ -44,6 +44,10 @@ if grep -q github <<<$giturl; then
 elif grep -q bitbucket <<<$giturl; then
     giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
     providerUrlDifference=branch
+# gitlab support
+elif grep -q gitlab <<<$giturl; then
+    giturl=${giturl/git\@gitlab\.com\:/https://gitlab.com/}
+    providerUrlDifference=tree
 fi
 giturl=${giturl%\.git}
 
