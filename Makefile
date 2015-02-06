@@ -1,8 +1,12 @@
+GETPATH = $(firstword $(subst :, ,$1))
+BINPATH = $(call GETPATH, ${PATH}) 
+GOPATH = $(join ${BINPATH}, /git-open)
 
 install:
-	@cp -r ./git-open /usr/local/bin
-	@chmod +x /usr/local/bin/git-open
+	@cp -r ./git-open ${GOPATH}
+	@chmod +x ${GOPATH}
 
 clean:
-	@rm /usr/local/bin/git-open
+	@rm ${GOPATH}
+
 
