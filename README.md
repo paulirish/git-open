@@ -20,11 +20,9 @@ A command-line script to open the GitHub page, or website for a repository.
 
 ## Installation
 
-Put the bash script in `~/bin/` and make sure that folder's in your PATH.
-
-```sh
-curl -o ~/bin/git-open https://raw.githubusercontent.com/paulirish/git-open/master/git-open
-chmod +x ~/bin/git-open
+```sh 
+git clone https://github.com/paulirish/git-open.git && cd ./git-open
+make
 ```
 
 ## Thx
