@@ -54,6 +54,8 @@ elif grep -q bitbucket <<<$giturl; then
 # Atlassian Stash support - Stash URLs always contain the /scm/ part
 elif grep -q "/scm/" <<<$giturl; then
   re='(.*)/scm/(.*)/(.*)\.git'
+fi
+giturl=${giturl%\.git}
 
   if [[ $giturl =~ $re ]]
   then
