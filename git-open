@@ -87,20 +87,12 @@ fi
 giturl=${giturl/tree\/master/}
 
 # get current open browser command
-if [ $(uname -s) == "Darwin" ]
-then
-  open=open
-elif [ "$TERM" == "cygwin" ]
-then
-  if [ "$MSYSTEM" == "MINGW32" ]
-  then
-    open=start
-  else
-    open=cygstart
-  fi
-else
-  open=xdg-open
-fi
+case $( uname -s ) in
+Darwin)  open=open;;
+MINGW*)  open=start;;
+CYGWIN*) open=cygstart;;
+*)       open=xdg-open;;
+esac
 
 # open it in a browser
 $open $giturl &> /dev/null
