@@ -42,6 +42,9 @@ else
     branch="$2"
 fi
 
+# Make hash character url friendly
+branch=${branch//#/%23}
+
 # URL normalization
 # Github 
 if grep -q github <<<$giturl; then
