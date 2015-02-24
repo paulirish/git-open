@@ -51,18 +51,16 @@ if grep -q github <<<$giturl; then
 elif grep -q bitbucket <<<$giturl; then
     giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
     providerUrlDifference=branch
-# Atlassian Stash support - Stash URLs always contain the /scm/ part
+# Atlassian Stash
 elif grep -q "/scm/" <<<$giturl; then
   re='(.*)/scm/(.*)/(.*)\.git'
-fi
-giturl=${giturl%\.git}
-
   if [[ $giturl =~ $re ]]
   then
     giturl=${BASH_REMATCH[1]}/projects/${BASH_REMATCH[2]}/repos/${BASH_REMATCH[3]}
     providerUrlDifference=browse
     branch="?at=refs%2Fheads%2F${branch}"
   fi
+# Gitlab
 else
   # custom gitlab
   gitlab_domain=$(git config --get gitopen.gitlab.domain)
