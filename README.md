@@ -32,20 +32,11 @@ chmod +x ~/bin/git-open
 To configure gitlab support you need to set gitopen.gitlab.domain:
 
 ```
-git config --global gitopen.gitlab.domain  [yourdomain.here]
+git config --global gitopen.gitlab.domain [yourdomain.here]
+# or
+git config gitopen.gitlab.domain [yourdomain.here] # in your local repository
 ```
 
-or
-
-```
-git config gitopen.gitlab.domain [yourdomain.here] in your local repository
-```
-
-By default it goes to the tree view but can be changed to go to the commits view like so:
-
-```
-git config gitopen.gitlab.urldifference commits
-```
 
 ## Thx
 @jasonmccreary did [all the hard work](https://github.com/jasonmccreary/gh)
