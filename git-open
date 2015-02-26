@@ -42,7 +42,8 @@ else
     branch="$2"
 fi
 
-# Make hash character url friendly
+# Make # and % characters url friendly
+branch=${branch//%/%25}
 branch=${branch//#/%23}
 
 # URL normalization
