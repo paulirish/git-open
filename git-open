@@ -43,12 +43,8 @@ else
 fi
 
 # URL normalization
-# Github 
-if grep -q github <<<$giturl; then
-    giturl=${giturl/git\@github\.com\:/https://github.com/}
-    providerUrlDifference=tree
 # bitbucket 
-elif grep -q bitbucket <<<$giturl; then
+if grep -q bitbucket <<<$giturl; then
     giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
     providerUrlDifference=branch
 # Atlassian Stash
@@ -60,7 +56,6 @@ elif grep -q "/scm/" <<<$giturl; then
     providerUrlDifference=browse
     branch="?at=refs%2Fheads%2F${branch}"
   fi
-# Gitlab
 else
   # custom gitlab
   gitlab_domain=$(git config --get gitopen.gitlab.domain)
@@ -72,6 +67,10 @@ else
   # hosted gitlab
   elif grep -q gitlab <<<$giturl; then
     giturl=${giturl/git\@gitlab\.com\:/https://gitlab.com/}
+    providerUrlDifference=tree
+  # Assume it's a GitHub repo (either in github.com or a GitHub Enterprise server)
+  else
+    giturl=$(sed 's/^git@\([^:]*\):\(.*\)/https:\/\/\1\/\2/' <<< $giturl)
     providerUrlDifference=tree
   fi
 fi
