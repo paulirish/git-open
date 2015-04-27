@@ -43,7 +43,7 @@ else
 fi
 
 # Make # and % characters url friendly
-branch=${${branch//%/%25}//#/%23}
+branch=${branch//%/%25} && branch=${branch//#/%23}
 
 # URL normalization
 # Github 
