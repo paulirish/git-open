@@ -43,6 +43,7 @@ else
 fi
 
 # Make # and % characters url friendly
+#   github.com/paulirish/git-open/pull/24
 branch=${branch//%/%25} && branch=${branch//#/%23}
 
 # URL normalization
@@ -50,11 +51,11 @@ branch=${branch//%/%25} && branch=${branch//#/%23}
 if grep -q gist.github <<<$giturl; then
     giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com}
     providerUrlDifference=tree
-# Github 
+# Github
 elif grep -q github <<<$giturl; then
     giturl=${giturl/git\@github\.com\:/https://github.com/}
     providerUrlDifference=tree
-# bitbucket 
+# bitbucket
 elif grep -q bitbucket <<<$giturl; then
     giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
     providerUrlDifference=branch
