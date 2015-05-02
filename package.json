@@ -1,6 +1,6 @@
 {
   "name": "git-open",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Type `git open` to open the GitHub page or website for a repository.",
   "repository": {
     "type": "git",
