@@ -1,0 +1,22 @@
+{
+  "name": "git-open",
+  "version": "1.0.1",
+  "description": "Type `git open` to open the GitHub page or website for a repository.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulirish/git-open.git"
+  },
+  "keywords": [
+    "git",
+    "cli"
+  ],
+  "bin": {
+    "git-open": "git-open"
+  },
+  "author": "Paul Irish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paulirish/git-open/issues"
+  },
+  "homepage": "https://github.com/paulirish/git-open"
+}
