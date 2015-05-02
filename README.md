@@ -1,6 +1,6 @@
 # git-open
 
-A command-line script to open the GitHub page, or website for a repository.
+Type `git open` to open the GitHub page or website for a repository in your browser.
 
 ## Usage
     git open [remote-name] [branch-name]
@@ -24,6 +24,15 @@ A command-line script to open the GitHub page, or website for a repository.
 ```sh
 npm install --global git-open
 ```
+
+
+#### Supported:
+* Github.com
+* Gists on Github
+* Bitbucket
+* Atlassian Stash
+* Gitlab.com
+* Gitlab custom hosted (see below)
 
 
 ## Gitlab support

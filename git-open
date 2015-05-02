@@ -43,8 +43,12 @@ else
 fi
 
 # URL normalization
+# Github gists
+if grep -q gist.github <<<$giturl; then
+    giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com}
+    providerUrlDifference=tree
 # Github 
-if grep -q github <<<$giturl; then
+elif grep -q github <<<$giturl; then
     giturl=${giturl/git\@github\.com\:/https://github.com/}
     providerUrlDifference=tree
 # bitbucket 
