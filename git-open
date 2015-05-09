@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Opens the github page for a repo/branch in your browser.
 # https://github.com/paulirish/git-open/
@@ -97,7 +97,7 @@ case $( uname -s ) in
   Darwin)  open=open;;
   MINGW*)  open=start;;
   CYGWIN*) open=cygstart;;
-  *)       open=xdg-open;;
+  *)       open=${BROWSER:-xdg-open};;
 esac
 
 # open it in a browser
