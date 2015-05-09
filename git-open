@@ -57,8 +57,7 @@ elif grep -q github <<<$giturl; then
 elif grep -q bitbucket <<<$giturl; then
   giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
   providerUrlDifference="src"
-  rev=$(git rev-parse HEAD)
-  branch="${rev}?at=${branch}"
+  branch="?at=${branch}"
 
 # Atlassian Stash
 elif grep -q "/scm/" <<<$giturl; then
