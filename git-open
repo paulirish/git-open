@@ -10,36 +10,32 @@
 # are we in a git repo?
 git rev-parse --is-inside-work-tree &>/dev/null
 
-if [[ $? != 0 ]]
-then
-    echo "Not a git repository."
-    exit 1
+if [[ $? != 0 ]]; then
+  echo "Not a git repository."
+  exit 1
 fi
 
 
 # assume origin if not provided
 # fallback to upstream if neither is present.
 remote="origin"
-if [ ! -z "$1" ]
-then
-    remote="$1"
+if [ -n "$1" ]; then
+  remote="$1"
 fi
 
 remote_url="remote.${remote}.url"
 
-giturl=$(git config --get $remote_url)
-if [ -z "$giturl" ]
-then
-    echo "$remote_url not set."
-    exit 1
+giturl=$(git config --get "$remote_url")
+if [ -z "$giturl" ]; then
+  echo "$remote_url not set."
+  exit 1
 fi
 
 # get current branch
-if [ -z "$2" ]
-then
-    branch=`git symbolic-ref -q --short HEAD`
+if [ -z "$2" ]; then
+  branch=$(git symbolic-ref -q --short HEAD)
 else
-    branch="$2"
+  branch="$2"
 fi
 
 # Make # and % characters url friendly
@@ -49,35 +45,39 @@ branch=${branch//%/%25} && branch=${branch//#/%23}
 # URL normalization
 # Github gists
 if grep -q gist.github <<<$giturl; then
-    giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com}
-    providerUrlDifference=tree
+  giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com}
+  providerUrlDifference=tree
+
 # Github
 elif grep -q github <<<$giturl; then
-    giturl=${giturl/git\@github\.com\:/https://github.com/}
-    providerUrlDifference=tree
+  giturl=${giturl/git\@github\.com\:/https://github.com/}
+  providerUrlDifference=tree
+
 # bitbucket
 elif grep -q bitbucket <<<$giturl; then
-    giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
-    providerUrlDifference=branch
+  giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
+  providerUrlDifference="src"
+  branch="?at=${branch}"
+
 # Atlassian Stash
 elif grep -q "/scm/" <<<$giturl; then
   re='(.*)/scm/(.*)/(.*)\.git'
-  if [[ $giturl =~ $re ]]
-  then
+  if [[ $giturl =~ $re ]]; then
     giturl=${BASH_REMATCH[1]}/projects/${BASH_REMATCH[2]}/repos/${BASH_REMATCH[3]}
     providerUrlDifference=browse
     branch="?at=refs%2Fheads%2F${branch}"
   fi
+
 # Gitlab
 else
   # custom gitlab
   gitlab_domain=$(git config --get gitopen.gitlab.domain)
-  if [ ! -z "$gitlab_domain" ]; then
-    if grep -q $gitlab_domain <<<$giturl; then
+  if [ -n "$gitlab_domain" ]; then
+    if grep -q "$gitlab_domain" <<<$giturl; then
       giturl=${giturl/git\@${gitlab_domain}:/https://${gitlab_domain}/}
       providerUrlDifference=tree
     fi
-  # hosted gitlab
+    # hosted gitlab
   elif grep -q gitlab <<<$giturl; then
     giturl=${giturl/git\@gitlab\.com\:/https://gitlab.com/}
     providerUrlDifference=tree
@@ -85,9 +85,8 @@ else
 fi
 giturl=${giturl%\.git}
 
-if [ ! -z "$branch" ]
-then
-    giturl="${giturl}/${providerUrlDifference}/${branch}"
+if [ -n "$branch" ]; then
+  giturl="${giturl}/${providerUrlDifference}/${branch}"
 fi
 
 # simplify URL for master
@@ -95,12 +94,13 @@ giturl=${giturl/tree\/master/}
 
 # get current open browser command
 case $( uname -s ) in
-Darwin)  open=open;;
-MINGW*)  open=start;;
-CYGWIN*) open=cygstart;;
-*)       open=xdg-open;;
+  Darwin)  open=open;;
+  MINGW*)  open=start;;
+  CYGWIN*) open=cygstart;;
+  *)       open=xdg-open;;
 esac
 
 # open it in a browser
-$open $giturl &> /dev/null
+$open "$giturl" &> /dev/null
 exit 0
+
