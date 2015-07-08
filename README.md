@@ -4,6 +4,7 @@ Type `git open` to open the GitHub page or website for a repository in your brow
 
 ## Usage
     git open [remote-name] [branch-name]
+    git open issue
 
 ![git open2015-01-24 13_51_18](https://cloud.githubusercontent.com/assets/39191/5889192/244a0b72-a3d0-11e4-8ab9-55fc64228aaa.gif)
 
@@ -17,6 +18,9 @@ Type `git open` to open the GitHub page or website for a repository in your brow
     $ git open upstream master
     > open https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/master
 
+    On a branch with the naming convention of issues/#123
+    $ git open issue
+    > open https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/issues/123
 
 ## Installation
 
@@ -24,6 +28,12 @@ Type `git open` to open the GitHub page or website for a repository in your brow
 ```sh
 npm install --global git-open
 ```
+
+Installing the version you downloaded (in the current director)
+```sh
+npm install --global ./
+```
+
 
 
 #### Supported:
