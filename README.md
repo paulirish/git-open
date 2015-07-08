@@ -4,7 +4,7 @@ Type `git open` to open the GitHub page or website for a repository in your brow
 
 ## Usage
     git open [remote-name] [branch-name]
-    git open issue
+    git open issue (only implemented github support, feel free to fix the other ones.)
 
 ![git open2015-01-24 13_51_18](https://cloud.githubusercontent.com/assets/39191/5889192/244a0b72-a3d0-11e4-8ab9-55fc64228aaa.gif)
 
