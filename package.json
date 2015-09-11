@@ -11,7 +11,8 @@
     "cli"
   ],
   "bin": {
-    "git-open": "git-open"
+    "git-open": "git-open",
+    "git-home" : "git-open"
   },
   "author": "Paul Irish",
   "license": "MIT",
