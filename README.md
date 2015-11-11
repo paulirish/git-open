@@ -25,6 +25,11 @@ Type `git open` to open the GitHub page or website for a repository in your brow
 npm install --global git-open
 ```
 
+or for Homebrew fans:
+```sh
+brew install git-open
+```
+
 
 #### Supported:
 * Github.com
