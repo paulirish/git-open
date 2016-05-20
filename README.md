@@ -44,7 +44,7 @@ git config --global gitopen.gitlab.domain [yourdomain.here]
 git config gitopen.gitlab.domain [yourdomain.here] # in your local repository
 ```
 ##GitHub Enterprise
-To configure GitHub enterrpise support, you need to set gitopen.enterprise.domain the Enterprise installation's root such as `github.mycompany.com`:
+To configure GitHub Enterpise support, you need to set gitopen.enterprise.domain to the Enterprise installation's root such as `github.mycompany.com`:
 
 ```
 git config --global gitopen.enterprise.domain [yourdomain.here]
