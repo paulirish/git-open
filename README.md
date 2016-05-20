@@ -48,7 +48,7 @@ To configure GitHub enterrpise support, you need to set gitopen.enterprise.domai
 
 ```
 git config --global gitopen.enterprise.domain [yourdomain.here]
-#or
+# or
 git config gitopen.enterprise.domain [yourdomain.here] # in your local repository
 ```
 
