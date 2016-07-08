@@ -60,6 +60,9 @@ elif grep -q github <<<$giturl; then
 # bitbucket
 elif grep -q bitbucket <<<$giturl; then
   giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
+  # handle SSH protocol (change ssh://https://bitbucket.org/user/repo to https://bitbucket.org/user/repo)
+  giturl=${giturl/#ssh\:\/\/git\@/https://}
+
   rev="$(git rev-parse HEAD)"
   git_pwd="$(git rev-parse --show-prefix)"
   providerUrlDifference="src/${rev}/${git_pwd}"
