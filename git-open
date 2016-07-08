@@ -31,6 +31,9 @@ if [ -z "$giturl" ]; then
   exit 1
 fi
 
+# Convert ssh:// link to a https:// one
+giturl=$( echo $giturl | sed s_'ssh://git@'_'https://'_ )
+
 # get current branch
 if [ -z "$2" ]; then
   branch=$(git symbolic-ref -q --short HEAD)
