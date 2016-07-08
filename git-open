@@ -31,9 +31,6 @@ if [ -z "$giturl" ]; then
   exit 1
 fi
 
-# Convert ssh:// link to a https:// one
-giturl=$( echo $giturl | sed s_'ssh://git@'_'https://'_ )
-
 # get current branch
 if [ -z "$2" ]; then
   branch=$(git symbolic-ref -q --short HEAD)
@@ -63,6 +60,9 @@ elif grep -q github <<<$giturl; then
 # bitbucket
 elif grep -q bitbucket <<<$giturl; then
   giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
+  # handle SSH protocol (links like ssh://git@github.com/user/repo)
+  giturl=${giturl/#ssh\:\/\/git\@bitbucket\.org\//https://bitbucket.org/}
+
   rev="$(git rev-parse HEAD)"
   git_pwd="$(git rev-parse --show-prefix)"
   providerUrlDifference="src/${rev}/${git_pwd}"
