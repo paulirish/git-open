@@ -48,12 +48,12 @@ if grep -q gist.github <<<$giturl; then
   giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com}
   providerUrlDifference=tree
 
-# Github
+# Github (or enterprise Github if 'github' in url)
 elif grep -q github <<<$giturl; then
-  giturl=${giturl/git\@github\.com\:/https://github.com/}
-
   # handle SSH protocol (links like ssh://git@github.com/user/repo)
-  giturl=${giturl/#ssh\:\/\/git\@github\.com\//https://github.com/}
+  giturl=${giturl/#ssh\:\/\//}
+
+  giturl=`echo $giturl | sed 's/git\@\(github[^:]*\):/https:\/\/\1\//'`
 
   providerUrlDifference=tree
 
