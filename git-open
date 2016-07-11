@@ -15,7 +15,6 @@ if [[ $? != 0 ]]; then
   exit 1
 fi
 
-
 # assume origin if not provided
 # fallback to upstream if neither is present.
 remote="origin"
@@ -42,9 +41,24 @@ fi
 #   github.com/paulirish/git-open/pull/24
 branch=${branch//%/%25} && branch=${branch//#/%23}
 
+#Check if the key for an enterprise root exists
+git config --get gitopen.enterprise.domain
+enterprise=$?
+
+#If the key exists, this repository has been configured for a GitHub enterprise root
+if [ $enterprise -eq 0 ]; then
+  # retrieve the enterprise domain
+  enterprise_domain=$(git config --get gitopen.enterprise.domain)
+  giturl=${giturl/git\@${enterprise_domain}:/https://${enterprise_domain}/}
+
+  # handle SSH protocol (links like ssh://git@github.com/user/repo)
+  giturl=${giturl/#ssh\:\/\/git\@${enterprise_domain}:/https://${enterprise_domain}/}
+
+  providerUrlDifference=tree
+
 # URL normalization
 # Github gists
-if grep -q gist.github <<<$giturl; then
+elif grep -q gist.github <<<$giturl; then
   giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com}
   providerUrlDifference=tree
 

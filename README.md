@@ -33,7 +33,7 @@ npm install --global git-open
 * Atlassian Stash
 * Gitlab.com
 * Gitlab custom hosted (see below)
-
+* GitHub Enterprise (see below)
 
 ## Gitlab support
 To configure gitlab support you need to set gitopen.gitlab.domain:
@@ -43,7 +43,14 @@ git config --global gitopen.gitlab.domain [yourdomain.here]
 # or
 git config gitopen.gitlab.domain [yourdomain.here] # in your local repository
 ```
+##GitHub Enterprise
+To configure GitHub Enterpise support, you need to set gitopen.enterprise.domain to the Enterprise installation's root such as `github.mycompany.com`:
 
+```
+git config --global gitopen.enterprise.domain [yourdomain.here]
+# or
+git config gitopen.enterprise.domain [yourdomain.here] # in your local repository
+```
 
 ## Thx
 @jasonmccreary did [all the hard work](https://github.com/jasonmccreary/gh)
