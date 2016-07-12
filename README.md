@@ -71,7 +71,7 @@ git-open can automatically guess the corresponding repository page for remotes
 - gitlab.com
 - Gitlab custom hosted (see below)
 - bitbucket.org
-- Atlassian Stash
+- Atlassian Bitbucket Server (formerly _Atlassian Stash_)
 
 #### Gitlab support
 
@@ -110,4 +110,3 @@ http://opensource.org/licenses/MIT
 
 - **2016-07-11** - Changelog started (readme formatting and installation
   instructions updated)
-

@@ -68,7 +68,7 @@ elif grep -q bitbucket <<<$giturl; then
   providerUrlDifference="src/${rev}/${git_pwd}"
   branch="?at=${branch}"
 
-# Atlassian Stash
+# Atlassian Bitbucket Server
 elif grep -q "/scm/" <<<$giturl; then
   re='(.*)/scm/(.*)/(.*)\.git'
   if [[ $giturl =~ $re ]]; then
@@ -112,4 +112,3 @@ esac
 # open it in a browser
 $open "$giturl" &> /dev/null
 exit 0
-
