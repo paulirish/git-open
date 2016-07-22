@@ -106,9 +106,12 @@ Please provide examples of the URLs you are parsing with each PR.
 ## License
 
 Copyright Jason McCreary & Paul Irish. Licensed under MIT.
-http://opensource.org/licenses/MIT
+<http://opensource.org/licenses/MIT>
 
 ## Changelog
 
+- **2016-07-22** - 1.1.0, update and add linters for package.json, readme.
+  Re-publish to NPM.
 - **2016-07-11** - Changelog started (readme formatting and installation
   instructions updated)
+
