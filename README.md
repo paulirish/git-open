@@ -89,8 +89,15 @@ or in your local repository:
 See [hub](https://github.com/github/hub) for complete GitHub opening support.
 It's the official GitHub project and provides `hub browse`.
 
-Homebrew has an alternate [git-open](https://github.com/jeffreyiacono/git-open)
+[Homebrew has an alternate git-open](https://github.com/jeffreyiacono/git-open)
 that only works with GitHub but can open user profile pages, too.
+
+@[gerep has an alternate git-open](https://github.com/gerep/git-open) that
+works with a few providers. Of note, it opens the default view for BitBucket
+instead of the source view.
+
+And, of course, [jasonmccreary's original gh](https://github.com/jasonmccreary/gh)
+from which this plugin was forked.
 
 ## Thanks
 
