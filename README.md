@@ -118,6 +118,11 @@ See the contributors tab for a growing list of people who have submitted PRs.
 
 Please provide examples of the URLs you are parsing with each PR.
 
+## Related projects
+
+- [`git recent`](https://github.com/paulirish/git-recent) - View your most recent git branches
+- [`diff-so-fancy`](https://github.com/so-fancy/diff-so-fancy/) - Making the output of `git diff` so fancy
+
 ## License
 
 Copyright Jason McCreary & Paul Irish. Licensed under MIT.
