@@ -32,6 +32,14 @@ You can use also `npm` to install an OLD (1 year ago) version of this package:
 
     npm install --global git-open
 
+#### Using Windows Powershell
+
+Save git-open anywhere, say as ~/Documents/Scripts/git-open.sh and define
+a function in your Powershell profile (see ~/Documents/WindowsPowerShell/profile.ps1) like this:
+
+    function git-open { cmd /c "C:\Program Files\Git\usr\bin\bash.exe" "~/Documents/Scripts/git-open.sh" }
+    Set-Alias -Name gop -Value git-open
+
 #### Using a ZSH Framework
 
 ##### [Antigen](https://github.com/zsh-users/antigen)

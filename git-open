@@ -106,6 +106,7 @@ case $( uname -s ) in
   Darwin)  open=open;;
   MINGW*)  open=start;;
   CYGWIN*) open=cygstart;;
+  MSYS*)   open="powershell.exe –NoProfile Start";;
   *)       open=${BROWSER:-xdg-open};;
 esac
 
