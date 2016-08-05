@@ -31,8 +31,8 @@
     "git-home": "git-open"
   },
   "scripts": {
-    "lint:package": "echo \"\nLinting package.json\" && pjv --recommendations --warnings && echo \"OK\n\n\"",
-    "lint:readme": "echo \"\nLinting README.md\" && markdownlint --config markdownlint.json README.md && echo \"OK\n\n\"",
+    "lint:package": "echo \"\nLinting package.json\" && node ./node_modules/package-json-validator/bin/pjv --recommendations --warnings && echo \"OK\n\n\"",
+    "lint:readme": "echo \"\nLinting README.md\" && node ./node_modules/markdownlint/lib/markdownlint.js --config markdownlint.json README.md && echo \"OK\n\n\"",
     "test": "npm run --silent lint:package && npm run --silent lint:readme"
   },
   "dependencies": {},
