@@ -6,7 +6,9 @@ browser.
 ## Usage
 
     git open [remote-name] [branch-name]
-    git open issue (only implemented github support, feel free to fix the other ones.)
+    git open issue 
+
+(only implemented github support, feel free to fix the other ones.)
 
 ### Examples
 
@@ -37,15 +39,6 @@ You can use also `npm` to install this package:
 
     npm install --global git-open
 
-Installing the version you downloaded (in the current director)
-```sh
-npm install --global ./
-```
-
-Installing a specific fork
-```sh
-npm install --global https://github.com/kangaroo5383/git-open.git
-```
 
 #### Using Windows Powershell
 
