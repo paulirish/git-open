@@ -1,22 +1,43 @@
 {
   "name": "git-open",
-  "version": "1.0.2",
-  "description": "Type `git open` to open the GitHub page or website for a repository.",
+  "version": "1.1.0",
+  "description": "Type `git open` to open the GitHub/GitLab/Bitbucket homepage for a repository.",
+  "author": "Paul Irish (http://paulirish.com/)",
+  "license": "MIT",
+  "homepage": "https://github.com/paulirish/git-open",
+  "bugs": {
+    "url": "https://github.com/paulirish/git-open/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/paulirish/git-open.git"
   },
+  "contributors": [
+    "Paul Irish (http://paulirish.com/)",
+    "Jason McCreary <jason@pureconcepts.net> (http://jason.pureconcepts.net/)",
+    "David O'Trakoun <me@davidosomething.com> (https://davidosomething.com/)"
+  ],
   "keywords": [
     "git",
     "cli"
   ],
+  "engines": {
+    "node": ">=0.10.3",
+    "npm": ">=2.0.0"
+  },
+  "preferGlobal": true,
   "bin": {
-    "git-open": "git-open"
+    "git-open": "git-open",
+    "git-home": "git-open"
   },
-  "author": "Paul Irish",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/paulirish/git-open/issues"
+  "scripts": {
+    "lint:package": "echo \"\nLinting package.json\" && pjv --recommendations --warnings && echo \"OK\n\n\"",
+    "lint:readme": "echo \"\nLinting README.md\" && markdownlint --config markdownlint.json README.md && echo \"OK\n\n\"",
+    "test": "npm run --silent lint:package && npm run --silent lint:readme"
   },
-  "homepage": "https://github.com/paulirish/git-open"
+  "dependencies": {},
+  "devDependencies": {
+    "markdownlint": "^0.2.0",
+    "package-json-validator": "^0.6.1"
+  }
 }

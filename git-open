@@ -62,17 +62,24 @@ if grep -q gist.github <<<$giturl; then
 # Github
 elif grep -q github <<<$giturl; then
   giturl=${giturl/git\@github\.com\:/https://github.com/}
+
+  # handle SSH protocol (links like ssh://git@github.com/user/repo)
+  giturl=${giturl/#ssh\:\/\/git\@github\.com\//https://github.com/}
+
   providerUrlDifference=tree
 
 # bitbucket
 elif grep -q bitbucket <<<$giturl; then
   giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
+  # handle SSH protocol (change ssh://https://bitbucket.org/user/repo to https://bitbucket.org/user/repo)
+  giturl=${giturl/#ssh\:\/\/git\@/https://}
+
   rev="$(git rev-parse HEAD)"
   git_pwd="$(git rev-parse --show-prefix)"
   providerUrlDifference="src/${rev}/${git_pwd}"
   branch="?at=${branch}"
 
-# Atlassian Stash
+# Atlassian Bitbucket Server
 elif grep -q "/scm/" <<<$giturl; then
   re='(.*)/scm/(.*)/(.*)\.git'
   if [[ $giturl =~ $re ]]; then
@@ -112,10 +119,10 @@ case $( uname -s ) in
   Darwin)  open=open;;
   MINGW*)  open=start;;
   CYGWIN*) open=cygstart;;
+  MSYS*)   open="powershell.exe –NoProfile Start";;
   *)       open=${BROWSER:-xdg-open};;
 esac
 
 # open it in a browser
 $open "$giturl" &> /dev/null
 exit 0
-
