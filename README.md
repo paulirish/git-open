@@ -34,6 +34,10 @@ Installing the version you downloaded (in the current director)
 npm install --global ./
 ```
 
+Installing a specific fork
+```sh
+npm install --global https://github.com/kangaroo5383/git-open.git
+```
 
 
 #### Supported:
