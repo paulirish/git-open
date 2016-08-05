@@ -6,6 +6,9 @@ browser.
 ## Usage
 
     git open [remote-name] [branch-name]
+    git open issue 
+
+(only implemented github support, feel free to fix the other ones.)
 
 ### Examples
 
@@ -17,6 +20,10 @@ browser.
 
     $ git open upstream master
     > open https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/master
+
+    On a branch with the naming convention of issues/#123
+    $ git open issue
+    > open https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/issues/123
 
 ![git open2015-01-24 13_51_18](https://cloud.githubusercontent.com/assets/39191/5889192/244a0b72-a3d0-11e4-8ab9-55fc64228aaa.gif)
 
@@ -31,6 +38,7 @@ or copy `git-open` into an existing included path like `/usr/local/bin`).
 You can use also `npm` to install this package:
 
     npm install --global git-open
+
 
 #### Using Windows Powershell
 
