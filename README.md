@@ -8,7 +8,7 @@ browser.
     git open [remote-name] [branch-name]
     git open issue 
 
-(only implemented github support, feel free to fix the other ones.)
+(`git open` works with these [hosted repo providers](#supported-remote-repositories), `git open issue` currently only works with Github)
 
 ### Examples
 
