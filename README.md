@@ -28,7 +28,7 @@ The preferred way of installation is to simply add the `git-open` script
 somewhere into your path (e.g. add the directory to your `PATH` environment
 or copy `git-open` into an existing included path like `/usr/local/bin`).
 
-You can use also `npm` to install an OLD (1 year ago) version of this package:
+You can use also `npm` to install this package:
 
     npm install --global git-open
 
