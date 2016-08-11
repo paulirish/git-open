@@ -27,7 +27,7 @@ if [ -n "$1" ]; then
       issue=${currentBranch#*#}
     else
       echo "'git open issue' expect branch naming to be issues/#123"
-      exit 0
+      exit 1
     fi
   else
     remote="$1"
