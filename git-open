@@ -11,7 +11,7 @@
 git rev-parse --is-inside-work-tree &>/dev/null
 
 if [[ $? != 0 ]]; then
-  echo "Not a git repository."
+  echo "Not a git repository." 1>&2
   exit 1
 fi
 
@@ -26,8 +26,8 @@ if [ -n "$1" ]; then
     if [[ $currentBranch =~ $regex ]]; then
       issue=${currentBranch#*#}
     else
-      echo "'git open issue' expect branch naming to be issues/#123"
-      exit 0
+      echo "'git open issue' expect branch naming to be issues/#123" 1>&2
+      exit 1
     fi
   else
     remote="$1"
@@ -38,7 +38,7 @@ remote_url="remote.${remote}.url"
 
 giturl=$(git config --get "$remote_url")
 if [ -z "$giturl" ]; then
-  echo "$remote_url not set."
+  echo "$remote_url not set." 1>&2
   exit 1
 fi
 
