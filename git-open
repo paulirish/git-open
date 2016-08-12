@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Opens the github page for a repo/branch in your browser.
+# Opens the GitHub page for a repo/branch in your browser.
 # https://github.com/paulirish/git-open/
 #
 # git open
@@ -54,12 +54,12 @@ fi
 branch=${branch//%/%25} && branch=${branch//#/%23}
 
 # URL normalization
-# Github gists
+# GitHub gists
 if grep -q gist.github <<<$giturl; then
   giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com}
   providerUrlDifference=tree
 
-# Github
+# GitHub
 elif grep -q github <<<$giturl; then
   giturl=${giturl/git\@github\.com\:/https://github.com/}
 
@@ -68,7 +68,7 @@ elif grep -q github <<<$giturl; then
 
   providerUrlDifference=tree
 
-# bitbucket
+# Bitbucket
 elif grep -q bitbucket <<<$giturl; then
   giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
   # handle SSH protocol (change ssh://https://bitbucket.org/user/repo to https://bitbucket.org/user/repo)
@@ -88,16 +88,16 @@ elif grep -q "/scm/" <<<$giturl; then
     branch="?at=refs%2Fheads%2F${branch}"
   fi
 
-# Gitlab
+# GitLab
 else
-  # custom gitlab
+  # custom GitLab
   gitlab_domain=$(git config --get gitopen.gitlab.domain)
   if [ -n "$gitlab_domain" ]; then
     if grep -q "$gitlab_domain" <<<$giturl; then
       giturl=${giturl/git\@${gitlab_domain}:/https://${gitlab_domain}/}
       providerUrlDifference=tree
     fi
-    # hosted gitlab
+    # hosted GitLab
   elif grep -q gitlab <<<$giturl; then
     giturl=${giturl/git\@gitlab\.com\:/https://gitlab.com/}
     providerUrlDifference=tree

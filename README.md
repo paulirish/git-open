@@ -1,6 +1,6 @@
 # git-open
 
-Type `git open` to open the repo website (Github, Gitlab, Bitbucket) in your browser.
+Type `git open` to open the repo website (GitHub, GitLab, Bitbucket) in your browser.
 
 ![git open2015-01-24 13_51_18](https://cloud.githubusercontent.com/assets/39191/5889192/244a0b72-a3d0-11e4-8ab9-55fc64228aaa.gif)
 
@@ -8,10 +8,10 @@ Type `git open` to open the repo website (Github, Gitlab, Bitbucket) in your bro
 
 ```sh
 git open [remote-name] [branch-name]
-git open issue 
+git open issue
 ```
 
-(`git open` works with these [hosted repo providers](#supported-remote-repositories), `git open issue` currently only works with Github)
+(`git open` works with these [hosted repo providers](#supported-remote-repositories), `git open issue` currently only works with GitHub)
 
 ### Examples
 
@@ -26,7 +26,7 @@ $ git open upstream master
 # opens https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/master
 
 $ git open issue
-# If branches use naming convention of issues/#123, 
+# If branches use naming convention of issues/#123,
 # opens https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/issues/123
 ```
 
@@ -92,13 +92,13 @@ git-open can automatically guess the corresponding repository page for remotes
 - github.com
 - gist.github.com
 - gitlab.com
-- Gitlab custom hosted (see below)
+- GitLab custom hosted (see below)
 - bitbucket.org
 - Atlassian Bitbucket Server (formerly _Atlassian Stash_)
 
-#### Gitlab support
+#### GitLab support
 
-To configure gitlab support you need to set `gitopen.gitlab.domain`:
+To configure GitLab support you need to set `gitopen.gitlab.domain`:
 
 ```sh
 # use --global to set across all repos, instead of just the local one
