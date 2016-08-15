@@ -92,9 +92,20 @@ elif grep -q "/scm/" <<<$giturl; then
 else
   # custom GitLab
   gitlab_domain=$(git config --get gitopen.gitlab.domain)
+  gitlab_port=$(git config --get gitopen.gitlab.port)
   if [ -n "$gitlab_domain" ]; then
     if grep -q "$gitlab_domain" <<<$giturl; then
-      giturl=${giturl/git\@${gitlab_domain}:/https://${gitlab_domain}/}
+
+      # handle SSH protocol (links like ssh://git@gitlab.domain.com/user/repo)
+      giturl=${giturl/#ssh\:\/\//https://}
+
+      # remove git@ from the domain
+      giturl=${giturl/git\@${gitlab_domain}/${gitlab_domain}/}
+
+      # remove SSH port
+      if [ -n "$gitlab_port" ]; then
+        giturl=${giturl/\/:${gitlab_port}\///}
+      fi
       providerUrlDifference=tree
     fi
     # hosted GitLab
