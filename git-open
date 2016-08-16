@@ -56,7 +56,7 @@ branch=${branch//%/%25} && branch=${branch//#/%23}
 # URL normalization
 # GitHub gists
 if grep -q gist.github <<<$giturl; then
-  giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com}
+  giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com/}
   providerUrlDifference=tree
 
 # GitHub
