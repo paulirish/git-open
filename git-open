@@ -30,7 +30,7 @@ if [ -n "$1" ]; then
       exit 1
     fi
   elif [ "$1" == "pr" ]; then
-    echo "my man!";
+    pr="frigg yeah"
   else
     remote="$1"
   fi
@@ -50,8 +50,6 @@ if [ -z "$2" ]; then
 else
   branch="$2"
 fi
-
-
 
 # Make # and % characters url friendly
 #   github.com/paulirish/git-open/pull/24
@@ -122,6 +120,14 @@ giturl=${giturl%\.git}
 
 if [ -n "$issue" ]; then
   giturl="${giturl}/issues/${issue}"
+elif [ -n "$pr" ]; then
+  ownerAndRepo=${giturl#https\://github.com/};
+  repo=${ownerAndRepo#*/};
+  owner=${ownerAndRepo%/$repo};
+  allPrsUrl="https://api.github.com/repos/"$ownerAndRepo"/pulls?head="$owner":"$branch;
+  unparsedPrUrl=$(curl -s $allPrsUrl | grep -m 1 html_url 2> /dev/null);
+  unparsedPrUrl=${unparsedPrUrl#*\"\: \"};
+  giturl=${unparsedPrUrl%\"\,};
 elif [ -n "$branch" ]; then
   giturl="${giturl}/${providerUrlDifference}/${branch}"
 fi
