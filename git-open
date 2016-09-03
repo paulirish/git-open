@@ -121,13 +121,13 @@ giturl=${giturl%\.git}
 if [ -n "$issue" ]; then
   giturl="${giturl}/issues/${issue}"
 elif [ -n "$pr" ]; then
-  ownerAndRepo=${giturl#https\://github.com/};
-  repo=${ownerAndRepo#*/};
-  owner=${ownerAndRepo%/$repo};
-  allPrsUrl="https://api.github.com/repos/"$ownerAndRepo"/pulls?head="$owner":"$branch;
-  unparsedPrUrl=$(curl -s $allPrsUrl | grep -m 1 html_url 2> /dev/null);
-  unparsedPrUrl=${unparsedPrUrl#*\"\: \"};
-  prUrl=${unparsedPrUrl%\"\,};
+  # assumes $giturl is of the form .*/user/repo
+  owner=`expr "$giturl" : '.*/\(.*\)/.*$'`
+  repo=`expr "$giturl" : '.*/\(.*\)$'`
+  # github-only solution
+  allPrsUrl="https://api.github.com/repos/"$owner"/"$repo"/pulls?head="$owner":"$branch
+  unparsedPrUrl=$(curl -s $allPrsUrl | grep -m 1 html_url 2> /dev/null)
+  prUrl=`expr "$unparsedPrUrl" : '.*\"\(.*\)\",$'`
   if [ -n "$prUrl" ]; then
     giturl=$prUrl
   fi
