@@ -51,6 +51,8 @@ else
   branch="$2"
 fi
 
+
+
 # Make # and % characters url friendly
 #   github.com/paulirish/git-open/pull/24
 branch=${branch//%/%25} && branch=${branch//#/%23}
