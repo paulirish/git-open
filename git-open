@@ -23,23 +23,34 @@ fi
 # assume origin if not provided
 # fallback to upstream if neither is present.
 remote="origin"
-if [ "$1" == "pr" ]; then
-  pr="true"
-  shift;
-fi
 if [ -n "$1" ]; then
-  if [ "$1" == "issue" ]; then
-    currentBranch=$(git symbolic-ref -q --short HEAD)
-    regex='^issue'
-    if [[ $currentBranch =~ $regex ]]; then
-      issue=${currentBranch#*#}
-    else
-      echo "'git open issue' expect branch naming to be issues/#123" 1>&2
-      exit 1
-    fi
-  else
-    remote="$1"
-  fi
+  case "$1" in
+    "pr")
+      pr="self"
+      shift;
+      if [ "$1" == "parent" ]; then
+        pr="parent"
+        shift;
+      fi
+      if [ -n "$1" ]; then
+        remote="$1"
+      fi
+      ;;
+    "issue")
+      echo issue
+      currentBranch=$(git symbolic-ref -q --short HEAD)
+      regex='^issue'
+      if [[ $currentBranch =~ $regex ]]; then
+        issue=${currentBranch#*#}
+      else
+        echo "'git open issue' expect branch naming to be issues/#123" 1>&2
+        exit 1
+      fi
+      ;;
+    *)
+      remote="$1"
+      ;;
+  esac
 fi
 
 remote_url="remote.${remote}.url"
