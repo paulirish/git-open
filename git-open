@@ -6,6 +6,10 @@
 # git open
 # git open [remote] [branch]
 
+# import pr-utils from git-open's directory
+SOURCE_DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$SOURCE_DIR" ]]; then SOURCE_DIR="$PWD"; fi
+. "$SOURCE_DIR/pr-utils"
 
 # are we in a git repo?
 git rev-parse --is-inside-work-tree &>/dev/null

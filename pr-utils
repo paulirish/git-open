@@ -1,0 +1,18 @@
+# Gets url to all PRs for branch
+function getAllPrsUrl {
+  local giturl="$1";
+  # assumes $giturl is of the form .*/user/repo
+  local owner=`expr "$giturl" : '.*/\(.*\)/.*$'`
+  local repo=`expr "$giturl" : '.*/\(.*\)$'`
+  # github-only solution
+  local allPrsUrl="https://api.github.com/repos/"$owner"/"$repo"/pulls?head="$owner":"$branch
+  echo $allPrsUrl;
+}
+
+# Gets most recent PR from all PRs for branch
+function getPrUrl {
+  local allPrsUrl="$1"
+  local unparsedPrUrl=$(curl -s $allPrsUrl | grep -m 1 html_url 2> /dev/null)
+  local prUrl=`expr "$unparsedPrUrl" : '.*\"\(.*\)\",$'`
+  echo $prUrl
+}
