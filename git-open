@@ -146,6 +146,9 @@ elif [ -n "$pr" ]; then
   prUrl=$(getPrUrl $allPrsUrl)
   if [ -n "$prUrl" ]; then
     giturl=$prUrl
+  else
+    echo "No pull requests for $branch" 1>&2
+    exit 1
   fi
 elif [ -n "$branch" ]; then
   giturl="${giturl}/${providerUrlDifference}/${branch}"
