@@ -96,6 +96,9 @@ else
   if [ -n "$gitlab_domain" ]; then
     if grep -q "$gitlab_domain" <<<$giturl; then
 
+      # Handle GitLab's default SSH notation (like git@gitlab.domain.com:user/repo)
+      giturl=${giturl/git\@${gitlab_domain}\:/https://${gitlab_domain}/}
+
       # handle SSH protocol (links like ssh://git@gitlab.domain.com/user/repo)
       giturl=${giturl/#ssh\:\/\//https://}
 
