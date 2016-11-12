@@ -139,4 +139,4 @@ esac
 
 # open it in a browser
 $open "$giturl" &> /dev/null
-exit 0
+exit $?
