@@ -28,6 +28,9 @@ $ git open upstream master
 $ git open issue
 # If branches use naming convention of issues/#123,
 # opens https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/issues/123
+
+$ git open README.md
+# opens https://github.com/REMOTE_ORIGIN_USER/CURRENT_REPO/tree/CURRENT_BRANCH/README.md
 ```
 
 ### Installation

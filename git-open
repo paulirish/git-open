@@ -19,34 +19,41 @@ fi
 # assume origin if not provided
 # fallback to upstream if neither is present.
 remote="origin"
-if [ -n "$1" ]; then
-  if [ "$1" == "issue" ]; then
-    currentBranch=$(git symbolic-ref -q --short HEAD)
-    regex='^issue'
-    if [[ $currentBranch =~ $regex ]]; then
-      issue=${currentBranch#*#}
-    else
-      echo "'git open issue' expect branch naming to be issues/#123" 1>&2
-      exit 1
-    fi
-  else
-    remote="$1"
-  fi
-fi
+branch=$(git symbolic-ref -q --short HEAD)
+
+while (( $# > 0 ))
+do
+  case "$1" in
+    "issue")
+      currentBranch=$(git symbolic-ref -q --short HEAD)
+      regex='^issue'
+      if [[ $currentBranch =~ $regex ]]; then
+        issue=${currentBranch#*#}
+      else
+        echo "'git open issue' expect branch naming to be issues/#123" 1>&2
+        exit 1
+      fi
+      ;;
+    -*|--*)
+      ;;
+    *)
+      if [[ -e $1 ]]; then
+        file="$1"
+      else
+        remote="$1" branch="$2"
+        shift
+      fi
+      ;;
+  esac
+  shift
+done
 
 remote_url="remote.${remote}.url"
 
 giturl=$(git config --get "$remote_url")
-if [ -z "$giturl" ]; then
+if [[ -z $giturl ]]; then
   echo "$remote_url not set." 1>&2
   exit 1
-fi
-
-# get current branch
-if [ -z "$2" ]; then
-  branch=$(git symbolic-ref -q --short HEAD)
-else
-  branch="$2"
 fi
 
 # Make # and % characters url friendly
@@ -93,7 +100,7 @@ else
   # custom GitLab
   gitlab_domain=$(git config --get gitopen.gitlab.domain)
   gitlab_port=$(git config --get gitopen.gitlab.port)
-  if [ -n "$gitlab_domain" ]; then
+  if [[ -n $gitlab_domain ]]; then
     if grep -q "$gitlab_domain" <<<$giturl; then
 
       # Handle GitLab's default SSH notation (like git@gitlab.domain.com:user/repo)
@@ -106,7 +113,7 @@ else
       giturl=${giturl/git\@${gitlab_domain}/${gitlab_domain}/}
 
       # remove SSH port
-      if [ -n "$gitlab_port" ]; then
+      if [[ -n $gitlab_port ]]; then
         giturl=${giturl/\/:${gitlab_port}\///}
       fi
       providerUrlDifference=tree
@@ -119,9 +126,9 @@ else
 fi
 giturl=${giturl%\.git}
 
-if [ -n "$issue" ]; then
+if [[ -n $issue ]]; then
   giturl="${giturl}/issues/${issue}"
-elif [ -n "$branch" ]; then
+elif [[ -n $branch ]]; then
   giturl="${giturl}/${providerUrlDifference}/${branch}"
 fi
 
@@ -136,6 +143,10 @@ case $( uname -s ) in
   MSYS*)   open="powershell.exe –NoProfile Start";;
   *)       open=${BROWSER:-xdg-open};;
 esac
+
+if [[ -n $file ]]; then
+    giturl="$giturl/$file"
+fi
 
 # open it in a browser
 $open "$giturl" &> /dev/null
