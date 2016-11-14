@@ -37,7 +37,7 @@ do
     -*|--*)
       ;;
     *)
-      if [[ -f $1 ]]; then
+      if [[ -e $1 ]]; then
         file="$1"
       else
         remote="$1" branch="$2"
