@@ -19,20 +19,34 @@ fi
 # assume origin if not provided
 # fallback to upstream if neither is present.
 remote="origin"
-if [[ -n $1 ]]; then
-  if [[ $1 == "issue" ]]; then
-    currentBranch=$(git symbolic-ref -q --short HEAD)
-    regex='^issue'
-    if [[ $currentBranch =~ $regex ]]; then
-      issue=${currentBranch#*#}
-    else
-      echo "'git open issue' expect branch naming to be issues/#123" 1>&2
-      exit 1
-    fi
-  else
-    remote="$1"
-  fi
-fi
+branch=$(git symbolic-ref -q --short HEAD)
+
+while (( $# > 0 ))
+do
+  case "$1" in
+    "issue")
+      currentBranch=$(git symbolic-ref -q --short HEAD)
+      regex='^issue'
+      if [[ $currentBranch =~ $regex ]]; then
+        issue=${currentBranch#*#}
+      else
+        echo "'git open issue' expect branch naming to be issues/#123" 1>&2
+        exit 1
+      fi
+      ;;
+    -*|--*)
+      ;;
+    *)
+      if [[ -f $1 ]]; then
+        file="$1"
+      else
+        remote="$1" branch="$2"
+        shift
+      fi
+      ;;
+  esac
+  shift
+done
 
 remote_url="remote.${remote}.url"
 
@@ -40,13 +54,6 @@ giturl=$(git config --get "$remote_url")
 if [[ -z $giturl ]]; then
   echo "$remote_url not set." 1>&2
   exit 1
-fi
-
-# get current branch
-if [[ -z $2 ]]; then
-  branch=$(git symbolic-ref -q --short HEAD)
-else
-  branch="$2"
 fi
 
 # Make # and % characters url friendly
@@ -136,6 +143,10 @@ case $( uname -s ) in
   MSYS*)   open="powershell.exe –NoProfile Start";;
   *)       open=${BROWSER:-xdg-open};;
 esac
+
+if [[ -n $file ]]; then
+    giturl="$giturl/$file"
+fi
 
 # open it in a browser
 $open "$giturl" &> /dev/null
