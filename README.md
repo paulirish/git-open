@@ -105,6 +105,12 @@ To configure GitLab support you need to set `gitopen.gitlab.domain`:
 git config [--global] gitopen.gitlab.domain [yourdomain.here]
 ```
 
+GitLab protocol default is `https:`, if you need modify:
+
+```sh
+git config [--global] gitopen.gitlab.protocol [https:|http:]
+```
+
 ## Related projects / alternatives
 
 See [hub](https://github.com/github/hub) for complete GitHub opening support.
