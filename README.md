@@ -1,24 +1,48 @@
-# gh
-A command-line script to open the GitHub page for a repository.
+# git-open
+
+A command-line script to open the GitHub page, or website for a repository.
 
 ## Usage
-    gh [remote-name] [branch-name]
+    git open [remote-name] [branch-name]
+
+![git open2015-01-24 13_51_18](https://cloud.githubusercontent.com/assets/39191/5889192/244a0b72-a3d0-11e4-8ab9-55fc64228aaa.gif)
 
 ### Examples
-    $ gh
+    $ git open
     > open https://github.com/REMOTE_ORIGIN_USER/CURRENT_REPO/tree/CURRENT_BRANCH
 
-    $ gh upstream
+    $ git open upstream
     > open https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/CURRENT_BRANCH
 
-    $ gh upstream master
+    $ git open upstream master
     > open https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/master
 
+
 ## Installation
-On Unix systems you have several options. Namely creating an alias or a symbolic link to `gh.sh`.
 
-I prefer to create a symbolic link within `/usr/local/bin/`:
+Put the bash script in `~/bin/` and make sure that folder's in your PATH.
 
-    ln -s /Users/jason/Documents/workspace/gh/gh.sh /usr/local/bin/gh
+```sh
+curl -o ~/bin/git-open https://raw.githubusercontent.com/paulirish/git-open/master/git-open
+chmod +x ~/bin/git-open
+```
 
-**Note:** `open` my not work across all platforms. On some Linux distributions you can replace `open` to `xdg-open`.
+
+## Gitlab support
+To configure gitlab support you need to set gitopen.gitlab.domain:
+
+```
+git config --global gitopen.gitlab.domain [yourdomain.here]
+# or
+git config gitopen.gitlab.domain [yourdomain.here] # in your local repository
+```
+
+
+## Thx
+@jasonmccreary did [all the hard work](https://github.com/jasonmccreary/gh)
+
+## License
+
+Copyright Jason McCreary & Paul Irish. Licensed under MIT.
+
+http://opensource.org/licenses/MIT
