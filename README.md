@@ -98,11 +98,19 @@ git-open can automatically guess the corresponding repository page for remotes
 
 #### GitLab support
 
-To configure GitLab support you need to set `gitopen.gitlab.domain`:
+To configure GitLab support you need to set some options.
+
+| option name               | description                                                | example            |
+| ------------------------- | ---------------------------------------------------------- | ------------------ |
+| gitopen.gitlab.domain     | The (web)domain name that will work for most of the people | gitlab.example.com |
+| gitopen.gitlab.ssh.domain | A specific ssh domain name, *if needed*                    | git.example.com    |
+| gitopen.gitlab.ssh.port   | A specific ssh port, *if needed*                           | 10022              |
 
 ```sh
 # use --global to set across all repos, instead of just the local one
-git config [--global] gitopen.gitlab.domain [yourdomain.here]
+git config [--global] gitopen.gitlab.domain [value]
+git config [--global] gitopen.gitlab.ssh.domain [value]
+git config [--global] gitopen.gitlab.ssh.port [value]
 ```
 
 If your Gitlab custom hosted is serving `http` you can also specify this:
