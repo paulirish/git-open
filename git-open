@@ -98,7 +98,7 @@ else
   
   gitlab_protocol=$(git config --get gitopen.gitlab.protocol)
   if [ -z "$gitlab_protocol" ]; then
-      gitlab_protocol=http
+      gitlab_protocol=https
   fi
 
 if [ -n "$gitlab_domain" ]; then
