@@ -92,26 +92,30 @@ elif grep -q "/scm/" <<<$giturl; then
 else
   # custom GitLab
   gitlab_domain=$(git config --get gitopen.gitlab.domain)
-  gitlab_port=$(git config --get gitopen.gitlab.port)
+  gitlab_ssh_domain=$(git config --get gitopen.gitlab.ssh.domain)
+  gitlab_ssh_domain=${gitlab_ssh_domain:-$gitlab_domain}
+  gitlab_ssh_port=$(git config --get gitopen.gitlab.ssh.port)
+  
   gitlab_protocol=$(git config --get gitopen.gitlab.protocol)
   if [ -z "$gitlab_protocol" ]; then
-      gitlab_protocol=http
+      gitlab_protocol=https
   fi
-  if [ -n "$gitlab_domain" ]; then
-    if grep -q "$gitlab_domain" <<<$giturl; then
+
+if [ -n "$gitlab_domain" ]; then
+    if egrep -q "${gitlab_domain}|${gitlab_ssh_domain}" <<<$giturl; then
 
       # Handle GitLab's default SSH notation (like git@gitlab.domain.com:user/repo)
-      giturl=${giturl/git\@${gitlab_domain}\:/${gitlab_protocol}://${gitlab_domain}/}
+      giturl=${giturl/git\@${gitlab_ssh_domain}\:/${gitlab_protocol}://${gitlab_domain}/}
 
       # handle SSH protocol (links like ssh://git@gitlab.domain.com/user/repo)
       giturl=${giturl/#ssh\:\/\//${gitlab_protocol}://}
 
       # remove git@ from the domain
-      giturl=${giturl/git\@${gitlab_domain}/${gitlab_domain}/}
+      giturl=${giturl/git\@${gitlab_ssh_domain}/${gitlab_domain}/}
 
       # remove SSH port
-      if [ -n "$gitlab_port" ]; then
-        giturl=${giturl/\/:${gitlab_port}\///}
+      if [ -n "$gitlab_ssh_port" ]; then
+        giturl=${giturl/\/:${gitlab_ssh_port}\///}
       fi
       providerUrlDifference=tree
     fi
