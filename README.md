@@ -113,6 +113,12 @@ git config [--global] gitopen.gitlab.ssh.domain [value]
 git config [--global] gitopen.gitlab.ssh.port [value]
 ```
 
+If your Gitlab custom hosted is serving `http` you can also specify this:
+```sh
+# use --global to set across all repos, instead of just the local one
+git config [--global] gitopen.gitlab.protocol http
+```
+
 ## Related projects / alternatives
 
 See [hub](https://github.com/github/hub) for complete GitHub opening support.

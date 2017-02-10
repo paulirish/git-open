@@ -95,14 +95,20 @@ else
   gitlab_ssh_domain=$(git config --get gitopen.gitlab.ssh.domain)
   gitlab_ssh_domain=${gitlab_ssh_domain:-$gitlab_domain}
   gitlab_ssh_port=$(git config --get gitopen.gitlab.ssh.port)
-  if [ -n "$gitlab_domain" ]; then
+  
+  gitlab_protocol=$(git config --get gitopen.gitlab.protocol)
+  if [ -z "$gitlab_protocol" ]; then
+      gitlab_protocol=https
+  fi
+
+if [ -n "$gitlab_domain" ]; then
     if egrep -q "${gitlab_domain}|${gitlab_ssh_domain}" <<<$giturl; then
 
       # Handle GitLab's default SSH notation (like git@gitlab.domain.com:user/repo)
-      giturl=${giturl/git\@${gitlab_ssh_domain}\:/https://${gitlab_domain}/}
+      giturl=${giturl/git\@${gitlab_ssh_domain}\:/${gitlab_protocol}://${gitlab_domain}/}
 
       # handle SSH protocol (links like ssh://git@gitlab.domain.com/user/repo)
-      giturl=${giturl/#ssh\:\/\//https://}
+      giturl=${giturl/#ssh\:\/\//${gitlab_protocol}://}
 
       # remove git@ from the domain
       giturl=${giturl/git\@${gitlab_ssh_domain}/${gitlab_domain}/}
