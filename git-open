@@ -29,6 +29,11 @@ if [ -n "$1" ]; then
       echo "'git open issue' expect branch naming to be issues/#123" 1>&2
       exit 1
     fi
+  elif [ "$1" == "compareto" ]; then
+    currentBranch=$(git symbolic-ref -q --short HEAD)
+    # Make # and % characters url friendly
+    currentBranch=${currentBranch//%/%25} && currentBranch=${currentBranch//#/%23}
+    
   else
     remote="$1"
   fi
@@ -43,7 +48,9 @@ if [ -z "$giturl" ]; then
 fi
 
 # get current branch
-if [ -z "$2" ]; then
+if [ -z "$2" ] && [ "$1" == "compareto" ]; then
+  branch="master"
+elif [ -z "$2" ]; then
   branch=$(git symbolic-ref -q --short HEAD)
 else
   branch="$2"
@@ -129,6 +136,10 @@ giturl=${giturl%\.git}
 
 if [ -n "$issue" ]; then
   giturl="${giturl}/issues/${issue}"
+elif [ $currentBranch == "master" ]; then
+  giturl="${giturl}/compare/${branch}"
+elif [ -n "$currentBranch" ]; then
+  giturl="${giturl}/compare/${currentBranch}...${branch}"
 elif [ -n "$branch" ]; then
   giturl="${giturl}/${providerUrlDifference}/${branch}"
 fi
