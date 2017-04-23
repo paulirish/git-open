@@ -82,7 +82,7 @@ check for updates to the git repository.
 
 ##### [zplug](https://github.com/zplug/zplug)
 
-`zplug "paulirish/git-open", as:command`
+`zplug "paulirish/git-open", as:plugin`
 
 ### Supported remote repositories
 
