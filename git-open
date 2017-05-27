@@ -74,6 +74,9 @@ elif grep -q bitbucket <<<$giturl; then
   # handle SSH protocol (change ssh://https://bitbucket.org/user/repo to https://bitbucket.org/user/repo)
   giturl=${giturl/#ssh\:\/\/git\@/https://}
 
+  # remove username
+  giturl=${giturl//\/\/*@bitbucket.org///bitbucket.org}
+
   rev="$(git rev-parse HEAD)"
   git_pwd="$(git rev-parse --show-prefix)"
   providerUrlDifference="src/${rev}/${git_pwd}"
