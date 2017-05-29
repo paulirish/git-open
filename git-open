@@ -101,10 +101,18 @@ else
 
   gitlab_protocol=$(git config --get gitopen.gitlab.protocol)
   if [ -z "$gitlab_protocol" ]; then
-      gitlab_protocol=https
+    gitlab_protocol=https
   fi
 
-if [ -n "$gitlab_domain" ]; then
+  providerUrlDifference=tree
+
+  if [ -z "$gitlab_domain" ];then
+    giturl=$(git config remote.origin.url)
+    giturl=${giturl/git\@/}
+    giturl=${giturl/:/\/}
+    giturl=${giturl/\.git/}
+    giturl=$(curl -s -I $giturl | perl -n -e '/^Location: (.*)$/ && print "$1\n"')
+  elif [ -n "$gitlab_domain" ]; then
     if egrep -q "${gitlab_domain}|${gitlab_ssh_domain}" <<<$giturl; then
 
       # Handle GitLab's default SSH notation (like git@gitlab.domain.com:user/repo)
@@ -125,7 +133,6 @@ if [ -n "$gitlab_domain" ]; then
     # hosted GitLab
   elif grep -q gitlab <<<$giturl; then
     giturl=${giturl/git\@gitlab\.com\:/https://gitlab.com/}
-    providerUrlDifference=tree
   fi
 fi
 giturl=${giturl%\.git}
