@@ -31,12 +31,14 @@
     "git-home": "git-open"
   },
   "scripts": {
-    "lint:package": "echo \"\nLinting package.json\" && node ./node_modules/package-json-validator/bin/pjv --recommendations --warnings && echo \"OK\n\n\"",
+    "lint:editorconfig": "eclint check git-open* readme*",
+    "lint:package": "echo \"\nLinting package.json\" && pjv --recommendations --warnings && echo \"OK\n\n\"",
     "lint:readme": "echo \"\nLinting README.md\" && node ./node_modules/markdownlint/lib/markdownlint.js --config markdownlint.json README.md && echo \"OK\n\n\"",
     "test": "npm run --silent lint:package && npm run --silent lint:readme"
   },
   "dependencies": {},
   "devDependencies": {
+    "eclint": "^2.1.0",
     "markdownlint": "^0.2.0",
     "package-json-validator": "^0.6.1"
   }
