@@ -98,7 +98,7 @@ else
   gitlab_ssh_domain=$(git config --get gitopen.gitlab.ssh.domain)
   gitlab_ssh_domain=${gitlab_ssh_domain:-$gitlab_domain}
   gitlab_ssh_port=$(git config --get gitopen.gitlab.ssh.port)
-  
+
   gitlab_protocol=$(git config --get gitopen.gitlab.protocol)
   if [ -z "$gitlab_protocol" ]; then
       gitlab_protocol=https
