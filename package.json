@@ -31,7 +31,7 @@
     "git-home": "git-open"
   },
   "scripts": {
-    "lint:editorconfig": "eclint check git-open* readme*",
+    "lint:editorconfig": "eclint check git-open* readme* .travis.yml",
     "lint:package": "pjv --recommendations --warnings",
     "lint:readme": "node ./node_modules/markdownlint/lib/markdownlint.js --config markdownlint.json README.md",
     "test": "npm run lint:package && npm run lint:readme && npm run lint:editorconfig"
