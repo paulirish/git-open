@@ -34,7 +34,7 @@
     "lint:editorconfig": "eclint check git-open* readme*",
     "lint:package": "echo \"\nLinting package.json\" && pjv --recommendations --warnings && echo \"OK\n\n\"",
     "lint:readme": "echo \"\nLinting README.md\" && node ./node_modules/markdownlint/lib/markdownlint.js --config markdownlint.json README.md && echo \"OK\n\n\"",
-    "test": "npm run --silent lint:package && npm run --silent lint:readme"
+    "test": "npm run lint:package && npm run lint:readme && npm run lint:editorconfig"
   },
   "dependencies": {},
   "devDependencies": {
