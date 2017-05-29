@@ -55,12 +55,12 @@ branch=${branch//%/%25} && branch=${branch//#/%23}
 
 # URL normalization
 # GitHub gists
-if grep -q gist.github <<<$giturl; then
+if grep -q gist.github <<<"$giturl"; then
   giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com/}
   providerUrlDifference=tree
 
 # GitHub
-elif grep -q github <<<$giturl; then
+elif grep -q github <<<"$giturl"; then
   giturl=${giturl/git\@github\.com\:/https://github.com/}
 
   # handle SSH protocol (links like ssh://git@github.com/user/repo)
@@ -69,7 +69,7 @@ elif grep -q github <<<$giturl; then
   providerUrlDifference=tree
 
 # Bitbucket
-elif grep -q bitbucket <<<$giturl; then
+elif grep -q bitbucket <<<"$giturl"; then
   giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
   # handle SSH protocol (change ssh://https://bitbucket.org/user/repo to https://bitbucket.org/user/repo)
   giturl=${giturl/#ssh\:\/\/git\@/https://}
@@ -83,7 +83,7 @@ elif grep -q bitbucket <<<$giturl; then
   branch="?at=${branch}"
 
 # Atlassian Bitbucket Server
-elif grep -q "/scm/" <<<$giturl; then
+elif grep -q "/scm/" <<<"$giturl"; then
   re='(.*)/scm/(.*)/(.*)\.git'
   if [[ $giturl =~ $re ]]; then
     giturl=${BASH_REMATCH[1]}/projects/${BASH_REMATCH[2]}/repos/${BASH_REMATCH[3]}
@@ -105,7 +105,7 @@ else
   fi
 
 if [ -n "$gitlab_domain" ]; then
-    if egrep -q "${gitlab_domain}|${gitlab_ssh_domain}" <<<$giturl; then
+    if egrep -q "${gitlab_domain}|${gitlab_ssh_domain}" <<<"$giturl"; then
 
       # Handle GitLab's default SSH notation (like git@gitlab.domain.com:user/repo)
       giturl=${giturl/git\@${gitlab_ssh_domain}\:/${gitlab_protocol}://${gitlab_domain}/}
@@ -123,7 +123,7 @@ if [ -n "$gitlab_domain" ]; then
       providerUrlDifference=tree
     fi
     # hosted GitLab
-  elif grep -q gitlab <<<$giturl; then
+  elif grep -q gitlab <<<"$giturl"; then
     giturl=${giturl/git\@gitlab\.com\:/https://gitlab.com/}
     providerUrlDifference=tree
   fi
