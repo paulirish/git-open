@@ -62,13 +62,13 @@ if grep -q gist.github <<<"$giturl"; then
 # GitHub
 elif grep -q github <<<"$giturl"; then
   giturl=${giturl/git\@github\.com\:/https://github.com/}
-  
+
   # handle urls with the git user
   giturl=${giturl/#github\.com\:/https://github.com/}
-  
+
   # handle urls without the github domain with git user
   giturl=${giturl/#github\:/https://github.com/}
-  
+
   # handle urls without the github domain
   giturl=${giturl/#ssh\:\/\/git\@github\//https://github.com/}
 
