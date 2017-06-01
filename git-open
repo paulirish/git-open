@@ -110,19 +110,25 @@ else
 if [ -n "$gitlab_domain" ]; then
     if egrep -q "${gitlab_domain}|${gitlab_ssh_domain}" <<<"$giturl"; then
 
+      # bring it into the default notation
+      # handle SSH protocol (links like ssh://git@gitlab.domain.com/user/repo)
+      giturl=${giturl/#ssh\:\/\//}
+
+      # remove SSH port
+      if [ -n "$gitlab_ssh_port" ]; then
+        giturl=${giturl/\:${gitlab_ssh_port}/}
+      fi
+
+      # replace slash following domain with colon
+      giturl=${giturl/${gitlab_ssh_domain}\//${gitlab_ssh_domain}\:}
+
       # Handle GitLab's default SSH notation (like git@gitlab.domain.com:user/repo)
       giturl=${giturl/git\@${gitlab_ssh_domain}\:/${gitlab_protocol}://${gitlab_domain}/}
 
-      # handle SSH protocol (links like ssh://git@gitlab.domain.com/user/repo)
-      giturl=${giturl/#ssh\:\/\//${gitlab_protocol}://}
 
       # remove git@ from the domain
       giturl=${giturl/git\@${gitlab_ssh_domain}/${gitlab_domain}/}
 
-      # remove SSH port
-      if [ -n "$gitlab_ssh_port" ]; then
-        giturl=${giturl/\/:${gitlab_ssh_port}\///}
-      fi
       providerUrlDifference=tree
     fi
     # hosted GitLab
@@ -131,6 +137,7 @@ if [ -n "$gitlab_domain" ]; then
     providerUrlDifference=tree
   fi
 fi
+
 giturl=${giturl%\.git}
 
 if [ -n "$issue" ]; then
