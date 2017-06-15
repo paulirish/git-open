@@ -31,9 +31,12 @@ function create_git_sandbox() {
   rm -rf "$foldername"
   mkdir "$foldername"
   cd "$foldername"
+
   git init -q
+  git config user.email "test@runner.com" && git config user.name "Test Runner"
   git remote add origin git@github.com:user/repo.git
   git checkout -fb master
+
   echo "ok" > readme.txt
   git add readme.txt
   git commit -m "add file" -q
