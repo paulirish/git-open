@@ -153,7 +153,7 @@ esac
 
 # if testing, log results to stdout. otherwise, mute the output
 if [ "$BATS_CWD" ]; then
-  open=printf
+  open=echo
 else
   exec &>/dev/null
 fi;
