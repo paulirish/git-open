@@ -119,7 +119,7 @@ If your Gitlab custom hosted is serving `http` you can also specify this:
 git config [--global] gitopen.gitlab.protocol http
 ```
 
-## Related projects / alternatives
+## Alternative projects
 
 See [hub](https://github.com/github/hub) for complete GitHub opening support.
 It's the official GitHub project and provides `hub browse`.
@@ -144,8 +144,17 @@ Please provide examples of the URLs you are parsing with each PR.
 
 #### Testing:
 
+You'll need to install [bats](https://github.com/sstephenson/bats#installing-bats-from-source), the Bash automated testing system. It's also available as `brew install bats`
+
 ```sh
+git submodule update --init # pull in the assertion libraries
+
+# Run the test suite once:
 bats test
+
+# Run it on every change with `entr`
+brew install entr
+ls --color=never * test/*.bats | entr bats test
 ```
 
 ## Related projects
