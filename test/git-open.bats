@@ -6,12 +6,14 @@ load 'test_helper/bats-assert/load'
 foldername="sandboxrepo"
 
 setup() {
+  # creates git repo with this setup:
+  #   git remote set-url origin git@github.com:user/repo.git
+  #   git checkout master
   create_git_sandbox
 }
 
 @test "git-open gh basic" {
   run ../git-open
-  git remote set-url origin git@github.com:user/repo.git
   assert_output 'https://github.com/user/repo/'
 }
 

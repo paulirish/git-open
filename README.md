@@ -138,9 +138,15 @@ from which this plugin was forked.
 
 [jasonmccreary](https://github.com/jasonmccreary/) did [the initial hard work](https://github.com/jasonmccreary/gh). Since then, [many contributors](https://github.com/paulirish/git-open/graphs/contributors) have submitted great PRs.
 
-## Contributing
+## Contributing & Development
 
 Please provide examples of the URLs you are parsing with each PR.
+
+#### Testing:
+
+```sh
+bats test
+```
 
 ## Related projects
 
