@@ -152,7 +152,7 @@ case $( uname -s ) in
 esac
 
 # if testing, log results to stdout. otherwise, mute the output
-if [ -n $BATS_TEST_NAME ]; then
+if [ $BATS_CWD ]; then
   open=printf
 else
   exec &>/dev/null
