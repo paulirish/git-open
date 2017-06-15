@@ -151,6 +151,14 @@ case $( uname -s ) in
   *)       open=${BROWSER:-xdg-open};;
 esac
 
+# if testing, log results to stdout. otherwise, mute the output
+if [ -n $BATS_TEST_NAME ]; then
+  open=printf
+else
+  exec &>/dev/null
+fi;
+
 # open it in a browser
-$open "$giturl" &> /dev/null
+$open "$giturl"
+
 exit $?
