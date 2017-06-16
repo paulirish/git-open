@@ -57,6 +57,16 @@ setup() {
   assert_output "https://github.com/user/repo/"
 }
 
+@test "gh: git protocol origin" {
+  # currently fails. derimagia rewrite fixes
+  skip
+
+  git remote set-url origin "git://github.com/user/repo.git"
+  git checkout -B "master"
+  run ../git-open
+  assert_output "https://github.com/user/repo"
+}
+
 @test "gh: git open issue" {
   # https://github.com/paulirish/git-open/pull/46
   git remote set-url origin "github.com:paulirish/git-open.git"
