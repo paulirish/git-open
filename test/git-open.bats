@@ -18,7 +18,7 @@ setup() {
   git remote set-url origin "git@github.com:user/repo.git"
   git checkout -B "master"
   run ../git-open
-  assert_output "https://github.com/user/repo/"
+  assert_output "https://github.com/user/repo"
 }
 
 @test "gh: branch" {
@@ -32,7 +32,7 @@ setup() {
   git remote set-url origin "git@github.com:user/repo.git"
   git remote add upstream "git@github.com:upstreamorg/repo.git"
   run ../git-open "upstream"
-  assert_output "https://github.com/upstreamorg/repo/"
+  assert_output "https://github.com/upstreamorg/repo"
 
   git checkout -B "mybranch"
   run ../git-open "upstream" "otherbranch"
@@ -43,18 +43,18 @@ setup() {
   # https://github.com/paulirish/git-open/pull/63
   git remote set-url origin "github.com:paulirish/git-open.git"
   run ../git-open
-  assert_output "https://github.com/paulirish/git-open/"
+  assert_output "https://github.com/paulirish/git-open"
 }
 
 @test "gh: ssh origin" {
   git remote set-url origin "ssh://git@github.com/user/repo"
   run ../git-open
-  assert_output "https://github.com/user/repo/"
+  assert_output "https://github.com/user/repo"
 
   # https://github.com/paulirish/git-open/pull/30
   git remote set-url origin "ssh://git@github.com/user/repo.git"
   run ../git-open
-  assert_output "https://github.com/user/repo/"
+  assert_output "https://github.com/user/repo"
 }
 
 @test "gh: git protocol origin" {
@@ -78,7 +78,7 @@ setup() {
 @test "gh: gist" {
   git remote set-url origin "git@gist.github.com:2d84a6db1b41b4020685.git"
   run ../git-open
-  assert_output "https://gist.github.com/2d84a6db1b41b4020685/"
+  assert_output "https://gist.github.com/2d84a6db1b41b4020685"
 }
 
 @test "basic: # and % in branch names are URL encoded" {
@@ -101,15 +101,14 @@ setup() {
 @test "bitbucket: basic" {
   git remote set-url origin "git@bitbucket.org:paulirish/crbug-extension.git"
   run ../git-open
-  assert_output --partial "https://bitbucket.org/paulirish/crbug-extension/"
+  assert_output --partial "https://bitbucket.org/paulirish/crbug-extension"
 }
 
 @test "bitbucket: non-origin remote" {
   # https://github.com/paulirish/git-open/pull/4
   git remote add bbclone "git@bitbucket.org:rwhitbeck/git-open.git"
   run ../git-open "bbclone"
-  assert_output --partial "https://bitbucket.org/rwhitbeck/git-open/"
-  assert_output --partial "//?at=master"
+  assert_output "https://bitbucket.org/rwhitbeck/git-open"
 }
 
 @test "bitbucket: open source view" {
@@ -117,11 +116,7 @@ setup() {
   git remote set-url origin "https://bitbucket.org/kisom/consbri.git"
   git checkout -B "devel"
   run ../git-open
-  assert_output --partial "https://bitbucket.org/kisom/consbri/src/"
-  assert_output --partial "?at=devel"
-
-  # FIXME: deal with the double slash in the URL
-  skip  # FWIW, above assertions are still tested ;)
+  assert_output "https://bitbucket.org/kisom/consbri/src/devel"
   refute_output --partial "//"
 }
 
@@ -140,8 +135,7 @@ setup() {
   # https://github.com/paulirish/git-open/pull/36
   git remote set-url origin "ssh://git@bitbucket.org/lbesson/bin.git"
   run ../git-open
-  assert_output --partial "https://bitbucket.org/lbesson/bin/"
-  assert_output --partial "//?at=master"
+  assert_output "https://bitbucket.org/lbesson/bin"
 }
 
 @test "bitbucket: no username@ in final url" {
@@ -162,7 +156,7 @@ setup() {
   git config "gitopen.gitlab.domain" "gitlab.example.com"
   git config "gitopen.gitlab.ssh.domain" "git.example.com"
   run ../git-open
-  assert_output "https://gitlab.example.com/namespace/project/"
+  assert_output "https://gitlab.example.com/namespace/project"
 }
 
 @test "gitlab: default ssh origin style" {
@@ -170,7 +164,7 @@ setup() {
   git remote set-url origin "git@gitlab.example.com:user/repo"
   git config "gitopen.gitlab.domain" "gitlab.example.com"
   run ../git-open
-  assert_output "https://gitlab.example.com/user/repo/"
+  assert_output "https://gitlab.example.com/user/repo"
 }
 
 @test "gitlab: ssh:// origin style" {
@@ -178,11 +172,7 @@ setup() {
   git remote set-url origin "ssh://git@gitlab.domain.com/user/repo"
   git config "gitopen.gitlab.domain" "gitlab.domain.com"
   run ../git-open
-  assert_output --partial "https://gitlab.domain.com/"
-  assert_output --partial "/user/repo/"
-
-  # FIXME: deal with the double slash in the URL
-  skip
+  assert_output "https://gitlab.domain.com/user/repo"
   refute_output --partial "//"
 }
 
