@@ -8,146 +8,53 @@
 
 
 # are we in a git repo?
-git rev-parse --is-inside-work-tree &>/dev/null
-
-if [[ $? != 0 ]]; then
+if ! git rev-parse --is-inside-work-tree &>/dev/null; then
   echo "Not a git repository." 1>&2
   exit 1
 fi
 
+# assume remote origin if not provided
+remote=${1:-"origin"}
 
-# assume origin if not provided
-# fallback to upstream if neither is present.
-remote="origin"
-if [ -n "$1" ]; then
-  if [ "$1" == "issue" ]; then
-    currentBranch=$(git symbolic-ref -q --short HEAD)
-    regex='^issue'
-    if [[ $currentBranch =~ $regex ]]; then
-      issue=${currentBranch#*#}
-    else
-      echo "'git open issue' expect branch naming to be issues/#123" 1>&2
-      exit 1
-    fi
-  else
-    remote="$1"
-  fi
-fi
+# @TODO ls-remote will also expand "insteadOf" items `giturl=$(git ls-remote --get-url $remote)``
+giturl=$(git config --get "remote.${remote}.url")
 
-remote_url="remote.${remote}.url"
-
-giturl=$(git config --get "$remote_url")
-if [ -z "$giturl" ]; then
-  echo "$remote_url not set." 1>&2
+if [[ -z "$giturl" ]]; then
+  echo "Git remote is not set for $remote" 1>&2
   exit 1
 fi
 
-# get current branch
-if [ -z "$2" ]; then
-  branch=$(git symbolic-ref -q --short HEAD)
-else
-  branch="$2"
-fi
+# Initial case examples: 'git@example.com:user/project', 'https://example.com:8080/scm/user/project.git/'
+# Trim "/" and ".git" from the end of the url
+giturl=${giturl%/} giturl=${giturl%.git}
 
-# Make # and % characters url friendly
-#   github.com/paulirish/git-open/pull/24
-branch=${branch//%/%25} && branch=${branch//#/%23}
+# Trim before last '@' and protocol (*://) from beginning
+uri=${giturl##*@} uri=${uri##*://}
 
-# URL normalization
-# GitHub gists
-if grep -q gist.github <<<"$giturl"; then
-  giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com/}
-  providerUrlDifference=tree
+# Trims before first ':' or '/' to get path
+path=${uri#*[/:]}
 
-# GitHub
-elif grep -q github <<<"$giturl"; then
-  giturl=${giturl/git\@github\.com\:/https://github.com/}
+# Trims after first ':' or '/' to remove path
+server=${uri%%[/:]*}
 
-  # handle urls with the git user
-  giturl=${giturl/#github\.com\:/https://github.com/}
+# Get current branch
+branch=${2:-$(git symbolic-ref -q --short HEAD)}
 
-  # handle SSH protocol (links like ssh://git@github.com/user/repo)
-  giturl=${giturl/#ssh\:\/\/git\@github\.com\//https://github.com/}
+providerUrlDifference="tree"
+case "$server" in
+    "bitbucket.org") providerUrlDifference="src" ;;
+esac
 
-  providerUrlDifference=tree
-
-# Bitbucket
-elif grep -q bitbucket <<<"$giturl"; then
-  giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
-  # handle SSH protocol (change ssh://https://bitbucket.org/user/repo to https://bitbucket.org/user/repo)
-  giturl=${giturl/#ssh\:\/\/git\@/https://}
-
-  # remove username
-  giturl=${giturl//\/\/*@bitbucket.org///bitbucket.org}
-
-  rev="$(git rev-parse HEAD)"
-  git_pwd="$(git rev-parse --show-prefix)"
-  providerUrlDifference="src/${rev}/${git_pwd}"
-  branch="?at=${branch}"
-
-# Atlassian Bitbucket Server
-elif grep -q "/scm/" <<<"$giturl"; then
-  re='(.*)/scm/(.*)/(.*)\.git'
-  if [[ $giturl =~ $re ]]; then
-    giturl=${BASH_REMATCH[1]}/projects/${BASH_REMATCH[2]}/repos/${BASH_REMATCH[3]}
-    providerUrlDifference=browse
-    branch="?at=refs%2Fheads%2F${branch}"
-  fi
-
-# GitLab
-else
-  # custom GitLab
-  gitlab_domain=$(git config --get gitopen.gitlab.domain)
-  gitlab_ssh_domain=$(git config --get gitopen.gitlab.ssh.domain)
-  gitlab_ssh_domain=${gitlab_ssh_domain:-$gitlab_domain}
-  gitlab_ssh_port=$(git config --get gitopen.gitlab.ssh.port)
-
-  gitlab_protocol=$(git config --get gitopen.gitlab.protocol)
-  if [ -z "$gitlab_protocol" ]; then
-      gitlab_protocol=https
-  fi
-
-if [ -n "$gitlab_domain" ]; then
-    if egrep -q "${gitlab_domain}|${gitlab_ssh_domain}" <<<"$giturl"; then
-
-      # bring it into the default notation
-      # handle SSH protocol (links like ssh://git@gitlab.domain.com/user/repo)
-      giturl=${giturl/#ssh\:\/\//}
-
-      # remove SSH port
-      if [ -n "$gitlab_ssh_port" ]; then
-        giturl=${giturl/\:${gitlab_ssh_port}/}
-      fi
-
-      # replace slash following domain with colon
-      giturl=${giturl/${gitlab_ssh_domain}\//${gitlab_ssh_domain}\:}
-
-      # Handle GitLab's default SSH notation (like git@gitlab.domain.com:user/repo)
-      giturl=${giturl/git\@${gitlab_ssh_domain}\:/${gitlab_protocol}://${gitlab_domain}/}
-
-
-      # remove git@ from the domain
-      giturl=${giturl/git\@${gitlab_ssh_domain}/${gitlab_domain}/}
-
-      providerUrlDifference=tree
-    fi
-    # hosted GitLab
-  elif grep -q gitlab <<<"$giturl"; then
-    giturl=${giturl/git\@gitlab\.com\:/https://gitlab.com/}
-    providerUrlDifference=tree
-  fi
-fi
-
-giturl=${giturl%\.git}
-
-if [ -n "$issue" ]; then
-  giturl="${giturl}/issues/${issue}"
-elif [ -n "$branch" ]; then
-  giturl="${giturl}/${providerUrlDifference}/${branch}"
-fi
+# @TODO: support non-https?
+openurl="https://$server/$path"
 
 # simplify URL for master
-giturl=${giturl/tree\/master/}
+if [[ $branch != "master" ]]; then
+    # Make # and % characters url friendly
+    #   github.com/paulirish/git-open/pull/24
+    branch=${branch//%/%25} branch=${branch//#/%23}
+    openurl="$openurl/$providerUrlDifference/$branch"
+fi
 
 # get current open browser command
 case $( uname -s ) in
@@ -166,6 +73,6 @@ else
 fi;
 
 # open it in a browser
-$open "$giturl"
+$open "$openurl"
 
 exit $?
