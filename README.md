@@ -1,4 +1,4 @@
-# git-open
+# git-open [![Build Status](https://img.shields.io/travis/paulirish/git-open/master.svg)](https://travis-ci.org/paulirish/git-open)
 
 Type `git open` to open the repo website (GitHub, GitLab, Bitbucket) in your browser.
 
@@ -174,6 +174,7 @@ Copyright Jason McCreary & Paul Irish. Licensed under MIT.
 
 ## Changelog
 
+- **2017-06-17** - test suite added
 - **2016-07-23** - readme -- fix oh-my-zsh install instructions
 - **2016-07-22** - 1.1.0, update and add linters for package.json, readme.
   Re-publish to NPM.
