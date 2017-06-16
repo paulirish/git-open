@@ -9,6 +9,8 @@ addons:
 cache:
   directories:
     - node_modules
+before_install:
+  - git clone --depth 1 https://github.com/sstephenson/bats.git
 install:
   - npm install
 script:
@@ -16,5 +18,4 @@ script:
   - npm run lint:readme
   - npm run lint:editorconfig
   - shellcheck git-open
-
-
+  - ./bats/bin/bats test/*.bats

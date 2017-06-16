@@ -158,6 +158,14 @@ case $( uname -s ) in
   *)       open=${BROWSER:-xdg-open};;
 esac
 
+# if testing, log results to stdout. otherwise, mute the output
+if [ "$BATS_CWD" ]; then
+  open=echo
+else
+  exec &>/dev/null
+fi;
+
 # open it in a browser
-$open "$giturl" &> /dev/null
+$open "$giturl"
+
 exit $?
