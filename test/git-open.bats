@@ -196,12 +196,12 @@ function create_git_sandbox() {
 
   git init -q
   git config user.email "test@runner.com" && git config user.name "Test Runner"
+
   # newer git auto-creates the origin remote
-  if [ $(git remote) ]; then
+  if ! git remote add origin "github.com:paulirish/git-open.git"; then
     git remote set-url origin "github.com:paulirish/git-open.git"
-  else
-    git remote add origin "github.com:paulirish/git-open.git"
   fi
+
   git checkout -B "master"
 
   echo "ok" > readme.txt
