@@ -32,7 +32,7 @@ giturl=${giturl%/} giturl=${giturl%.git}
 uri=${giturl##*@} uri=${uri##*://}
 
 # Trims before first ':' or '/' to get path
-path=${uri#*[/:]}
+urlpath=${uri#*[/:]}
 
 # Trims after first ':' or '/' to remove path
 server=${uri%%[/:]*}
@@ -40,39 +40,47 @@ server=${uri%%[/:]*}
 # Get current branch
 branch=${2:-$(git symbolic-ref -q --short HEAD)}
 
-providerUrlDifference="tree"
-case "$server" in
-    "bitbucket.org") providerUrlDifference="src" ;;
-esac
+# Make # and % characters url friendly
+#   github.com/paulirish/git-open/pull/24
+branch=${branch//%/%25} branch=${branch//#/%23}
+
+# Split arguments on '/'
+IFS='/' pathargs=($urlpath)
+
+providerBranchRef="tree/$branch"
+
+if [[ "$server" == 'bitbucket.org' ]]; then
+  # Bitbucket, see https://github.com/paulirish/git-open/issues/80 for why ?at is needed.
+  providerBranchRef="src?at=$branch"
+elif [[ ${pathargs[0]} == 'scm' ]]; then
+  # Bitbucket server, which starts with 'scm'
+  # Replace the first element, 'scm', with 'projects'. Keep the first argument, the string 'repos', and finally the rest of the arguments.
+  pathargs=('projects' ${pathargs[1]} 'repos' "${pathargs[@]:2}")
+  IFS='/' urlpath="${pathargs[*]}"
+  providerBranchRef="browse?at=$branch"
+fi
 
 # @TODO: support non-https?
-openurl="https://$server/$path"
+openurl="https://$server/$urlpath"
 
 # simplify URL for master
 if [[ $branch != "master" ]]; then
-    # Make # and % characters url friendly
-    #   github.com/paulirish/git-open/pull/24
-    branch=${branch//%/%25} branch=${branch//#/%23}
-    openurl="$openurl/$providerUrlDifference/$branch"
+    openurl="$openurl/$providerBranchRef"
 fi
 
 # get current open browser command
 case $( uname -s ) in
-  Darwin)  open=open;;
-  MINGW*)  open=start;;
-  CYGWIN*) open=cygstart;;
-  MSYS*)   open="powershell.exe –NoProfile Start";;
-  *)       open=${BROWSER:-xdg-open};;
+  Darwin)  open='open';;
+  MINGW*)  open='start';;
+  CYGWIN*) open='cygstart';;
+  MSYS*)   open='powershell.exe –NoProfile Start';;
+  *)       open='xdg-open';;
 esac
 
-# if testing, log results to stdout. otherwise, mute the output
-if [ "$BATS_CWD" ]; then
-  open=echo
-else
+# Allow printing the url if BROWSER=echo
+if [[ $BROWSER != "echo" ]]; then
   exec &>/dev/null
-fi;
+fi
 
 # open it in a browser
-$open "$openurl"
-
-exit $?
+${BROWSER:-$open} "$openurl"

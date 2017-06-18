@@ -7,6 +7,7 @@ foldername="sandboxrepo"
 
 setup() {
   create_git_sandbox
+  BROWSER=echo
 }
 
 
@@ -118,6 +119,9 @@ setup() {
   run ../git-open
   assert_output "https://bitbucket.org/kisom/consbri/src/devel"
   refute_output --partial "//"
+
+  # alternative destination..
+  # assert_output "https://bitbucket.org/kisom/consbri/src/?at=devel"
 }
 
 @test "bitbucket: open source view with a slash/branch" {
@@ -143,6 +147,21 @@ setup() {
   git remote set-url origin "https://trend_rand@bitbucket.org/trend_rand/test-repo.git"
   run ../git-open
   refute_output --partial "@"
+}
+
+@test "bitbucket server" {
+  # https://github.com/paulirish/git-open/pull/15
+  git remote set-url origin "https://user@bitbucket.example.com/scm/ppp/test-repo.git"
+  run ../git-open
+  assert_output "https://bitbucket.example.com/projects/ppp/repos/test-repo"
+}
+
+@test "bitbucket server branch" {
+  # https://github.com/paulirish/git-open/pull/15
+  git remote set-url origin "https://user@bitbucket.example.com/scm/ppp/test-repo.git"
+  git checkout -B "bb-server"
+  run ../git-open
+  assert_output "https://bitbucket.example.com/projects/ppp/repos/test-repo/browse?at=bb-server"
 }
 
 
@@ -180,7 +199,6 @@ setup() {
 # Tests not yet written:
 #   * gitopen.gitlab.port
 #   * gitopen.gitlab.protocol
-#   * Atlassian Bitbucket Server (https://github.com/paulirish/git-open/pull/15)
 
 
 teardown() {
