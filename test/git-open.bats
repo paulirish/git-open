@@ -112,12 +112,28 @@ setup() {
   assert_output --partial "//?at=master"
 }
 
-@test "bitbucket: branch" {
-  git remote set-url origin "https://paulirish@bitbucket.org/malb/lwe-estimator.git"
-  git checkout -B "new-bkw"
+@test "bitbucket: open source view" {
+  # https://github.com/paulirish/git-open/pull/26
+  git remote set-url origin "https://bitbucket.org/kisom/consbri.git"
+  git checkout -B "devel"
   run ../git-open
-  assert_output --partial "https://bitbucket.org/malb/lwe-estimator/src/"
-  assert_output --partial "?at=new-bkw"
+  assert_output --partial "https://bitbucket.org/kisom/consbri/src/"
+  assert_output --partial "?at=devel"
+
+  # FIXME: deal with the double slash in the URL
+  skip  # FWIW, above assertions are still tested ;)
+  refute_output --partial "//"
+}
+
+@test "bitbucket: open source view with a slash/branch" {
+  # https://github.com/paulirish/git-open/pull/26
+  # see https://github.com/paulirish/git-open/issues/80 for feat/branchname issues
+  git remote set-url origin "https://bitbucket.org/guyzmo/git-repo.git"
+  git checkout -B "bugfix/conftest_fix"
+  run ../git-open
+  assert_output --partial "https://bitbucket.org/guyzmo/git-repo/src/"
+  # BB appears to be fine with both literal or URL-encoded forward slash
+  assert_output --partial "?at=bugfix/conftest_fix"
 }
 
 @test "bitbucket: ssh:// clone urls" {
@@ -164,7 +180,10 @@ setup() {
   run ../git-open
   assert_output --partial "https://gitlab.domain.com/"
   assert_output --partial "/user/repo/"
-  # assert_output "https://gitlab.domain.com//user/repo/" # TODO fix double slash
+
+  # FIXME: deal with the double slash in the URL
+  skip
+  refute_output --partial "//"
 }
 
 
