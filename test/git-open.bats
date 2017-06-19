@@ -68,9 +68,6 @@ setup() {
 }
 
 @test "gh: git protocol origin" {
-  # currently fails. derimagia rewrite fixes
-  skip
-
   git remote set-url origin "git://github.com/user/repo.git"
   git checkout -B "master"
   run ../git-open
