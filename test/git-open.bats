@@ -7,9 +7,18 @@ foldername="sandboxrepo"
 
 setup() {
   create_git_sandbox
-  BROWSER=echo
+  export BROWSER=echo
 }
 
+##
+## Test environment
+##
+@test "test environment" {
+  assert_equal "$BROWSER" "echo"
+  cd ..
+  assert [ -e "$foldername" ]
+  assert [ -e "$foldername/.git" ]
+}
 
 ##
 ## GitHub
