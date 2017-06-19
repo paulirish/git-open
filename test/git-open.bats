@@ -173,7 +173,7 @@ setup() {
   assert_output "https://gitlab.example.com/user/repo/"
 }
 
-@test "gitlab: ssh:// origin style" {
+@test "gitlab: ssh://git@ origin" {
   # https://github.com/paulirish/git-open/pull/51
   git remote set-url origin "ssh://git@gitlab.domain.com/user/repo"
   git config "gitopen.gitlab.domain" "gitlab.domain.com"
@@ -186,6 +186,24 @@ setup() {
   refute_output --partial "//"
 }
 
+@test "gitlab: ssh://git@host:port origin" {
+  # https://github.com/paulirish/git-open/pull/76
+  # this first set mostly matches the "gitlab: ssh://git@ origin" test
+  git remote set-url origin "ssh://git@repo.intranet/XXX/YYY.git"
+  git config "gitopen.gitlab.domain" "repo.intranet"
+  run ../git-open
+  assert_output "https://repo.intranet/XXX/YYY/"
+  refute_output --partial "ssh://"
+  refute_output --partial "//XXX"
+
+  git remote set-url origin "ssh://git@repo.intranet:7000/XXX/YYY.git"
+  git config "gitopen.gitlab.domain" "repo.intranet"
+  git config "gitopen.gitlab.ssh.port" "7000"
+  run ../git-open
+  assert_output "https://repo.intranet/XXX/YYY/"
+  refute_output --partial "ssh://"
+  refute_output --partial "//XXX"
+}
 
 # Tests not yet written:
 #   * gitopen.gitlab.port
