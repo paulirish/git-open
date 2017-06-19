@@ -50,14 +50,16 @@ IFS='/' pathargs=($urlpath)
 providerBranchRef="tree/$branch"
 
 if [[ "$server" == 'bitbucket.org' ]]; then
-  # Bitbucket, see https://github.com/paulirish/git-open/issues/80 for why ?at is needed.
-  providerBranchRef="src?at=$branch"
+  # Bitbucket, see https://github.com/paulirish/git-open/issues/80 for why the ref and the ?at is needed.
+  ref=$(git rev-parse --short $branch)
+  providerBranchRef="src/$ref?at=$branch"
 elif [[ ${pathargs[0]} == 'scm' ]]; then
   # Bitbucket server, which starts with 'scm'
   # Replace the first element, 'scm', with 'projects'. Keep the first argument, the string 'repos', and finally the rest of the arguments.
   pathargs=('projects' ${pathargs[1]} 'repos' "${pathargs[@]:2}")
   IFS='/' urlpath="${pathargs[*]}"
-  providerBranchRef="browse?at=$branch"
+  ref=$(git rev-parse --short $branch)
+  providerBranchRef="browse/$ref?at=$branch"
 fi
 
 # @TODO: support non-https?
