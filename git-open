@@ -13,6 +13,16 @@ if ! git rev-parse --is-inside-work-tree &>/dev/null; then
   exit 1
 fi
 
+is_issue=0
+
+# If the first argument is 'issue', we want to load the issue page
+if [[ "$1" == 'issue' ]]; then
+  is_issue=1
+
+  # Allow the user to provide other args, aka `git open issue upstream 79`
+  shift
+fi
+
 # assume remote origin if not provided
 remote=${1:-"origin"}
 
@@ -40,14 +50,18 @@ server=${uri%%[/:]*}
 # Get current branch
 branch=${2:-$(git symbolic-ref -q --short HEAD)}
 
-# Make # and % characters url friendly
-#   github.com/paulirish/git-open/pull/24
-branch=${branch//%/%25} branch=${branch//#/%23}
-
 # Split arguments on '/'
 IFS='/' pathargs=($urlpath)
 
-providerBranchRef="tree/$branch"
+if (( $is_issue )); then
+  # For issues, take the numbers and preprend 'issues/'
+  providerBranchRef="issues/${branch//[^0-9]/}"
+else
+  # Make # and % characters url friendly
+  #   github.com/paulirish/git-open/pull/24
+  branch=${branch//%/%25} branch=${branch//#/%23}
+  providerBranchRef="tree/$branch"
+fi
 
 if [[ "$server" == 'bitbucket.org' ]]; then
   # Bitbucket, see https://github.com/paulirish/git-open/issues/80 for why the ref and the ?at is needed.
