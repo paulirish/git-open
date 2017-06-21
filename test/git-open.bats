@@ -128,11 +128,8 @@ setup() {
   git remote set-url origin "https://bitbucket.org/kisom/consbri.git"
   git checkout -B "devel"
   run ../git-open
-  assert_output "https://bitbucket.org/kisom/consbri/src/devel"
-  refute_output --partial "//"
-
-  # alternative destination..
-  # assert_output "https://bitbucket.org/kisom/consbri/src/?at=devel"
+  refute_output --partial "//kisom"
+  assert_output "https://bitbucket.org/kisom/consbri/src?at=devel"
 }
 
 @test "bitbucket: open source view with a slash/branch" {
@@ -141,7 +138,7 @@ setup() {
   git remote set-url origin "https://bitbucket.org/guyzmo/git-repo.git"
   git checkout -B "bugfix/conftest_fix"
   run ../git-open
-  assert_output --partial "https://bitbucket.org/guyzmo/git-repo/src/"
+  assert_output --partial "https://bitbucket.org/guyzmo/git-repo/src"
   # BB appears to be fine with both literal or URL-encoded forward slash
   assert_output --partial "?at=bugfix/conftest_fix"
 }
@@ -203,7 +200,7 @@ setup() {
   git config "gitopen.gitlab.domain" "gitlab.domain.com"
   run ../git-open
   assert_output "https://gitlab.domain.com/user/repo"
-  refute_output --partial "//"
+  refute_output --partial "//user"
 }
 
 @test "gitlab: ssh://git@host:port origin" {
@@ -212,7 +209,7 @@ setup() {
   git remote set-url origin "ssh://git@repo.intranet/XXX/YYY.git"
   git config "gitopen.gitlab.domain" "repo.intranet"
   run ../git-open
-  assert_output "https://repo.intranet/XXX/YYY/"
+  assert_output "https://repo.intranet/XXX/YYY"
   refute_output --partial "ssh://"
   refute_output --partial "//XXX"
 
@@ -220,7 +217,7 @@ setup() {
   git config "gitopen.gitlab.domain" "repo.intranet"
   git config "gitopen.gitlab.ssh.port" "7000"
   run ../git-open
-  assert_output "https://repo.intranet/XXX/YYY/"
+  assert_output "https://repo.intranet/XXX/YYY"
   refute_output --partial "ssh://"
   refute_output --partial "//XXX"
 }
