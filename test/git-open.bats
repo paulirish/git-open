@@ -128,11 +128,9 @@ setup() {
   git remote set-url origin "https://bitbucket.org/kisom/consbri.git"
   git checkout -B "devel"
   run ../git-open
-  assert_output "https://bitbucket.org/kisom/consbri/src/devel"
+  ref=$(git rev-parse --short devel)
+  assert_output "https://bitbucket.org/kisom/consbri/src/$ref?at=devel"
   refute_output --partial "//"
-
-  # alternative destination..
-  # assert_output "https://bitbucket.org/kisom/consbri/src/?at=devel"
 }
 
 @test "bitbucket: open source view with a slash/branch" {
@@ -172,7 +170,8 @@ setup() {
   git remote set-url origin "https://user@bitbucket.example.com/scm/ppp/test-repo.git"
   git checkout -B "bb-server"
   run ../git-open
-  assert_output "https://bitbucket.example.com/projects/ppp/repos/test-repo/browse?at=bb-server"
+  ref=$(git rev-parse -q --short HEAD)
+  assert_output "https://bitbucket.example.com/projects/ppp/repos/test-repo/browse/$ref?at=bb-server"
 }
 
 
