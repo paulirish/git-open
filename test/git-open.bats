@@ -237,8 +237,11 @@ function create_git_sandbox() {
   rm -rf "$foldername"
   mkdir "$foldername"
   cd "$foldername"
+  # safety check. Don't muck with the git repo if we're not inside the sandbox.
+  assert_equal $(basename $PWD) "$foldername"
 
   git init -q
+  assert [ -e "../$foldername/.git" ]
   git config user.email "test@runner.com" && git config user.name "Test Runner"
 
   # newer git auto-creates the origin remote
