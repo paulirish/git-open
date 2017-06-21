@@ -155,7 +155,7 @@ You'll need to install [bats](https://github.com/sstephenson/bats#installing-bat
 git submodule update --init # pull in the assertion libraries
 
 # Run the test suite once:
-bats test
+bats test  # or `npm run unit`
 
 # Run it on every change with `entr`
 brew install entr
