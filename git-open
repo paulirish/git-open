@@ -53,7 +53,7 @@ branch=${2:-$(git symbolic-ref -q --short HEAD)}
 # Split arguments on '/'
 IFS='/' pathargs=($urlpath)
 
-if (( $is_issue )); then
+if (( is_issue )); then
   # For issues, take the numbers and preprend 'issues/'
   providerBranchRef="issues/${branch//[^0-9]/}"
 else
