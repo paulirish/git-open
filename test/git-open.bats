@@ -201,6 +201,18 @@ setup() {
   assert_output "https://mybb.domain.com/git/projects/ppp/repos/rrr"
 }
 
+@test "bitbucket: Bitbucket Server branch" {
+  # https://github.com/paulirish/git-open/issues/80
+  git remote set-url origin "https://user@mybb.domain.com/git/scm/ppp/rrr.git"
+  git checkout -B "develop"
+  run ../git-open
+
+  # The following query args work with BB Server:
+  #     at=refs%2Fheads%2Fdevelop, at=develop, at=refs/heads/develop
+  # However /src/develop does not (unlike bitbucket.org)
+  assert_output "https://mybb.domain.com/git/projects/ppp/repos/rrr?at=develop"
+}
+
 
 ##
 ## GitLab
