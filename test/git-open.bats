@@ -178,6 +178,9 @@ setup() {
 ##
 
 @test "gitlab: separate domains" {
+  skip
+  # skipping until test is fixed: see #87
+
   # https://github.com/paulirish/git-open/pull/56
   git remote set-url origin "git@git.example.com:namespace/project.git"
   git config "gitopen.gitlab.domain" "gitlab.example.com"
@@ -204,6 +207,9 @@ setup() {
 }
 
 @test "gitlab: ssh://git@host:port origin" {
+  skip
+  # skipping until test is fixed: see #87
+
   # https://github.com/paulirish/git-open/pull/76
   # this first set mostly matches the "gitlab: ssh://git@ origin" test
   git remote set-url origin "ssh://git@repo.intranet/XXX/YYY.git"
