@@ -6,6 +6,10 @@
 # git open
 # git open [remote] [branch]
 
+# import pr-utils from git-open's directory
+SOURCE_DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$SOURCE_DIR" ]]; then SOURCE_DIR="$PWD"; fi
+. "$SOURCE_DIR/pr-utils"
 
 # are we in a git repo?
 git rev-parse --is-inside-work-tree &>/dev/null
@@ -20,18 +24,33 @@ fi
 # fallback to upstream if neither is present.
 remote="origin"
 if [ -n "$1" ]; then
-  if [ "$1" == "issue" ]; then
-    currentBranch=$(git symbolic-ref -q --short HEAD)
-    regex='^issue'
-    if [[ $currentBranch =~ $regex ]]; then
-      issue=${currentBranch#*#}
-    else
-      echo "'git open issue' expect branch naming to be issues/#123" 1>&2
-      exit 1
-    fi
-  else
-    remote="$1"
-  fi
+  case "$1" in
+    "pr")
+      pr="self"
+      shift;
+      if [ "$1" == "parent" ]; then
+        pr="parent"
+        shift;
+      fi
+      if [ -n "$1" ]; then
+        remote="$1"
+      fi
+      ;;
+    "issue")
+      echo issue
+      currentBranch=$(git symbolic-ref -q --short HEAD)
+      regex='^issue'
+      if [[ $currentBranch =~ $regex ]]; then
+        issue=${currentBranch#*#}
+      else
+        echo "'git open issue' expect branch naming to be issues/#123" 1>&2
+        exit 1
+      fi
+      ;;
+    *)
+      remote="$1"
+      ;;
+  esac
 fi
 
 remote_url="remote.${remote}.url"
@@ -142,6 +161,15 @@ giturl=${giturl%\.git}
 
 if [ -n "$issue" ]; then
   giturl="${giturl}/issues/${issue}"
+elif [ -n "$pr" ]; then
+  allPrsUrl=$(getAllPrsUrl $giturl)
+  prUrl=$(getPrUrl $allPrsUrl)
+  if [ -n "$prUrl" ]; then
+    giturl=$prUrl
+  else
+    echo "No pull requests for $branch" 1>&2
+    exit 1
+  fi
 elif [ -n "$branch" ]; then
   giturl="${giturl}/${providerUrlDifference}/${branch}"
 fi
