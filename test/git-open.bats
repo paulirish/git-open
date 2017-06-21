@@ -80,6 +80,11 @@ setup() {
   git checkout -B "issues/#12"
   run ../git-open "issue"
   assert_output "https://github.com/paulirish/git-open/issues/12"
+
+  # https://github.com/paulirish/git-open/pull/86
+  git checkout -B "fix-issue-36"
+  run ../git-open "issue"
+  assert_output "https://github.com/paulirish/git-open/issues/36"
 }
 
 @test "gh: gist" {
