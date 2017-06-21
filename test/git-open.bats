@@ -104,6 +104,24 @@ setup() {
   assert_output "https://github.com/paulirish/git-open/tree/just-50%25"
 }
 
+@test "basic: tracked remote is default" {
+  # https://github.com/paulirish/git-open/issues/65
+
+  # create a local git repo I can push to
+  local_remote="sandboxremote"
+  cd .. && rm -rf $local_remote && mkdir $local_remote && cd $local_remote &&
+    git init --bare myrepo.git &&
+    cd ../$foldername
+
+  git remote add other "../$local_remote/myrepo.git"
+  git push --set-upstream other master
+  run ../git-open
+  # Not an ideal assertion, but it works..
+  assert_output "https://../$local_remote/myrepo"
+
+  # cleanup
+  rm -rf ../$local_remote
+}
 
 
 ##
