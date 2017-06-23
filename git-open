@@ -86,8 +86,8 @@ fi
 case $( uname -s ) in
   Darwin)  open='open';;
   MINGW*)  open='start';;
+  MSYS*)   open='start';;
   CYGWIN*) open='cygstart';;
-  MSYS*)   open='powershell.exe –NoProfile Start';;
   *)       open='xdg-open';;
 esac
 
