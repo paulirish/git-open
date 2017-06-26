@@ -13,7 +13,9 @@ if ! git rev-parse --is-inside-work-tree &>/dev/null; then
   exit 1
 fi
 
+# Defaults
 is_issue=0
+protocol="https"
 
 # If the first argument is 'issue', we want to load the issue page
 if [[ "$1" == 'issue' ]]; then
@@ -34,18 +36,35 @@ if [[ -z "$giturl" ]]; then
   exit 1
 fi
 
-# Initial case examples: 'git@example.com:user/project', 'https://example.com:8080/scm/user/project.git/'
+# From git-fetch(5), native protocols:
+# ssh://[user@]host.xz[:port]/path/to/repo.git/
+# git://host.xz[:port]/path/to/repo.git/
+# http[s]://host.xz[:port]/path/to/repo.git/
+# ftp[s]://host.xz[:port]/path/to/repo.git/
+# [user@]host.xz:path/to/repo.git/ - scp-like but is an alternative to ssh.
+
 # Trim "/" and ".git" from the end of the url
 giturl=${giturl%/} giturl=${giturl%.git}
 
 # Trim before last '@' and protocol (*://) from beginning
 uri=${giturl##*@} uri=${uri##*://}
 
-# Trims before first ':' or '/' to get path
-urlpath=${uri#*[/:]}
+# If there isn't a protocol, we can assume it's using the scp syntax which uses ':' to seperate the path.
+[[ $giturl =~ :// ]] && pathsep='/' || pathsep=':'
 
-# Trims after first ':' or '/' to remove path
-server=${uri%%[/:]*}
+# Seperate the domain and the urlpath on the first {pathsep}. This also removes the gitport from the domain.
+domain=${uri%%[:$pathsep]*} urlpath=${uri#*$pathsep}
+
+# Allow config options to replace the server or the protocol
+openurl="$protocol://$domain"
+
+function getConfig() {
+  config=$(git config --get-urlmatch "open.$1" "$openurl")
+  echo "${config:-${!1}}"
+}
+
+domain=$(getConfig "domain")
+protocol=$(getConfig "protocol")
 
 # Get current branch
 branch=${2:-$(git symbolic-ref -q --short HEAD)}
@@ -63,7 +82,7 @@ else
   providerBranchRef="tree/$branch"
 fi
 
-if [[ "$server" == 'bitbucket.org' ]]; then
+if [[ "$domain" == 'bitbucket.org' ]]; then
   # Bitbucket, see https://github.com/paulirish/git-open/issues/80 for why ?at is needed.
   providerBranchRef="src?at=$branch"
 elif [[ ${pathargs[0]} == 'scm' ]]; then
@@ -74,8 +93,7 @@ elif [[ ${pathargs[0]} == 'scm' ]]; then
   providerBranchRef="browse?at=$branch"
 fi
 
-# @TODO: support non-https?
-openurl="https://$server/$urlpath"
+openurl="$protocol://$domain/$urlpath"
 
 # simplify URL for master
 if [[ $branch != "master" ]]; then
