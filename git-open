@@ -85,8 +85,10 @@ elif grep -q "/scm/" <<<$giturl; then
   if [[ $giturl =~ $re ]]; then
     giturl=${BASH_REMATCH[1]}/projects/${BASH_REMATCH[2]}/repos/${BASH_REMATCH[3]}
 
-    giturl=${giturl/http\:\/\/[^\@]*\@/http\:\/\/}
-    giturl=${giturl/https\:\/\/[^\@]*\@/https\:\/\/}
+    # Bitbucket Server can't handle an origin which includes the basicAuth part, so it gets stripped
+    if [[ $giturl =~ ^http(s?)://([^@]*@)(.*)$ ]] ; then
+      giturl="http${BASH_REMATCH[1]}://${BASH_REMATCH[3]}"
+    fi
   
     providerUrlDifference=browse
     branch="?at=refs%2Fheads%2F${branch}"
