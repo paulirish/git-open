@@ -44,18 +44,58 @@ uri=${giturl##*@} uri=${uri##*://}
 # Trims before first ':' or '/' to get path
 urlpath=${uri#*[/:]}
 
-# Trims after first ':' or '/' to remove path
-server=${uri%%[/:]*}
+# Make # and % characters url friendly
+#   github.com/paulirish/git-open/pull/24
+branch=${branch//%/%25} && branch=${branch//#/%23}
 
-# Get current branch
-branch=${2:-$(git symbolic-ref -q --short HEAD)}
+# URL normalization
+# GitHub gists
+if grep -q gist.github <<<"$giturl"; then
+  giturl=${giturl/git\@gist.github\.com\:/https://gist.github.com/}
+  providerUrlDifference=tree
 
-# Split arguments on '/'
-IFS='/' pathargs=($urlpath)
+# GitHub
+elif grep -q github <<<"$giturl"; then
+  giturl=${giturl/git\@github\.com\:/https://github.com/}
 
-if (( is_issue )); then
-  # For issues, take the numbers and preprend 'issues/'
-  providerBranchRef="issues/${branch//[^0-9]/}"
+  # handle urls with the git user
+  giturl=${giturl/#github\.com\:/https://github.com/}
+
+  # handle urls without the github domain with git user
+  giturl=${giturl/#github\:/https://github.com/}
+
+  # handle urls without the github domain
+  giturl=${giturl/#ssh\:\/\/git\@github\//https://github.com/}
+
+  # handle SSH protocol (links like ssh://git@github.com/user/repo)
+  giturl=${giturl/#ssh\:\/\/git\@github\.com\//https://github.com/}
+
+  providerUrlDifference=tree
+
+# Bitbucket
+elif grep -q bitbucket <<<"$giturl"; then
+  giturl=${giturl/git\@bitbucket\.org\:/https://bitbucket.org/}
+  # handle SSH protocol (change ssh://https://bitbucket.org/user/repo to https://bitbucket.org/user/repo)
+  giturl=${giturl/#ssh\:\/\/git\@/https://}
+
+  # remove username
+  giturl=${giturl//\/\/*@bitbucket.org///bitbucket.org}
+
+  rev="$(git rev-parse HEAD)"
+  git_pwd="$(git rev-parse --show-prefix)"
+  providerUrlDifference="src/${rev}/${git_pwd}"
+  branch="?at=${branch}"
+
+# Atlassian Bitbucket Server
+elif grep -q "/scm/" <<<"$giturl"; then
+  re='(.*)/scm/(.*)/(.*)\.git'
+  if [[ $giturl =~ $re ]]; then
+    giturl=${BASH_REMATCH[1]}/projects/${BASH_REMATCH[2]}/repos/${BASH_REMATCH[3]}
+    providerUrlDifference=browse
+    branch="?at=refs%2Fheads%2F${branch}"
+  fi
+
+# GitLab
 else
   # Make # and % characters url friendly
   #   github.com/paulirish/git-open/pull/24
