@@ -1,4 +1,4 @@
-# git-open
+# git-open [![Build Status](https://img.shields.io/travis/paulirish/git-open/master.svg)](https://travis-ci.org/paulirish/git-open)
 
 Type `git open` to open the repo website (GitHub, GitLab, Bitbucket) in your browser.
 
@@ -119,7 +119,7 @@ If your Gitlab custom hosted is serving `http` you can also specify this:
 git config [--global] gitopen.gitlab.protocol http
 ```
 
-## Related projects / alternatives
+## Alternative projects
 
 See [hub](https://github.com/github/hub) for complete GitHub opening support.
 It's the official GitHub project and provides `hub browse`.
@@ -138,9 +138,29 @@ from which this plugin was forked.
 
 [jasonmccreary](https://github.com/jasonmccreary/) did [the initial hard work](https://github.com/jasonmccreary/gh). Since then, [many contributors](https://github.com/paulirish/git-open/graphs/contributors) have submitted great PRs.
 
-## Contributing
+## Contributing & Development
 
 Please provide examples of the URLs you are parsing with each PR.
+
+You can run `git-open` in `echo` mode, which doesn't open your browser, but just prints the URL to stdout:
+```sh
+env BROWSER='echo' ./git-open
+```
+
+#### Testing:
+
+You'll need to install [bats](https://github.com/sstephenson/bats#installing-bats-from-source), the Bash automated testing system. It's also available as `brew install bats`
+
+```sh
+git submodule update --init # pull in the assertion libraries
+
+# Run the test suite once:
+bats test  # or `npm run unit`
+
+# Run it on every change with `entr`
+brew install entr
+npm run watch
+```
 
 ## Related projects
 
@@ -154,6 +174,7 @@ Copyright Jason McCreary & Paul Irish. Licensed under MIT.
 
 ## Changelog
 
+- **2017-06-17** - test suite added
 - **2016-07-23** - readme -- fix oh-my-zsh install instructions
 - **2016-07-22** - 1.1.0, update and add linters for package.json, readme.
   Re-publish to NPM.
