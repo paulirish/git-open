@@ -320,6 +320,29 @@ setup() {
   assert_output "https://git.example.com:7000/XXX/YYY"
 }
 
+##
+## Visual Studio Team Services
+##
+
+@test "vsts: https url" {
+  git remote set-url origin "https://gitopen.visualstudio.com/Project/_git/Repository"
+  run ../git-open
+  assert_output --partial "https://gitopen.visualstudio.com/Project/_git/Repository"
+}
+
+@test "vsts: ssh url" {
+  git remote add vsts_ssh "ssh://gitopen@gitopen.visualstudio.com:22/Project/_git/Repository"
+  run ../git-open "vsts_ssh"
+  assert_output "https://gitopen.visualstudio.com/Project/_git/Repository"
+}
+
+@test "vsts: on-premises tfs http url" {
+  git remote set-url origin "http://tfs.example.com:8080/Project/_git/Repository"
+  run ../git-open
+  assert_output --partial "http://tfs.example.com:8080/Project/_git/Repository"
+}
+
+
 teardown() {
   cd ..
   rm -rf "$foldername"
