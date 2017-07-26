@@ -131,9 +131,15 @@ elif [[ ${pathargs[0]} == 'scm' ]]; then
   IFS='/' urlpath="${pathargs[*]}"
   providerBranchRef="/browse?at=$branch"
 elif [[ "${#pathargs[@]}" -ge '2' && ${pathargs[${#pathargs[@]} - 2]} == '_git' ]]; then
-  # Visual Studio Team Services and Team Foundation Server: keep the
-  # Team Project and repository name, append branch selector.
-  providerBranchRef="?version=GB$branch"
+  # Visual Studio Team Services and Team Foundation Server always have /_git/ as the second to last segment in the url path
+  if (( is_issue )); then
+    # Switch to workitems, provide work item id if specified
+    urlpath="${urlpath%%/_git/*}/_workitems"
+    providerBranchRef="?id=${branch//[^0-9]/}"
+  else
+    # Keep project and repository name, append branch selector.
+    providerBranchRef="?version=GB$branch"
+  fi
 fi
 
 openurl="$protocol://$domain/$urlpath"

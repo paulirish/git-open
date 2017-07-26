@@ -356,6 +356,13 @@ setup() {
   assert_output "http://tfs.example.com:8080/Project/Folder/_git/Repository?version=GBmybranch"
 }
 
+@test "vsts: issue" {
+  git remote set-url origin "http://tfs.example.com:8080/Project/Folder/_git/Repository"
+  git checkout -B "bugfix-36"
+  run ../git-open "--issue"
+  assert_output "http://tfs.example.com:8080/Project/Folder/_workitems?id=36"
+}
+
 
 teardown() {
   cd ..
