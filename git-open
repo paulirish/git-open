@@ -62,17 +62,37 @@ fi
 # ftp[s]://host.xz[:port]/path/to/repo.git/
 # [user@]host.xz:path/to/repo.git/ - scp-like but is an alternative to ssh.
 
-# Trim "/" and ".git" from the end of the url
-giturl=${giturl%/} giturl=${giturl%.git}
+# Determine whether this is a url (https, ssh, git+ssh...) or an scp-style path
+if [[ "$giturl" =~ ^[a-z\+]+://.* ]]; then
+  # Trim URL scheme and possible username
+  gitprotocol=${giturl%%://*}
+  uri=${giturl#*://}
+  uri=${uri#*@}
 
-# Trim before last '@' and protocol (*://) from beginning
-uri=${giturl##*@} uri=${uri##*://}
+  # Split on first '/ to get server name and path
+  domain=${uri%%/*}
+  urlpath=${uri#*/}
 
-# If there isn't a protocol, we can assume it's using the scp syntax which uses ':' to seperate the path.
-[[ $giturl =~ :// ]] && pathsep='/' || pathsep=':'
+  # Remove port number from non-http/https protocols (ie, ssh)
+  if [[ $gitprotocol != 'https' && $gitprotocol != 'http' ]]; then
+    domain=${domain%:*}
+  fi
+else
+  # Trim possible username from SSH path
+  uri=${giturl##*@}
 
-# Seperate the domain and the urlpath on the first {pathsep}. This also removes the gitport from the domain.
-domain=${uri%%[:$pathsep]*} urlpath=${uri#*$pathsep}
+  # Split on first ':' to get server name and path
+  domain=${uri%%:*}
+  urlpath=${uri#*:}
+fi
+
+# Trim "/" from beginning of URL; "/" and ".git" from end of URL
+urlpath=${urlpath#/} urlpath=${urlpath%/} urlpath=${urlpath%.git}
+
+# If the URL is provided as "http", preserve that
+if [[ $gitprotocol == 'http' ]]; then
+  protocol='http'
+fi
 
 # Allow config options to replace the server or the protocol
 openurl="$protocol://$domain"
