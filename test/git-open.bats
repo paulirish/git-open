@@ -21,6 +21,21 @@ setup() {
 }
 
 ##
+## Help
+##
+
+@test "help text" {
+  run ../git-open -h
+  assert_output --partial "usage: git open"
+}
+
+@test "invalid option" {
+  run ../git-open --invalid-option
+  assert_output --partial "error: unknown option \`invalid-option'"
+  assert_output --partial "usage: git open"
+}
+
+##
 ## GitHub
 ##
 
@@ -85,6 +100,15 @@ setup() {
   git checkout -B "fix-issue-36"
   run ../git-open "issue"
   assert_output "https://github.com/paulirish/git-open/issues/36"
+
+  # -i and --issue
+  git checkout -B "fix-issue-37"
+  run ../git-open "--issue"
+  assert_output "https://github.com/paulirish/git-open/issues/37"
+
+  git checkout -B "fix-issue-38"
+  run ../git-open "-i"
+  assert_output "https://github.com/paulirish/git-open/issues/38"
 }
 
 @test "gh: gist" {

@@ -1,21 +1,46 @@
 #!/usr/bin/env bash
 
-# Opens the GitHub page for a repo/branch in your browser.
-# https://github.com/paulirish/git-open/
-#
-# git open
-# git open [remote] [branch]
+# Use git-sh-setup, similar to git-rebase
+# https://www.kernel.org/pub/software/scm/git/docs/git-sh-setup.html
+# https://github.com/git/git/blob/master/git-rebase.sh
+# shellcheck disable=SC2034
+OPTIONS_STUCKLONG=t
+# shellcheck disable=SC2034
+OPTIONS_KEEPDASHDASH=
+# shellcheck disable=SC2034
+OPTIONS_SPEC="\
+git open [options]
+git open [remote] [branch]
+git open issue
+--
+  Opens the GitHub page for a repo/branch in your browser.
+  https://github.com/paulirish/git-open/
 
+  Available options are
+i,issue!      open issues page
+"
+
+# https://github.com/koalaman/shellcheck/wiki/SC1090
+# shellcheck source=/dev/null
+. "$(git --exec-path)/git-sh-setup"
+
+# Defaults
+is_issue=0
+protocol="https"
+
+while test $# != 0; do
+  case "$1" in
+  --issue) is_issue=1;;
+  --) shift; break ;;
+  esac
+  shift
+done
 
 # are we in a git repo?
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
   echo "Not a git repository." 1>&2
   exit 1
 fi
-
-# Defaults
-is_issue=0
-protocol="https"
 
 # If the first argument is 'issue', we want to load the issue page
 if [[ "$1" == 'issue' ]]; then
