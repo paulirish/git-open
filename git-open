@@ -29,7 +29,7 @@ if (( is_issue )); then
   giturl=$(git config --get "remote.${remote}.url")
   # @TODO ls-remote will also expand "insteadOf" items `giturl=$(git ls-remote --get-url $remote)`
   if [[ -z "$giturl" ]]; then
-     remote=${1:-"origin"}
+      remote=${1:-"origin"}
   fi
 else
   remote=${1:-"origin"}
