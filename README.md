@@ -54,6 +54,10 @@ function git-open { cmd /c "C:\Program Files\Git\usr\bin\bash.exe" "~/Documents/
 Set-Alias -Name gop -Value git-open
 ```
 
+#### Using Windows with `cmd` terminal
+
+Save the `git-open` script in any place accessible via your `%PATH%` environment var.
+
 #### Using a ZSH Framework
 
 ##### [Antigen](https://github.com/zsh-users/antigen)
