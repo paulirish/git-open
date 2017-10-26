@@ -177,18 +177,6 @@ setup() {
 ## GitLab
 ##
 
-@test "gitlab: separate domains" {
-  skip
-  # skipping until test is fixed: see #87
-
-  # https://github.com/paulirish/git-open/pull/56
-  git remote set-url origin "git@git.example.com:namespace/project.git"
-  git config "gitopen.gitlab.domain" "gitlab.example.com"
-  git config "gitopen.gitlab.ssh.domain" "git.example.com"
-  run ../git-open
-  assert_output "https://gitlab.example.com/namespace/project"
-}
-
 @test "gitlab: default ssh origin style" {
   # https://github.com/paulirish/git-open/pull/55
   git remote set-url origin "git@gitlab.example.com:user/repo"
@@ -206,32 +194,36 @@ setup() {
   refute_output --partial "//user"
 }
 
-@test "gitlab: ssh://git@host:port origin" {
-  skip
-  # skipping until test is fixed: see #87
-
-  # https://github.com/paulirish/git-open/pull/76
-  # this first set mostly matches the "gitlab: ssh://git@ origin" test
-  git remote set-url origin "ssh://git@repo.intranet/XXX/YYY.git"
-  git config "gitopen.gitlab.domain" "repo.intranet"
+@test "gitlab: separate domains" {
+  # https://github.com/paulirish/git-open/pull/56
+  git remote set-url origin "git@git.example.com:namespace/project.git"
+  git config --local --add "open.https://git.example.com.domain" "gitlab.example.com"
   run ../git-open
-  assert_output "https://repo.intranet/XXX/YYY"
-  refute_output --partial "ssh://"
-  refute_output --partial "//XXX"
-
-  git remote set-url origin "ssh://git@repo.intranet:7000/XXX/YYY.git"
-  git config "gitopen.gitlab.domain" "repo.intranet"
-  git config "gitopen.gitlab.ssh.port" "7000"
-  run ../git-open
-  assert_output "https://repo.intranet/XXX/YYY"
-  refute_output --partial "ssh://"
-  refute_output --partial "//XXX"
+  assert_output "https://gitlab.example.com/namespace/project"
 }
 
-# Tests not yet written:
-#   * gitopen.gitlab.port
-#   * gitopen.gitlab.protocol
+@test "gitlab: special domain and path" {
+  git remote set-url origin "ssh://git@git.example.com:7000/XXX/YYY.git"
+  git config --local --add "open.https://git.example.com.domain" "repo.intranet/subpath"
+  git config --local --add "open.https://git.example.com.protocol" "http"
 
+  run ../git-open
+  assert_output "http://repo.intranet/subpath/XXX/YYY"
+  refute_output --partial "https://"
+}
+
+@test "gitlab: different port" {
+  # https://github.com/paulirish/git-open/pull/76
+  git remote set-url origin "ssh://git@git.example.com:7000/XXX/YYY.git"
+  run ../git-open
+  assert_output "https://git.example.com/XXX/YYY"
+  refute_output --partial ":7000"
+
+  git remote set-url origin "https://git.example.com:7000/XXX/YYY.git"
+  run ../git-open
+  assert_output "https://git.example.com/XXX/YYY"
+  refute_output --partial ":7000"
+}
 
 teardown() {
   cd ..
