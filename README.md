@@ -8,6 +8,7 @@ Type `git open` to open the repo website (GitHub, GitLab, Bitbucket) in your bro
 
 ```sh
 git open [remote-name] [branch-name]
+
 git open issue
 ```
 
@@ -30,21 +31,21 @@ $ git open issue
 # opens https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/issues/123
 ```
 
-### Installation
+## Installation
 
-#### Without using a framework
+### Basic install
 
 The preferred way of installation is to simply add the `git-open` script
 somewhere into your path (e.g. add the directory to your `PATH` environment
 or copy `git-open` into an existing included path like `/usr/local/bin`).
 
-You can use also `npm` to install this package:
+### Install via NPM:
 
 ```sh
 npm install --global git-open
 ```
 
-#### Using Windows Powershell
+### Windows Powershell
 
 Save git-open anywhere, say as ~/Documents/Scripts/git-open.sh and define
 a function in your Powershell profile (see ~/Documents/WindowsPowerShell/profile.ps1) like this:
@@ -54,13 +55,13 @@ function git-open { cmd /c "C:\Program Files\Git\usr\bin\bash.exe" "~/Documents/
 Set-Alias -Name gop -Value git-open
 ```
 
-#### Using Windows with `cmd` terminal
+### Windows with `cmd` terminal
 
 Save the `git-open` script in any place accessible via your `%PATH%` environment var.
 
-#### Using a ZSH Framework
+### ZSH
 
-##### [Antigen](https://github.com/zsh-users/antigen)
+#### [Antigen](https://github.com/zsh-users/antigen)
 
 Add `antigen bundle paulirish/git-open` to your `.zshrc` with your other bundle
 commands.
@@ -70,25 +71,25 @@ start zsh, and periodically checking for updates to the git repository. You can
 also add the plugin to a running zsh with `antigen bundle paulirish/git-open`
 for testing before adding it to your `.zshrc`.
 
-##### [Oh-My-Zsh](http://ohmyz.sh/)
+#### [Oh-My-Zsh](http://ohmyz.sh/)
 
 1. `cd ~/.oh-my-zsh/custom/plugins`
 1. `git clone https://github.com/paulirish/git-open.git`
 1. Add `git-open` to your plugin list - edit `~/.zshrc` and change
    `plugins=(...)` to `plugins=(... git-open)`
 
-##### [Zgen](https://github.com/tarjoilija/zgen)
+#### [Zgen](https://github.com/tarjoilija/zgen)
 
 Add `zgen load paulirish/git-open` to your .zshrc file in the same function
 you're doing your other `zgen load` calls in. ZGen will take care of cloning
 the repository the next time you run `zgen save`, and will also periodically
 check for updates to the git repository.
 
-##### [zplug](https://github.com/zplug/zplug)
+#### [zplug](https://github.com/zplug/zplug)
 
 `zplug "paulirish/git-open", as:plugin`
 
-### Supported remote repositories
+## Supported remote repositories
 
 git-open can automatically guess the corresponding repository page for remotes
 (default looks for `origin`) on the following hosts:
@@ -100,7 +101,7 @@ git-open can automatically guess the corresponding repository page for remotes
 - bitbucket.org
 - Atlassian Bitbucket Server (formerly _Atlassian Stash_)
 
-#### GitLab support
+### GitLab support
 
 To configure GitLab support you need to set some options.
 
