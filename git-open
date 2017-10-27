@@ -25,8 +25,17 @@ if [[ "$1" == 'issue' ]]; then
   shift
 fi
 
-# assume remote origin if not provided
-remote=${1:-"origin"}
+# assume remote origin if not provided (unless we are opening an issue, then use upstream)
+if (( is_issue )); then
+  remote=${1:-"upstream"}
+  giturl=$(git config --get "remote.${remote}.url")
+  # @TODO ls-remote will also expand "insteadOf" items `giturl=$(git ls-remote --get-url $remote)`
+  if [[ -z "$giturl" ]]; then
+      remote=${1:-"origin"}
+  fi
+else
+  remote=${1:-"origin"}
+fi
 
 # @TODO ls-remote will also expand "insteadOf" items `giturl=$(git ls-remote --get-url $remote)``
 giturl=$(git config --get "remote.${remote}.url")
