@@ -104,6 +104,27 @@ setup() {
   assert_output "https://github.com/paulirish/git-open/tree/just-50%25"
 }
 
+@test "basic: tracked remote is default" {
+  # https://github.com/paulirish/git-open/issues/65
+
+ # create a local git repo I can push to
+  remote_name="sandboxremote"
+  remote_url="git@github.com:userfork/git-open.git"
+
+  # ideally we'd set a real upstream branch, but that's not possible without
+  # pull/push'ing over the network. So we're cheating and just setting the
+  # branch.<branch>.remote config
+  # https://github.com/paulirish/git-open/pull/88#issuecomment-339813145
+  git remote add $remote_name $remote_url
+  git config --local --add branch.master.remote $remote_name
+
+  run ../git-open
+  assert_output "https://github.com/userfork/git-open"
+
+  git config --local --add branch.master.remote origin
+  run ../git-open
+  assert_output "https://github.com/paulirish/git-open"
+}
 
 
 ##

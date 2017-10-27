@@ -25,8 +25,11 @@ if [[ "$1" == 'issue' ]]; then
   shift
 fi
 
-# assume remote origin if not provided
-remote=${1:-"origin"}
+# choose remote. priority to: provided argument, detected tracked remote, 'origin'
+branch_name=$(git name-rev --name-only HEAD 2>/dev/null)
+tracked_remote=$(git config "branch.$branch_name.remote")
+remote=${1:-$tracked_remote}
+remote=${remote:-"origin"}
 
 # @TODO ls-remote will also expand "insteadOf" items `giturl=$(git ls-remote --get-url $remote)``
 giturl=$(git config --get "remote.${remote}.url")
