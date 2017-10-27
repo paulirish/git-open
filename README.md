@@ -101,27 +101,25 @@ git-open can automatically guess the corresponding repository page for remotes
 - bitbucket.org
 - Atlassian Bitbucket Server (formerly _Atlassian Stash_)
 
-### GitLab support
+### Configuration (GitLab support)
 
-To configure GitLab support you need to set some options.
+To configure GitLab support (or other unique hosting situations) you need to set some options.
 
-| option name               | description                                                | example            |
-| ------------------------- | ---------------------------------------------------------- | ------------------ |
-| gitopen.gitlab.domain     | The (web)domain name that will work for most of the people | gitlab.example.com |
-| gitopen.gitlab.ssh.domain | A specific ssh domain name, *if needed*                    | git.example.com    |
-| gitopen.gitlab.ssh.port   | A specific ssh port, *if needed*                           | 10022              |
+| option name               | description  |
+| ------------------------- | ---------------- |
+| open.[gitdomain].domain   | The (web) domain to open based on the provided git repo domain |
+| open.[gitdomain].protocol | The (web) protocol to open based on the provided git repo domain. (Defaults to `https`) |
+
+<!--
+git config --local --add open.[gitdomain].domain [value]
+git config --local --add open.[gitdomain].protocol [value]
+-->
 
 ```sh
-# use --global to set across all repos, instead of just the local one
-git config [--global] gitopen.gitlab.domain [value]
-git config [--global] gitopen.gitlab.ssh.domain [value]
-git config [--global] gitopen.gitlab.ssh.port [value]
-```
-
-If your Gitlab custom hosted is serving `http` you can also specify this:
-```sh
-# use --global to set across all repos, instead of just the local one
-git config [--global] gitopen.gitlab.protocol http
+# Your git remote is at "ssh://git@git.internal.biz:7000/XXX/YYY.git"
+# Your hosted gitlab is "http://repo.intranet/subpath/XXX/YYY"
+git config --local --add "open.https://git.internal.biz.domain" "repo.intranet/subpath"
+git config --local --add "open.https://git.internal.biz.protocol" "http"
 ```
 
 ## Alternative projects
