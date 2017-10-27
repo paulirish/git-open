@@ -17,17 +17,17 @@ git open issue
 
 ```sh
 $ git open
-# opens https://github.com/REMOTE_ORIGIN_USER/CURRENT_REPO/tree/CURRENT_BRANCH
+# opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/tree/CURRENT_BRANCH
 
-$ git open upstream
-# opens https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/CURRENT_BRANCH
+$ git open someremote
+# opens https://github.com/PROVIDED_REMOTE_USER/CURRENT_REPO/tree/CURRENT_BRANCH
 
-$ git open upstream master
-# opens https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/tree/master
+$ git open someremote somebranch
+# opens https://github.com/PROVIDED_REMOTE_USER/CURRENT_REPO/tree/PROVIDED_BRANCH
 
 $ git open issue
 # If branches use naming convention of issues/#123,
-# opens https://github.com/REMOTE_UPSTREAM_USER/CURRENT_REPO/issues/123
+# opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
 ```
 
 ### Installation
