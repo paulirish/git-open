@@ -194,6 +194,45 @@ setup() {
 }
 
 
+@test "bitbucket: Bitbucket Server" {
+  # https://github.com/paulirish/git-open/issues/77#issuecomment-309044010
+  git remote set-url origin "https://user@mybb.domain.com/scm/ppp/rrr.git"
+  run ../git-open
+
+  # any of the following are acceptable
+  assert_output "https://mybb.domain.com/projects/ppp/repos/rrr" ||
+    assert_output "https://mybb.domain.com/projects/ppp/repos/rrr/browse/?at=master" ||
+    assert_output "https://mybb.domain.com/projects/ppp/repos/rrr/browse/?at=refs%2Fheads%2Fmaster"
+}
+
+@test "bitbucket: Bitbucket Server branch" {
+  # https://github.com/paulirish/git-open/issues/80
+  git remote set-url origin "https://user@mybb.domain.com/scm/ppp/rrr.git"
+  git checkout -B "develop"
+  run ../git-open
+
+  # The following query args work with BB Server:
+  #     at=refs%2Fheads%2Fdevelop, at=develop, at=refs/heads/develop
+  # However /src/develop does not (unlike bitbucket.org)
+  assert_output "https://mybb.domain.com/projects/ppp/repos/rrr/browse?at=develop" ||
+    assert_output "https://mybb.domain.com/projects/ppp/repos/rrr/browse?at=refs%2Fheads%2Fdevelop" ||
+    assert_output "https://mybb.domain.com/projects/ppp/repos/rrr/browse?at=refs/heads/develop"
+
+  refute_output --partial "/src/develop"
+}
+
+
+@test "bitbucket: Bitbucket Server private user repos" {
+  # https://github.com/paulirish/git-open/pull/83#issuecomment-309968538
+  git remote set-url origin "https://mybb.domain.com/scm/~first.last/rrr.git"
+  git checkout -B "develop"
+  run ../git-open
+  assert_output "https://mybb.domain.com/projects/~first.last/repos/rrr/browse?at=develop" ||
+    assert_output "https://mybb.domain.com/projects/~first.last/repos/rrr/browse?at=refs%2Fheads%2Fdevelop" ||
+    assert_output "https://mybb.domain.com/projects/~first.last/repos/rrr/browse?at=refs/heads/develop"
+
+}
+
 ##
 ## GitLab
 ##
