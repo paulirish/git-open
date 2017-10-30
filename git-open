@@ -105,11 +105,17 @@ fi
 
 # get current open browser command
 case $( uname -s ) in
-  Darwin)  open='open';;
-  MINGW*)  open='start';;
-  MSYS*)   open='start';;
-  CYGWIN*) open='cygstart';;
-  *)       open='xdg-open';;
+  Darwin)   open='open';;
+  MINGW*)   open='start';;
+  MSYS*)    open='start';;
+  CYGWIN*)  open='cygstart';;
+  *)        # Try to detect WSL (Windows Subsystem for Linux)
+            if uname -r | grep -q Microsoft; then
+              open='powershell.exe'
+              openopt='Start'
+            else
+              open='xdg-open'
+            fi;;
 esac
 
 # Allow printing the url if BROWSER=echo
@@ -118,4 +124,4 @@ if [[ $BROWSER != "echo" ]]; then
 fi
 
 # open it in a browser
-${BROWSER:-$open} "$openurl"
+${BROWSER:-$open} $openopt "$openurl"
