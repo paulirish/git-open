@@ -89,19 +89,13 @@ setup() {
   assert_output "https://github.com/user/repo"
 }
 
-@test "gh: git open issue" {
+@test "gh: git open --issue" {
   # https://github.com/paulirish/git-open/pull/46
   git remote set-url origin "github.com:paulirish/git-open.git"
   git checkout -B "issues/#12"
-  run ../git-open "issue"
+  run ../git-open "--issue"
   assert_output "https://github.com/paulirish/git-open/issues/12"
 
-  # https://github.com/paulirish/git-open/pull/86
-  git checkout -B "fix-issue-36"
-  run ../git-open "issue"
-  assert_output "https://github.com/paulirish/git-open/issues/36"
-
-  # -i and --issue
   git checkout -B "fix-issue-37"
   run ../git-open "--issue"
   assert_output "https://github.com/paulirish/git-open/issues/37"

@@ -11,7 +11,6 @@ OPTIONS_KEEPDASHDASH=
 OPTIONS_SPEC="\
 git open [options]
 git open [remote] [branch]
-git open issue
 --
   Opens the GitHub page for a repo/branch in your browser.
   https://github.com/paulirish/git-open/
@@ -40,14 +39,6 @@ done
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
   echo "Not a git repository." 1>&2
   exit 1
-fi
-
-# If the first argument is 'issue', we want to load the issue page
-if [[ "$1" == 'issue' ]]; then
-  is_issue=1
-
-  # Allow the user to provide other args, aka `git open issue upstream 79`
-  shift
 fi
 
 # choose remote. priority to: provided argument, detected tracked remote, 'origin'
