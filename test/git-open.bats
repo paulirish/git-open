@@ -21,6 +21,21 @@ setup() {
 }
 
 ##
+## Help
+##
+
+@test "help text" {
+  run ../git-open -h
+  assert_output --partial "usage: git open"
+}
+
+@test "invalid option" {
+  run ../git-open --invalid-option
+  assert_output --partial "error: unknown option \`invalid-option'"
+  assert_output --partial "usage: git open"
+}
+
+##
 ## GitHub
 ##
 
@@ -74,17 +89,20 @@ setup() {
   assert_output "https://github.com/user/repo"
 }
 
-@test "gh: git open issue" {
+@test "gh: git open --issue" {
   # https://github.com/paulirish/git-open/pull/46
   git remote set-url origin "github.com:paulirish/git-open.git"
   git checkout -B "issues/#12"
-  run ../git-open "issue"
+  run ../git-open "--issue"
   assert_output "https://github.com/paulirish/git-open/issues/12"
 
-  # https://github.com/paulirish/git-open/pull/86
-  git checkout -B "fix-issue-36"
-  run ../git-open "issue"
-  assert_output "https://github.com/paulirish/git-open/issues/36"
+  git checkout -B "fix-issue-37"
+  run ../git-open "--issue"
+  assert_output "https://github.com/paulirish/git-open/issues/37"
+
+  git checkout -B "fix-issue-38"
+  run ../git-open "-i"
+  assert_output "https://github.com/paulirish/git-open/issues/38"
 }
 
 @test "gh: gist" {

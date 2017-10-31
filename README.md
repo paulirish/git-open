@@ -9,10 +9,10 @@ Type `git open` to open the repo website (GitHub, GitLab, Bitbucket) in your bro
 ```sh
 git open [remote-name] [branch-name]
 
-git open issue
+git open --issue
 ```
 
-(`git open` works with these [hosted repo providers](#supported-remote-repositories), `git open issue` currently only works with GitHub)
+(`git open` works with these [hosted repo providers](#supported-remote-repositories), `git open --issue` currently only works with GitHub)
 
 ### Examples
 
@@ -26,7 +26,7 @@ $ git open someremote
 $ git open someremote somebranch
 # opens https://github.com/PROVIDED_REMOTE_USER/CURRENT_REPO/tree/PROVIDED_BRANCH
 
-$ git open issue
+$ git open --issue
 # If branches use naming convention of issues/#123,
 # opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
 ```
