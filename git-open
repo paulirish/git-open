@@ -137,6 +137,8 @@ esac
 # Allow printing the url if BROWSER=echo
 if [[ $BROWSER != "echo" ]]; then
   exec &>/dev/null
+else
+  unset openopt
 fi
 
 # open it in a browser
