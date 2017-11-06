@@ -41,10 +41,12 @@ if ! git rev-parse --is-inside-work-tree &>/dev/null; then
   exit 1
 fi
 
-# choose remote. priority to: provided argument, detected tracked remote, 'origin'
+# choose remote. priority to: provided argument, default in config, detected tracked remote, 'origin'
 branch_name=$(git name-rev --name-only HEAD 2>/dev/null)
 tracked_remote=$(git config "branch.$branch_name.remote")
-remote=${1:-$tracked_remote}
+default_remote=$(git config open.default.remote)
+remote=${1:-$default_remote}
+remote=${remote:-$tracked_remote}
 remote=${remote:-"origin"}
 
 # @TODO ls-remote will also expand "insteadOf" items `giturl=$(git ls-remote --get-url $remote)``
