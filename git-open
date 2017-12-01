@@ -62,17 +62,37 @@ fi
 # ftp[s]://host.xz[:port]/path/to/repo.git/
 # [user@]host.xz:path/to/repo.git/ - scp-like but is an alternative to ssh.
 
-# Trim "/" and ".git" from the end of the url
-giturl=${giturl%/} giturl=${giturl%.git}
+# Determine whether this is a url (https, ssh, git+ssh...) or an scp-style path
+if [[ "$giturl" =~ ^[a-z\+]+://.* ]]; then
+  # Trim URL scheme and possible username
+  gitprotocol=${giturl%%://*}
+  uri=${giturl#*://}
+  uri=${uri#*@}
 
-# Trim before last '@' and protocol (*://) from beginning
-uri=${giturl##*@} uri=${uri##*://}
+  # Split on first '/ to get server name and path
+  domain=${uri%%/*}
+  urlpath=${uri#*/}
 
-# If there isn't a protocol, we can assume it's using the scp syntax which uses ':' to seperate the path.
-[[ $giturl =~ :// ]] && pathsep='/' || pathsep=':'
+  # Remove port number from non-http/https protocols (ie, ssh)
+  if [[ $gitprotocol != 'https' && $gitprotocol != 'http' ]]; then
+    domain=${domain%:*}
+  fi
+else
+  # Trim possible username from SSH path
+  uri=${giturl##*@}
 
-# Seperate the domain and the urlpath on the first {pathsep}. This also removes the gitport from the domain.
-domain=${uri%%[:$pathsep]*} urlpath=${uri#*$pathsep}
+  # Split on first ':' to get server name and path
+  domain=${uri%%:*}
+  urlpath=${uri#*:}
+fi
+
+# Trim "/" from beginning of URL; "/" and ".git" from end of URL
+urlpath=${urlpath#/} urlpath=${urlpath%/} urlpath=${urlpath%.git}
+
+# If the URL is provided as "http", preserve that
+if [[ $gitprotocol == 'http' ]]; then
+  protocol='http'
+fi
 
 # Allow config options to replace the server or the protocol
 openurl="$protocol://$domain"
@@ -93,30 +113,40 @@ IFS='/' pathargs=($urlpath)
 
 if (( is_issue )); then
   # For issues, take the numbers and preprend 'issues/'
-  providerBranchRef="issues/${branch//[^0-9]/}"
+  providerBranchRef="/issues/${branch//[^0-9]/}"
 else
   # Make # and % characters url friendly
   #   github.com/paulirish/git-open/pull/24
   branch=${branch//%/%25} branch=${branch//#/%23}
-  providerBranchRef="tree/$branch"
+  providerBranchRef="/tree/$branch"
 fi
 
 if [[ "$domain" == 'bitbucket.org' ]]; then
   # Bitbucket, see https://github.com/paulirish/git-open/issues/80 for why ?at is needed.
-  providerBranchRef="src?at=$branch"
+  providerBranchRef="/src?at=$branch"
 elif [[ ${pathargs[0]} == 'scm' ]]; then
   # Bitbucket server, which starts with 'scm'
   # Replace the first element, 'scm', with 'projects'. Keep the first argument, the string 'repos', and finally the rest of the arguments.
   pathargs=('projects' ${pathargs[1]} 'repos' "${pathargs[@]:2}")
   IFS='/' urlpath="${pathargs[*]}"
-  providerBranchRef="browse?at=$branch"
+  providerBranchRef="/browse?at=$branch"
+elif [[ "${#pathargs[@]}" -ge '2' && ${pathargs[${#pathargs[@]} - 2]} == '_git' ]]; then
+  # Visual Studio Team Services and Team Foundation Server always have /_git/ as the second to last segment in the url path
+  if (( is_issue )); then
+    # Switch to workitems, provide work item id if specified
+    urlpath="${urlpath%%/_git/*}/_workitems"
+    providerBranchRef="?id=${branch//[^0-9]/}"
+  else
+    # Keep project and repository name, append branch selector.
+    providerBranchRef="?version=GB$branch"
+  fi
 fi
 
 openurl="$protocol://$domain/$urlpath"
 
 # simplify URL for master
 if [[ $branch != "master" ]]; then
-    openurl="$openurl/$providerBranchRef"
+    openurl="$openurl$providerBranchRef"
 fi
 
 # get current open browser command

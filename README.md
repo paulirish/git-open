@@ -12,7 +12,7 @@ git open [remote-name] [branch-name]
 git open --issue
 ```
 
-(`git open` works with these [hosted repo providers](#supported-remote-repositories), `git open --issue` currently only works with GitHub)
+(`git open` works with these [hosted repo providers](#supported-remote-repositories), `git open --issue` currently only works with GitHub, Visual Studio Team Services and Team Foundation Server)
 
 ### Examples
 
@@ -100,6 +100,8 @@ git-open can automatically guess the corresponding repository page for remotes
 - GitLab custom hosted (see below)
 - bitbucket.org
 - Atlassian Bitbucket Server (formerly _Atlassian Stash_)
+- Visual Studio Team Services
+- Team Foundation Server (on-premises)
 
 ### GitLab support
 
