@@ -198,6 +198,7 @@ Copyright Jason McCreary & Paul Irish. Licensed under MIT.
 
 ## Changelog
 
+- **2017-12-01** - 2.0 shipped
 - **2017-12-01** - Configuration for custom remote added
 - **2017-11-30** - Support for VSTS Added
 - **2017-10-31** - `--issue` and `-h` added
@@ -205,7 +206,7 @@ Copyright Jason McCreary & Paul Irish. Licensed under MIT.
 - **2017-10-30** - WSL support added
 - **2017-06-16** - Introduced a test suite in BATS
 - **2017-06-15** - Entire script rewritten and simplified by @dermagia
-- **2016-07-23** - readme -- fix oh-my-zsh install instructions
-- **2016-07-22** - 1.1.0, update and add linters for package.json, readme.  Re-publish to NPM.
-- **2016-07-11** - Changelog started (readme formatting and installation instructions updated)
+- **2016-07-23** - Readme: fix oh-my-zsh install instructions
+- **2016-07-22** - 1.1.0 shipped. update and add linters for package.json, readme.
+- **2016-07-11** - Readme formatting and installation instructions updated. Changelog started
 
