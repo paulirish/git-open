@@ -18,6 +18,7 @@ git open [remote] [branch]
   Available options are
 i,issue!      open issues page
 "
+SUBDIRECTORY_OK=true
 
 # https://github.com/koalaman/shellcheck/wiki/SC1090
 # shellcheck source=/dev/null
