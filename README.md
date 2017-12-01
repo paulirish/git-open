@@ -103,7 +103,9 @@ git-open can automatically guess the corresponding repository page for remotes
 - Visual Studio Team Services
 - Team Foundation Server (on-premises)
 
-### Configuration (GitLab support)
+## Configuration 
+
+### Configuring the web destination (aka GitLab support)
 
 To configure GitLab support (or other unique hosting situations) you need to set some options.
 
@@ -127,15 +129,19 @@ git config [--global] "open.https://git.internal.biz.domain" "repo.intranet/subp
 git config [--global] "open.https://git.internal.biz.protocol" "http"
 ```
 
-### Default remote
+### Configuring which remote to open 
 
-Normally `git open` opens the remote named `origin`. When you fork a project
+By default, `git open` opens the remote named `origin`. However, if your current branch is [remotely-tracking](https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches#_tracking_branches) a different remote, that tracked remote will be used.
+
+In some instances, you may want to override this behavior. When you fork a project
 and add a remote named `upstream` you often want that upstream to be opened
-as the default remote. To accomplice this, you can do this:
+rather than your fork. To accomplish this, you can set the `open.default.remote` within your project:
 
 ```sh
 git config open.default.remote upstream
 ```
+
+This is equivalent to always typing `git open upstream`.
 
 ## Alternative projects
 
