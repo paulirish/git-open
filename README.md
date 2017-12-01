@@ -2,7 +2,7 @@
 
 Type `git open` to open the repo website (GitHub, GitLab, Bitbucket) in your browser.
 
-![git open2015-01-24 13_51_18](https://cloud.githubusercontent.com/assets/39191/5889192/244a0b72-a3d0-11e4-8ab9-55fc64228aaa.gif)
+![Demo of git open in action](https://user-images.githubusercontent.com/39191/33507513-f60041ae-d6a9-11e7-985c-ab296d6a5b0f.gif)
 
 ## Usage
 
