@@ -103,27 +103,28 @@ git-open can automatically guess the corresponding repository page for remotes
 - Visual Studio Team Services
 - Team Foundation Server (on-premises)
 
-### GitLab support
+### Configuration (GitLab support)
 
-To configure GitLab support you need to set some options.
+To configure GitLab support (or other unique hosting situations) you need to set some options.
 
-| option name               | description                                                | example            |
-| ------------------------- | ---------------------------------------------------------- | ------------------ |
-| gitopen.gitlab.domain     | The (web)domain name that will work for most of the people | gitlab.example.com |
-| gitopen.gitlab.ssh.domain | A specific ssh domain name, *if needed*                    | git.example.com    |
-| gitopen.gitlab.ssh.port   | A specific ssh port, *if needed*                           | 10022              |
+| option name               | description  |
+| ------------------------- | ---------------- |
+| open.[gitdomain].domain   | The (web) domain to open based on the provided git repo domain |
+| open.[gitdomain].protocol | The (web) protocol to open based on the provided git repo domain. (Defaults to `https`) |
+
 
 ```sh
-# use --global to set across all repos, instead of just the local one
-git config [--global] gitopen.gitlab.domain [value]
-git config [--global] gitopen.gitlab.ssh.domain [value]
-git config [--global] gitopen.gitlab.ssh.port [value]
+git config [--global] open.[gitdomain].domain [value]
+git config [--global] open.[gitdomain].protocol [value]
 ```
 
-If your Gitlab custom hosted is serving `http` you can also specify this:
+**Example**
+ * Your git remote is at `ssh://git@git.internal.biz:7000/XXX/YYY.git`
+ * Your hosted gitlab is `http://repo.intranet/subpath/XXX/YYY`
+
 ```sh
-# use --global to set across all repos, instead of just the local one
-git config [--global] gitopen.gitlab.protocol http
+git config [--global] "open.https://git.internal.biz.domain" "repo.intranet/subpath"
+git config [--global] "open.https://git.internal.biz.protocol" "http"
 ```
 
 ### Default remote

@@ -276,7 +276,6 @@ setup() {
 @test "gitlab: default ssh origin style" {
   # https://github.com/paulirish/git-open/pull/55
   git remote set-url origin "git@gitlab.example.com:user/repo"
-  git config "gitopen.gitlab.domain" "gitlab.example.com"
   run ../git-open
   assert_output "https://gitlab.example.com/user/repo"
 }
@@ -284,7 +283,6 @@ setup() {
 @test "gitlab: ssh://git@ origin" {
   # https://github.com/paulirish/git-open/pull/51
   git remote set-url origin "ssh://git@gitlab.domain.com/user/repo"
-  git config "gitopen.gitlab.domain" "gitlab.domain.com"
   run ../git-open
   assert_output "https://gitlab.domain.com/user/repo"
   refute_output --partial "//user"
