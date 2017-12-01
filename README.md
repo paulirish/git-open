@@ -110,16 +110,19 @@ To configure GitLab support (or other unique hosting situations) you need to set
 | open.[gitdomain].domain   | The (web) domain to open based on the provided git repo domain |
 | open.[gitdomain].protocol | The (web) protocol to open based on the provided git repo domain. (Defaults to `https`) |
 
-<!--
-git config --local --add open.[gitdomain].domain [value]
-git config --local --add open.[gitdomain].protocol [value]
--->
 
 ```sh
-# Your git remote is at "ssh://git@git.internal.biz:7000/XXX/YYY.git"
-# Your hosted gitlab is "http://repo.intranet/subpath/XXX/YYY"
-git config --local --add "open.https://git.internal.biz.domain" "repo.intranet/subpath"
-git config --local --add "open.https://git.internal.biz.protocol" "http"
+git config [--global] open.[gitdomain].domain [value]
+git config [--global] open.[gitdomain].protocol [value]
+```
+
+**Example**
+ * Your git remote is at `ssh://git@git.internal.biz:7000/XXX/YYY.git`
+ * Your hosted gitlab is `http://repo.intranet/subpath/XXX/YYY`
+
+```sh
+git config [--global] "open.https://git.internal.biz.domain" "repo.intranet/subpath"
+git config [--global] "open.https://git.internal.biz.protocol" "http"
 ```
 
 ## Alternative projects
