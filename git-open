@@ -171,3 +171,5 @@ fi
 
 # open it in a browser
 ${BROWSER:-$open} $openopt "$openurl"
+
+unset openopt
