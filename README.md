@@ -126,6 +126,16 @@ If your Gitlab custom hosted is serving `http` you can also specify this:
 git config [--global] gitopen.gitlab.protocol http
 ```
 
+### Default remote
+
+Normally `git open` opens the remote named `origin`. When you fork a project
+and add a remote named `upstream` you often want that upstream to be opened
+as the default remote. To accomplice this, you can do this:
+
+```sh
+git config open.default.remote upstream
+```
+
 ## Alternative projects
 
 See [hub](https://github.com/github/hub) for complete GitHub opening support.
