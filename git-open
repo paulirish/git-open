@@ -21,7 +21,7 @@ i,issue!      open issues page
 
 # https://github.com/koalaman/shellcheck/wiki/SC1090
 # shellcheck source=/dev/null
-. "$(git --exec-path)/git-sh-setup"
+SUBDIRECTORY_OK='Yes' . "$(git --exec-path)/git-sh-setup"
 
 # Defaults
 is_issue=0
