@@ -34,7 +34,9 @@
     "lint:editorconfig": "eclint check git-open* readme* .travis.yml",
     "lint:package": "pjv --recommendations --warnings",
     "lint:readme": "node ./node_modules/markdownlint/lib/markdownlint.js --config markdownlint.json README.md",
-    "test": "npm run unit && npm run lint:package && npm run lint:readme && npm run lint:editorconfig",
+    "lint:man": "node ./node_modules/markdownlint/lib/markdownlint.js --config markdownlint.json git-open.1.md",
+    "man": "marked-man --version \"git-open $npm_package_version\" --manual \"Git manual\" --section 1 git-open.1.md > git-open.1",
+    "test": "npm run unit && npm run lint:package && npm run lint:man && npm run lint:readme && npm run lint:editorconfig",
     "unit": "bats test/",
     "watch": "find . -maxdepth 2 -iname '*bats' -o -iname 'git-open' | entr bats test/"
   },
@@ -42,6 +44,7 @@
   "devDependencies": {
     "eclint": "^2.1.0",
     "markdownlint": "^0.2.0",
+    "marked-man": "^0.2.1",
     "package-json-validator": "^0.6.1"
   }
 }
