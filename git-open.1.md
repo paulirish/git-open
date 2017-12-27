@@ -3,19 +3,16 @@
 
 ## SYNOPSIS
 
-`git-open` [remote-name] [branch-name]
-
-`git-open` --issue
+`git open` [--issue] [remote-name] [branch-name]
 
 
 ## DESCRIPTION
 
-`git-open` opens the repository's website in your browser. The major well known
+`git open` opens the repository's website in your browser. The major well known
 git hosting services are supported.
 
 
 ## OPTIONS
-
 
 `-i`, `--issue`
   Open the current issue. When the name of the current branch matches the right pattern, 
@@ -54,10 +51,10 @@ If branches use naming convention of `issues/#123`, it opens
 https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
 
 
-## SUPPORTED REMOTE REPOSITORIES
+## SUPPORTED GIT HOSTING SERVICES
 
 git-open can automatically guess the corresponding repository page for remotes
-(default looks for `origin`) on the following hosts:
+on the following git hosting services:
 
 - github.com
 - gist.github.com
@@ -72,7 +69,7 @@ git-open can automatically guess the corresponding repository page for remotes
 ## CONFIGURATION
 
 To configure git-open you may need to set some `git config` options. 
-You can use `--global` to set across all repos, instead of just the local one.
+You can use `--global` to set across all repos, instead of just the current repo.
 
 ```sh
 $ git config [--global] option value

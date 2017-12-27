@@ -30,6 +30,7 @@
     "git-open": "git-open",
     "git-home": "git-open"
   },
+  "man": "./git-open.1",
   "scripts": {
     "lint:editorconfig": "eclint check git-open* readme* .travis.yml",
     "lint:package": "pjv --recommendations --warnings",
