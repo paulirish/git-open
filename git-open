@@ -126,10 +126,19 @@ fi
 if [[ "$domain" == 'bitbucket.org' ]]; then
   # Bitbucket, see https://github.com/paulirish/git-open/issues/80 for why ?at is needed.
   providerBranchRef="/src?at=$branch"
-elif [[ ${pathargs[0]} == 'scm' ]]; then
-  # Bitbucket server, which starts with 'scm'
-  # Replace the first element, 'scm', with 'projects'. Keep the first argument, the string 'repos', and finally the rest of the arguments.
-  pathargs=('projects' ${pathargs[1]} 'repos' "${pathargs[@]:2}")
+elif [[ "${#pathargs[@]}" -ge 3 && ${pathargs[${#pathargs[@]} - 3]} == 'scm' ]]; then
+  # Bitbucket server always has /scm/ as the third to last segment in the url path, e.g. /scm/ppp/test-repo.git
+  # Anything before the 'scm' is part of the server's root context
+
+  # Check whether there are other context parts before the 'scm' part
+  pathPref=()
+  if [[ "${#pathargs[@]}" -gt 3 ]]; then
+    # If there are other context parts, add them, up to (but not including) the found 'scm'
+    pathPref=("${pathargs[*]:0:${#pathargs[@]} - 3}")
+  fi
+
+  # Replace the 'scm' element, with 'projects'. Keep the first argument, the string 'repos', and finally the rest of the arguments.
+  pathargs=(${pathPref[@]} 'projects' ${pathargs[${#pathargs[@]} - 2]} 'repos' "${pathargs[@]:${#pathargs[@]} - 1}")
   IFS='/' urlpath="${pathargs[*]}"
   providerBranchRef="/browse?at=$branch"
 elif [[ "${#pathargs[@]}" -ge '2' && ${pathargs[${#pathargs[@]} - 2]} == '_git' ]]; then
