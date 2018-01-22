@@ -104,43 +104,7 @@ git-open can automatically guess the corresponding repository page for remotes
 
 ## Configuration 
 
-### Configuring the web destination (aka GitLab support)
-
-To configure GitLab support (or other unique hosting situations) you need to set some options.
-
-| option name               | description  |
-| ------------------------- | ---------------- |
-| open.[gitdomain].domain   | The (web) domain to open based on the provided git repo domain |
-| open.[gitdomain].protocol | The (web) protocol to open based on the provided git repo domain. (Defaults to `https`) |
-
-
-```sh
-git config [--global] open.[gitdomain].domain [value]
-git config [--global] open.[gitdomain].protocol [value]
-```
-
-**Example**
- * Your git remote is at `ssh://git@git.internal.biz:7000/XXX/YYY.git`
- * Your hosted gitlab is `http://repo.intranet/subpath/XXX/YYY`
-
-```sh
-git config [--global] "open.https://git.internal.biz.domain" "repo.intranet/subpath"
-git config [--global] "open.https://git.internal.biz.protocol" "http"
-```
-
-### Configuring which remote to open 
-
-By default, `git open` opens the remote named `origin`. However, if your current branch is [remotely-tracking](https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches#_tracking_branches) a different remote, that tracked remote will be used.
-
-In some instances, you may want to override this behavior. When you fork a project
-and add a remote named `upstream` you often want that upstream to be opened
-rather than your fork. To accomplish this, you can set the `open.default.remote` within your project:
-
-```sh
-git config open.default.remote upstream
-```
-
-This is equivalent to always typing `git open upstream`.
+See the [man page](git-open.1.md) for more information on how to configure `git-open`.
 
 ## Alternative projects
 
