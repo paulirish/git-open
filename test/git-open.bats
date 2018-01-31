@@ -36,6 +36,18 @@ setup() {
 }
 
 ##
+## url handling
+##
+
+@test "url: insteadOf handling" {
+	git config --global url.http://example.com/.insteadOf ex:
+	git remote set-url origin ex:example.git
+	git checkout -B master
+	run ../git-open
+	assert_output "http://example.com/example"
+}
+
+##
 ## GitHub
 ##
 

@@ -49,8 +49,7 @@ remote=${1:-$default_remote}
 remote=${remote:-$tracked_remote}
 remote=${remote:-"origin"}
 
-# @TODO ls-remote will also expand "insteadOf" items `giturl=$(git ls-remote --get-url $remote)``
-giturl=$(git config --get "remote.${remote}.url")
+giturl=$(git ls-remote --get-url "$remote")
 
 if [[ -z "$giturl" ]]; then
   echo "Git remote is not set for $remote" 1>&2
