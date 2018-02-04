@@ -214,22 +214,6 @@ setup() {
   refute_output --partial "@"
 }
 
-@test "bitbucket server" {
-  # https://github.com/paulirish/git-open/pull/15
-  git remote set-url origin "https://user@bitbucket.example.com/scm/ppp/test-repo.git"
-  run ../git-open
-  assert_output "https://bitbucket.example.com/projects/ppp/repos/test-repo"
-}
-
-@test "bitbucket server branch" {
-  # https://github.com/paulirish/git-open/pull/15
-  git remote set-url origin "https://user@bitbucket.example.com/scm/ppp/test-repo.git"
-  git checkout -B "bb-server"
-  run ../git-open
-  assert_output "https://bitbucket.example.com/projects/ppp/repos/test-repo/browse?at=bb-server"
-}
-
-
 @test "bitbucket: Bitbucket Server" {
   # https://github.com/paulirish/git-open/issues/77#issuecomment-309044010
   git remote set-url origin "https://user@mybb.domain.com/scm/ppp/rrr.git"
@@ -268,6 +252,38 @@ setup() {
     assert_output "https://mybb.domain.com/projects/~first.last/repos/rrr/browse?at=refs/heads/develop"
 
 }
+
+
+@test "bitbucket: Bitbucket Server with different root context" {
+  # https://github.com/paulirish/git-open/pull/15
+  git remote set-url origin "https://user@bitbucket.example.com/git/scm/ppp/test-repo.git"
+  run ../git-open
+  assert_output "https://bitbucket.example.com/git/projects/ppp/repos/test-repo" ||
+    assert_output "https://bitbucket.example.com/git/projects/ppp/repos/test-repo/?at=master" ||
+    assert_output "https://bitbucket.example.com/git/projects/ppp/repos/test-repo/?at=refs%2Fheads%2Fmaster"
+}
+
+
+@test "bitbucket: Bitbucket Server with different root context with multiple parts" {
+  # https://github.com/paulirish/git-open/pull/15
+  git remote set-url origin "https://user@bitbucket.example.com/really/long/root/context/scm/ppp/test-repo.git"
+  run ../git-open
+  assert_output "https://bitbucket.example.com/really/long/root/context/projects/ppp/repos/test-repo" ||
+    assert_output "https://bitbucket.example.com/really/long/root/context/projects/ppp/repos/test-repo/?at=master" ||
+    assert_output "https://bitbucket.example.com/really/long/root/context/projects/ppp/repos/test-repo/?at=refs%2Fheads%2Fmaster"
+}
+
+
+@test "bitbucket: Bitbucket Server private user repos with different root context" {
+  # https://github.com/paulirish/git-open/pull/83#issuecomment-309968538
+  git remote set-url origin "https://mybb.domain.com/root/context/scm/~first.last/rrr.git"
+  git checkout -B "develop"
+  run ../git-open
+  assert_output "https://mybb.domain.com/root/context/projects/~first.last/repos/rrr/browse?at=develop" ||
+    assert_output "https://mybb.domain.com/root/context/projects/~first.last/repos/rrr/browse?at=refs%2Fheads%2Fdevelop" ||
+    assert_output "https://mybb.domain.com/root/context/projects/~first.last/repos/rrr/browse?at=refs/heads/develop"
+}
+
 
 ##
 ## GitLab
