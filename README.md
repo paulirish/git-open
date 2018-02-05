@@ -1,4 +1,4 @@
-# git-open [![Build Status](https://img.shields.io/travis/paulirish/git-open/master.svg)](https://travis-ci.org/paulirish/git-open)
+# git-open [![Build Status](https://img.shields.io/travis/paulirish/git-open/master.svg)](https://travis-ci.org/paulirish/git-open/builds)
 
 Type `git open` to open the repo website (GitHub, GitLab, Bitbucket) in your browser.
 
