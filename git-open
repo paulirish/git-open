@@ -56,7 +56,7 @@ if [[ -z "$giturl" ]]; then
   exit 1
 fi
 
-ssh_config=${ssh_config:-~/.ssh/config}
+ssh_config=${ssh_config:-"$HOME/.ssh/config"}
 # Resolves an ssh alias defined in ssh_config to it's corresponding hostname
 # echos out result, should be used within subshell $( ssh_resolve $host )
 # echos out nothing if alias could not be resolved
@@ -157,7 +157,7 @@ protocol=$(getConfig "protocol")
 branch=${2:-$(git symbolic-ref -q --short HEAD)}
 
 # Split arguments on '/'
-IFS='/' pathargs=($urlpath)
+IFS='/' read -r -a pathargs <<<"$urlpath"
 
 if (( is_issue )); then
   # For issues, take the numbers and preprend 'issues/'
@@ -180,6 +180,7 @@ elif [[ "${#pathargs[@]}" -ge 3 && ${pathargs[${#pathargs[@]} - 3]} == 'scm' ]];
   pathPref=("${pathargs[*]:0:${#pathargs[@]} - 3}")
 
   # Replace the 'scm' element, with 'projects'. Keep the first argument, the string 'repos', and finally the rest of the arguments.
+  # shellcheck disable=SC2206
   pathargs=(${pathPref[@]} 'projects' ${pathargs[${#pathargs[@]} - 2]} 'repos' "${pathargs[@]:${#pathargs[@]} - 1}")
   IFS='/' urlpath="${pathargs[*]}"
   providerBranchRef="/browse?at=$branch"
