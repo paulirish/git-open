@@ -56,12 +56,51 @@ if [[ -z "$giturl" ]]; then
   exit 1
 fi
 
+ssh_config=${ssh_config:-"$HOME/.ssh/config"}
+# Resolves an ssh alias defined in ssh_config to it's corresponding hostname
+# echos out result, should be used within subshell $( ssh_resolve $host )
+# echos out nothing if alias could not be resolved
+function ssh_resolve() {
+  domain="$1"
+  ssh_found=true
+  # Filter to only ssh_config lines that start with "Host" or "HostName"
+  resolved=$(while read -r ssh_line; do
+    # Split each line by spaces, of the form:
+    # Host alias [alias...]
+    # Host regex
+    # HostName resolved.domain.com
+    read -r -a ssh_array <<<"${ssh_line}"
+    ssh_optcode="${ssh_array[0]}"
+    if [[ ${ssh_optcode^^} == HOST ]]; then
+      # Host
+      ssh_found=false
+      # Iterate through aliases looking for a match
+      for ssh_index in $(seq 1 $((${#ssh_array[@]} - 1))); do
+        ssh_host=${ssh_array[$ssh_index]}
+        # shellcheck disable=SC2053
+        if [[ $domain == $ssh_host ]]; then
+          # Found a match, next HostName entry will be returned while matched
+          ssh_found=true
+          break
+        fi
+      done
+    elif $ssh_found && [[ ${ssh_optcode^^} == HOSTNAME ]]; then
+      # HostName, but only if ssh_found is true (the last Host entry matched)
+      # Replace all instances of %h with the Host alias
+      echo "${ssh_array[1]//%h/$domain}"
+    fi
+  done < <(grep -iE "^\\s*Host(Name)?\\s+" "$ssh_config"))
+  # Take only the last resolved hostname (multiple are overridden)
+  tail -1 <<<"$resolved"
+}
+
 # From git-fetch(5), native protocols:
 # ssh://[user@]host.xz[:port]/path/to/repo.git/
 # git://host.xz[:port]/path/to/repo.git/
 # http[s]://host.xz[:port]/path/to/repo.git/
 # ftp[s]://host.xz[:port]/path/to/repo.git/
 # [user@]host.xz:path/to/repo.git/ - scp-like but is an alternative to ssh.
+# [user@]hostalias:path/to/repo.git/ - handles host aliases defined in ssh_config(5)
 
 # Determine whether this is a url (https, ssh, git+ssh...) or an scp-style path
 if [[ "$giturl" =~ ^[a-z\+]+://.* ]]; then
@@ -85,6 +124,14 @@ else
   # Split on first ':' to get server name and path
   domain=${uri%%:*}
   urlpath=${uri#*:}
+
+  # Resolve sshconfig aliases
+  if [[ -e "$ssh_config" ]]; then
+    domain_resolv=$(ssh_resolve "$domain")
+    if [[ ! -z "$domain_resolv" ]]; then
+      domain="$domain_resolv"
+    fi
+  fi
 fi
 
 # Trim "/" from beginning of URL; "/" and ".git" from end of URL
@@ -110,7 +157,7 @@ protocol=$(getConfig "protocol")
 branch=${2:-$(git symbolic-ref -q --short HEAD)}
 
 # Split arguments on '/'
-IFS='/' pathargs=($urlpath)
+IFS='/' read -r -a pathargs <<<"$urlpath"
 
 if (( is_issue )); then
   # For issues, take the numbers and preprend 'issues/'
@@ -133,6 +180,7 @@ elif [[ "${#pathargs[@]}" -ge 3 && ${pathargs[${#pathargs[@]} - 3]} == 'scm' ]];
   pathPref=("${pathargs[*]:0:${#pathargs[@]} - 3}")
 
   # Replace the 'scm' element, with 'projects'. Keep the first argument, the string 'repos', and finally the rest of the arguments.
+  # shellcheck disable=SC2206
   pathargs=(${pathPref[@]} 'projects' ${pathargs[${#pathargs[@]} - 2]} 'repos' "${pathargs[@]:${#pathargs[@]} - 1}")
   IFS='/' urlpath="${pathargs[*]}"
   providerBranchRef="/browse?at=$branch"
@@ -171,7 +219,9 @@ case $( uname -s ) in
 esac
 
 # Allow printing the url if BROWSER=echo
-if [[ $BROWSER != "echo" ]]; then
+if [[ $BROWSER == "echo" ]]; then
+  openopt=''
+else
   exec &>/dev/null
 fi
 
