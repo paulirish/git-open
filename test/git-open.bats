@@ -496,6 +496,13 @@ setup() {
   assert_output "http://tfs.example.com:8080/Project/Folder/_workitems?id=36"
 }
 
+@test "vsts: default project repository - issue" {
+  git remote set-url origin "https://gitopen.visualstudio.com/_git/Project"
+  git checkout -B "bugfix-36"
+  run ../git-open "--issue"
+  assert_output "https://gitopen.visualstudio.com/Project/_workitems?id=36"
+}
+
 
 teardown() {
   cd ..

@@ -189,6 +189,8 @@ elif [[ "${#pathargs[@]}" -ge '2' && ${pathargs[${#pathargs[@]} - 2]} == '_git' 
   if (( is_issue )); then
     # Switch to workitems, provide work item id if specified
     urlpath="${urlpath%%/_git/*}/_workitems"
+    # Handle case for the default repository url
+    urlpath="${urlpath#_git\/*}"
     providerBranchRef="?id=${branch//[^0-9]/}"
   else
     # Keep project and repository name, append branch selector.
