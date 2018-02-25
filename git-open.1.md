@@ -26,25 +26,25 @@ git hosting services are supported.
 ## EXAMPLES
 
 ```sh
-$ git open
+git open
 ```
 
 It opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/
 
 ```sh
-$ git open someremote
+git open someremote
 ```
 
 It opens https://github.com/PROVIDED_REMOTE_USER/CURRENT_REPO/
 
 ```sh
-$ git open someremote somebranch
+git open someremote somebranch
 ```
 
 It opens https://github.com/PROVIDED_REMOTE_USER/CURRENT_REPO/tree/PROVIDED_BRANCH
 
 ```sh
-$ git open --issue
+git open --issue
 ```
 
 If branches use naming convention of `issues/#123`, it opens
@@ -72,7 +72,7 @@ To configure git-open you may need to set some `git config` options.
 You can use `--global` to set across all repos, instead of just the current repo.
 
 ```sh
-$ git config [--global] option value
+git config [--global] option value
 ```
 
 ### Configuring which remote to open 
@@ -106,6 +106,7 @@ git config [--global] open.[gitdomain].protocol [value]
 ```
 
 **Example**
+
 - Your git remote is at `ssh://git@git.internal.biz:7000/XXX/YYY.git`
 - Your hosted gitlab is `http://repo.intranet/subpath/XXX/YYY`
 

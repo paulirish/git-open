@@ -1,3 +1,4 @@
 node_modules/
 sandboxrepo
 git-open.1
+package-lock.json

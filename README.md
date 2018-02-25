@@ -130,11 +130,12 @@ from which this plugin was forked.
 Please provide examples of the URLs you are parsing with each PR.
 
 You can run `git-open` in `echo` mode, which doesn't open your browser, but just prints the URL to stdout:
+
 ```sh
 env BROWSER='echo' ./git-open
 ```
 
-#### Testing:
+### Testing:
 
 You'll need to install [bats](https://github.com/sstephenson/bats#installing-bats-from-source), the Bash automated testing system. It's also available as `brew install bats`
 
