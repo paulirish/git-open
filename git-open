@@ -70,8 +70,8 @@ function ssh_resolve() {
     # Host regex
     # HostName resolved.domain.com
     read -r -a ssh_array <<<"${ssh_line}"
-    ssh_optcode="${ssh_array[0]}"
-    if [[ ${ssh_optcode^^} == HOST ]]; then
+    ssh_optcode="$(echo "${ssh_array[0]}" | tr '[:upper:]' '[:lower:]')"
+    if [[ $ssh_optcode == HOST ]]; then
       # Host
       ssh_found=false
       # Iterate through aliases looking for a match
@@ -84,7 +84,7 @@ function ssh_resolve() {
           break
         fi
       done
-    elif $ssh_found && [[ ${ssh_optcode^^} == HOSTNAME ]]; then
+    elif $ssh_found && [[ $ssh_optcode == HOSTNAME ]]; then
       # HostName, but only if ssh_found is true (the last Host entry matched)
       # Replace all instances of %h with the Host alias
       echo "${ssh_array[1]//%h/$domain}"
