@@ -70,7 +70,7 @@ function ssh_resolve() {
     # Host regex
     # HostName resolved.domain.com
     read -r -a ssh_array <<<"${ssh_line}"
-    ssh_optcode="$(echo "${ssh_array[0]}" | tr '[:upper:]' '[:lower:]')"
+    ssh_optcode="$(echo "${ssh_array[0]}" | tr '[:lower:]' '[:upper:]')"
     if [[ $ssh_optcode == HOST ]]; then
       # Host
       ssh_found=false
