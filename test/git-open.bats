@@ -503,6 +503,39 @@ setup() {
   assert_output "https://gitopen.visualstudio.com/Project/_workitems?id=36"
 }
 
+##
+## AWS Code Commit
+##
+
+@test "aws: https url" {
+  git remote set-url origin "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/repo"
+  git checkout -B "master"
+  run ../git-open
+  assert_output "https://us-east-1.console.aws.amazon.com/codecommit/home?region=us-east-1#/repository/repo/browse/"
+}
+
+@test "aws: ssh url" {
+  git remote set-url origin "ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/repo"
+  git checkout -B "master"
+  run ../git-open
+  assert_output "https://us-east-1.console.aws.amazon.com/codecommit/home?region=us-east-1#/repository/repo/browse/"
+}
+
+@test "aws: branch " {
+  git remote set-url origin "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/repo"
+  git checkout -B "mybranch"
+  run ../git-open
+  assert_output "https://us-east-1.console.aws.amazon.com/codecommit/home?region=us-east-1#/repository/repo/browse/mybranch/--/"
+}
+
+@test "aws: issue" {
+  git remote set-url origin "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/repo"
+  git checkout -B "issues/#12"
+  run ../git-open "--issue"
+  [ "$status" -eq 1 ]
+  assert_output "Issue feature does not supported on AWS Code Commit."
+}
+
 
 teardown() {
   cd ..

@@ -198,6 +198,11 @@ elif [[ "${#pathargs[@]}" -ge '2' && ${pathargs[${#pathargs[@]} - 2]} == '_git' 
   fi
 elif [[ "$domain" =~ amazonaws\.com$ ]]; then
   # AWS Code Commit
+  if (( is_issue )); then
+      echo "Issue feature does not supported on AWS Code Commit." 1>&2
+    exit 1
+  fi
+
   # Take region name from domain.
   region=${domain#*.}
   region=${region%%.*}
