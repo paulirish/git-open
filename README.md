@@ -101,6 +101,7 @@ git-open can automatically guess the corresponding repository page for remotes
 - Atlassian Bitbucket Server (formerly _Atlassian Stash_)
 - Visual Studio Team Services
 - Team Foundation Server (on-premises)
+- AWS Code Commit
 
 ## Configuration 
 

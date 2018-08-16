@@ -196,6 +196,28 @@ elif [[ "${#pathargs[@]}" -ge '2' && ${pathargs[${#pathargs[@]} - 2]} == '_git' 
     # Keep project and repository name, append branch selector.
     providerBranchRef="?version=GB$branch"
   fi
+elif [[ "$domain" =~ amazonaws\.com$ ]]; then
+  # AWS Code Commit
+  if (( is_issue )); then
+    echo "Issue feature does not supported on AWS Code Commit." 1>&2
+    exit 1
+  fi
+
+  # Take region name from domain.
+  region=${domain#*.}
+  region=${region%%.*}
+
+  # Replace domain.
+  # Ex. git-codecommit.us-east-1.amazonaws.com -> us-east-1.console.aws.amazon.com
+  domain="${region}.console.aws.amazon.com"
+
+  # Replace URL path.
+  # Ex. v1/repos/example -> codecommit/home?region=us-east-1#/repository/example/browse/
+  urlpath="codecommit/home?region=${region}#/repository/${urlpath##*/}/browse/"
+
+  # Replace branch ref.
+  # Ex. /tree/foobar -> foobar/--/
+  providerBranchRef="${providerBranchRef##*/}/--/"
 fi
 
 openurl="$protocol://$domain/$urlpath"
