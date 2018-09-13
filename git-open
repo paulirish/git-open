@@ -153,8 +153,8 @@ function getConfig() {
 domain=$(getConfig "domain")
 protocol=$(getConfig "protocol")
 
-# Get current branch
-branch=${2:-$(git symbolic-ref -q --short HEAD)}
+# Get current branch / tag / commit
+branch=${2:-$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match 2>/dev/null || git rev-parse HEAD)}
 
 # Split arguments on '/'
 IFS='/' read -r -a pathargs <<<"$urlpath"

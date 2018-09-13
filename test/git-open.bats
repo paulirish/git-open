@@ -65,6 +65,17 @@ setup() {
   assert_output "https://github.com/user/repo/tree/mybranch"
 }
 
+@test "gh: tag" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  git tag mytag
+  echo a > a
+  git add a
+  git commit -m a
+  git checkout mytag
+  run ../git-open
+  assert_output "https://github.com/user/repo/tree/mytag"
+}
+
 @test "gh: non-origin remote" {
   git remote set-url origin "git@github.com:user/repo.git"
   git remote add upstream "git@github.com:upstreamorg/repo.git"
@@ -290,6 +301,17 @@ setup() {
   git remote set-url origin "git@bitbucket.org:paulirish/crbug-extension.git"
   run ../git-open
   assert_output --partial "https://bitbucket.org/paulirish/crbug-extension"
+}
+
+@test "bitbucket: tag" {
+  git remote set-url origin "git@bitbucket.org:paulirish/crbug-extension.git"
+  git tag mytag
+  echo a > a
+  git add a
+  git commit -m a
+  git checkout mytag
+  run ../git-open
+  assert_output "https://bitbucket.org/paulirish/crbug-extension/src?at=mytag"
 }
 
 @test "bitbucket: non-origin remote" {
