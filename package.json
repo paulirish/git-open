@@ -44,7 +44,7 @@
   "dependencies": {},
   "devDependencies": {
     "eclint": "^2.1.0",
-    "markdownlint-cli": "^0.7.1",
+    "markdownlint-cli": "^0.13.0",
     "marked-man": "^0.2.1",
     "package-json-validator": "^0.6.1"
   }
