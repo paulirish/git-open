@@ -1,11 +1,5 @@
 language: node_js
 node_js: "node"
-addons:
-  apt:
-    sources:
-    - debian-sid    # Grab ShellCheck from the Debian repo
-    packages:
-    - shellcheck
 cache:
   directories:
     - node_modules
