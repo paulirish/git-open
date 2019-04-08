@@ -105,7 +105,7 @@ git-open can automatically guess the corresponding repository page for remotes
 
 ## Configuration 
 
-See the [man page](git-open.1.md) for more information on how to configure `git-open`.
+See the [main page](git-open.1.md) for more information on how to configure `git-open`.
 
 ## Alternative projects
 
