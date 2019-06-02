@@ -65,6 +65,27 @@ setup() {
   assert_output "https://github.com/user/repo/tree/mybranch"
 }
 
+@test "gh: upstream branch" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  git remote add upstreamRemote "git@github.com:user/upstream-repo.git"
+  git checkout -B "mybranch"
+  git config --local "branch.mybranch.merge" "refs/heads/myupstream/mybranch"
+  git config --local "branch.mybranch.remote" "upstreamRemote"
+  run ../git-open
+  assert_output "https://github.com/user/upstream-repo/tree/myupstream/mybranch"
+}
+
+@test "gh: upstream branch from param" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  git remote add upstreamRemote "git@github.com:user/upstream-repo.git"
+  git checkout -B "mybranch"
+  git config --local "branch.mybranch.merge" "refs/heads/upstreamBranch"
+  git config --local "branch.mybranch.remote" "upstreamRemote"
+  git checkout master
+  run ../git-open upstreamRemote mybranch
+  assert_output "https://github.com/user/upstream-repo/tree/upstreamBranch"
+}
+
 @test "gh: tag" {
   git remote set-url origin "git@github.com:user/repo.git"
   git tag mytag

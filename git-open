@@ -42,8 +42,10 @@ if ! git rev-parse --is-inside-work-tree &>/dev/null; then
 fi
 
 # choose remote. priority to: provided argument, default in config, detected tracked remote, 'origin'
-branch_name=$(git name-rev --name-only HEAD 2>/dev/null)
-tracked_remote=$(git config "branch.$branch_name.remote")
+branch=${2:-$(git symbolic-ref -q --short HEAD)}
+upstream_branch_full_name=$(git config "branch.$branch.merge")
+upstream_branch=${upstream_branch_full_name#"refs/heads/"}
+tracked_remote=$(git config "branch.$branch.remote")
 default_remote=$(git config open.default.remote)
 remote=${1:-$default_remote}
 remote=${remote:-$tracked_remote}
@@ -153,25 +155,25 @@ function getConfig() {
 domain=$(getConfig "domain")
 protocol=$(getConfig "protocol")
 
-# Get current branch / tag / commit
-branch=${2:-$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match 2>/dev/null || git rev-parse HEAD)}
+# Remote ref to open
+remote_ref=${upstream_branch:-${branch:-$(git describe --tags --exact-match 2>/dev/null || git rev-parse HEAD)}}
 
 # Split arguments on '/'
 IFS='/' read -r -a pathargs <<<"$urlpath"
 
 if (( is_issue )); then
   # For issues, take the numbers and preprend 'issues/'
-  providerBranchRef="/issues/${branch//[^0-9]/}"
+  providerBranchRef="/issues/${remote_ref//[^0-9]/}"
 else
   # Make # and % characters url friendly
   #   github.com/paulirish/git-open/pull/24
-  branch=${branch//%/%25} branch=${branch//#/%23}
-  providerBranchRef="/tree/$branch"
+  remote_ref=${remote_ref//%/%25} remote_ref=${remote_ref//#/%23}
+  providerBranchRef="/tree/$remote_ref"
 fi
 
 if [[ "$domain" == 'bitbucket.org' ]]; then
   # Bitbucket, see https://github.com/paulirish/git-open/issues/80 for why ?at is needed.
-  providerBranchRef="/src?at=$branch"
+  providerBranchRef="/src?at=$remote_ref"
 elif [[ "${#pathargs[@]}" -ge 3 && ${pathargs[${#pathargs[@]} - 3]} == 'scm' ]]; then
   # Bitbucket server always has /scm/ as the third to last segment in the url path, e.g. /scm/ppp/test-repo.git
   # Anything before the 'scm' is part of the server's root context
@@ -183,7 +185,7 @@ elif [[ "${#pathargs[@]}" -ge 3 && ${pathargs[${#pathargs[@]} - 3]} == 'scm' ]];
   # shellcheck disable=SC2206
   pathargs=(${pathPref[@]} 'projects' ${pathargs[${#pathargs[@]} - 2]} 'repos' "${pathargs[@]:${#pathargs[@]} - 1}")
   IFS='/' urlpath="${pathargs[*]}"
-  providerBranchRef="/browse?at=$branch"
+  providerBranchRef="/browse?at=$remote_ref"
 elif [[ "${#pathargs[@]}" -ge '2' && ${pathargs[${#pathargs[@]} - 2]} == '_git' ]]; then
   # Visual Studio Team Services and Team Foundation Server always have /_git/ as the second to last segment in the url path
   if (( is_issue )); then
@@ -191,10 +193,10 @@ elif [[ "${#pathargs[@]}" -ge '2' && ${pathargs[${#pathargs[@]} - 2]} == '_git' 
     urlpath="${urlpath%%/_git/*}/_workitems"
     # Handle case for the default repository url
     urlpath="${urlpath#_git\/*}"
-    providerBranchRef="?id=${branch//[^0-9]/}"
+    providerBranchRef="?id=${remote_ref//[^0-9]/}"
   else
     # Keep project and repository name, append branch selector.
-    providerBranchRef="?version=GB$branch"
+    providerBranchRef="?version=GB$remote_ref"
   fi
 elif [[ "$domain" =~ amazonaws\.com$ ]]; then
   # AWS Code Commit
@@ -223,7 +225,7 @@ fi
 openurl="$protocol://$domain/$urlpath"
 
 # simplify URL for master
-if [[ $branch != "master" ]]; then
+if [[ $remote_ref != "master" ]]; then
     openurl="$openurl$providerBranchRef"
 fi
 
