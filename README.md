@@ -29,6 +29,9 @@ $ git open someremote somebranch
 $ git open --issue
 # If branches use naming convention of issues/#123,
 # opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
+
+$ git open --print
+# prints https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/tree/CURRENT_BRANCH
 ```
 
 ## Installation
@@ -129,12 +132,6 @@ from which this plugin was forked.
 ## Contributing & Development
 
 Please provide examples of the URLs you are parsing with each PR.
-
-You can run `git-open` in `echo` mode, which doesn't open your browser, but just prints the URL to stdout:
-
-```sh
-env BROWSER='echo' ./git-open
-```
 
 ### Testing:
 

@@ -36,6 +36,17 @@ setup() {
 }
 
 ##
+## Print
+##
+
+@test "print url" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  git checkout -B "master"
+  BROWSER="assert_failure" run ../git-open -p
+  assert_output "https://github.com/user/repo"
+}
+
+##
 ## url handling
 ##
 

@@ -19,9 +19,11 @@ git hosting services are supported.
   it will open the webpage with that issue. See `EXAMPLES` for more information. 
   This only works on GitHub, GitLab, Visual Studio Team Services and Team Foundation Server at the moment.
 
+`-p`, `--print`
+  Just print the URL. Do not open it in browser.
+
 `-h`
   Show a short help text.
-
 
 ## EXAMPLES
 
@@ -50,6 +52,11 @@ git open --issue
 If branches use naming convention of `issues/#123`, it opens
 https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
 
+```sh
+git open --print
+```
+
+It prints the URL https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/
 
 ## SUPPORTED GIT HOSTING SERVICES
 
