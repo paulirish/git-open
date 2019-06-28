@@ -3,7 +3,7 @@
 
 ## SYNOPSIS
 
-`git open` [--issue] [remote-name] [branch-name]
+`git open` [--issue] [--commit] [remote-name] [branch-name]
 
 
 ## DESCRIPTION
@@ -13,6 +13,10 @@ git hosting services are supported.
 
 
 ## OPTIONS
+
+`-c`, `--commit`
+  Open the current commit. See `EXAMPLES` for more information. 
+  Only tested with GitHub & GitLab.
 
 `-i`, `--issue`
   Open the current issue. When the name of the current branch matches the right pattern, 
@@ -57,6 +61,14 @@ git open --print
 ```
 
 It prints the URL https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/
+
+```sh
+git open --commit
+```
+
+Supposing that the current sha is `2ddc8d4548d0cee3d714dcf0068dbec5b168a9b2`, it opens
+https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/commit/2ddc8d4548d0cee3d714dcf0068dbec5b168a9b2
+
 
 ## SUPPORTED GIT HOSTING SERVICES
 

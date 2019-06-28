@@ -160,6 +160,13 @@ setup() {
   assert_output "https://github.com/paulirish/git-open/issues/38"
 }
 
+@test "gh: git open --commit" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  sha=$(git rev-parse HEAD)
+  run ../git-open "--commit"
+  assert_output "https://github.com/paulirish/git-open/commit/${sha}"
+}
+
 @test "gh: gist" {
   git remote set-url origin "git@gist.github.com:2d84a6db1b41b4020685.git"
   run ../git-open

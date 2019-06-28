@@ -16,6 +16,7 @@ git open [remote] [branch]
   https://github.com/paulirish/git-open/
 
   Available options are
+c,commit!     open current commit
 i,issue!      open issues page
 p,print!      just print the url
 "
@@ -25,12 +26,14 @@ p,print!      just print the url
 SUBDIRECTORY_OK='Yes' . "$(git --exec-path)/git-sh-setup"
 
 # Defaults
+is_commit=0
 is_issue=0
 protocol="https"
 print_only=0
 
 while test $# != 0; do
   case "$1" in
+  --commit) is_commit=1;;
   --issue) is_issue=1;;
   --print) print_only=1;;
   --) shift; break ;;
@@ -227,8 +230,11 @@ fi
 
 openurl="$protocol://$domain/$urlpath"
 
-# simplify URL for master
-if [[ $remote_ref != "master" ]]; then
+if (( is_commit )); then
+    sha=$(git rev-parse HEAD)
+    openurl="$openurl/commit/$sha"
+elif [[ $remote_ref != "master" ]]; then
+    # simplify URL for master
     openurl="$openurl$providerBranchRef"
 fi
 
