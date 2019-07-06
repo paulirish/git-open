@@ -17,6 +17,7 @@ git open [remote] [branch]
 
   Available options are
 i,issue!      open issues page
+p,print!      just print the url
 "
 
 # https://github.com/koalaman/shellcheck/wiki/SC1090
@@ -26,10 +27,12 @@ SUBDIRECTORY_OK='Yes' . "$(git --exec-path)/git-sh-setup"
 # Defaults
 is_issue=0
 protocol="https"
+print_only=0
 
 while test $# != 0; do
   case "$1" in
   --issue) is_issue=1;;
+  --print) print_only=1;;
   --) shift; break ;;
   esac
   shift
@@ -242,6 +245,10 @@ case $( uname -s ) in
               open='xdg-open'
             fi;;
 esac
+
+if (( print_only )); then
+  BROWSER="echo"
+fi
 
 # Allow printing the url if BROWSER=echo
 if [[ $BROWSER != "echo" ]]; then
