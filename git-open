@@ -33,9 +33,9 @@ print_only=0
 
 while test $# != 0; do
   case "$1" in
-  --commit) is_commit=1;;
-  --issue) is_issue=1;;
-  --print) print_only=1;;
+  --commit|-c) is_commit=1;;
+  --issue|-i) is_issue=1;;
+  --print|-p) print_only=1;;
   --) shift; break ;;
   esac
   shift
