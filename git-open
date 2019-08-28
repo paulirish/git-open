@@ -256,10 +256,5 @@ if (( print_only )); then
   BROWSER="echo"
 fi
 
-# Allow printing the url if BROWSER=echo
-if [[ $BROWSER != "echo" ]]; then
-  exec &>/dev/null
-fi
-
 # open it in a browser
 ${BROWSER:-$open} "$openurl"
