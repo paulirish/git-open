@@ -136,7 +136,7 @@ else
   # Resolve sshconfig aliases
   if [[ -e "$ssh_config" ]]; then
     domain_resolv=$(ssh_resolve "$domain")
-    if [[ ! -z "$domain_resolv" ]]; then
+    if [[ -n "$domain_resolv" ]]; then
       domain="$domain_resolv"
     fi
   fi
