@@ -3,7 +3,7 @@
 
 ## SYNOPSIS
 
-`git open` [--issue] [--commit] [remote-name] [branch-name]
+`git open` [--issue] [--commit] [--suffix some_suffix] [remote-name] [branch-name]
 
 
 ## DESCRIPTION
@@ -22,6 +22,9 @@ git hosting services are supported.
   Open the current issue. When the name of the current branch matches the right pattern, 
   it will open the webpage with that issue. See `EXAMPLES` for more information. 
   This only works on GitHub, GitLab, Visual Studio Team Services and Team Foundation Server at the moment.
+
+`-s`, `--suffix` some_suffix
+  Append the given suffix to the url
 
 `-p`, `--print`
   Just print the URL. Do not open it in browser.
@@ -55,6 +58,12 @@ git open --issue
 
 If branches use naming convention of `issues/#123`, it opens
 https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
+
+```sh
+git open --suffix pulls
+```
+
+It opens the URL https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/pulls
 
 ```sh
 git open --print
