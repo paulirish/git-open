@@ -32,6 +32,9 @@ $ git open --issue
 
 $ git open --print
 # prints https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/tree/CURRENT_BRANCH
+
+$ git open --suffix pulls
+# opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/pulls
 ```
 
 ## Installation
