@@ -35,7 +35,10 @@ suffix_flag=""
 
 while test $# != 0; do
   case "$1" in
-  --commit) is_commit=1;;
+  -c|--commit)
+      is_commit="$1"
+      commit_hash="$3"
+      shift ;;
   --issue) is_issue=1;;
   --suffix=*) suffix_flag="$1";;
   --print) print_only=1;;
@@ -237,7 +240,9 @@ fi
 
 openurl="$protocol://$domain/$urlpath"
 
-if (( is_commit )); then
+if [ "$commit_hash" ]; then
+    openurl="$openurl/commit/$commit_hash"
+elif (( is_commit )); then
     sha=$(git rev-parse HEAD)
     openurl="$openurl/commit/$sha"
 elif [[ $remote_ref != "master" ]]; then
