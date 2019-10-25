@@ -3,7 +3,7 @@
 
 ## SYNOPSIS
 
-`git open` [--issue] [--commit] [--suffix some_suffix] [remote-name] [branch-name]
+`git open` [--issue] [--commit some_commit_hash] [--suffix some_suffix] [remote-name] [branch-name]
 
 
 ## DESCRIPTION
@@ -15,7 +15,7 @@ git hosting services are supported.
 ## OPTIONS
 
 `-c`, `--commit`
-  Open the current commit. See `EXAMPLES` for more information. 
+  Open the current commit or the given commit hash. See `EXAMPLES` for more information. 
   Only tested with GitHub & GitLab.
 
 `-i`, `--issue`
@@ -78,6 +78,11 @@ git open --commit
 Supposing that the current sha is `2ddc8d4548d0cee3d714dcf0068dbec5b168a9b2`, it opens
 https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/commit/2ddc8d4548d0cee3d714dcf0068dbec5b168a9b2
 
+```sh
+git open --commit somecommithash
+```
+
+It opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/commit/somecommithash
 
 ## SUPPORTED GIT HOSTING SERVICES
 

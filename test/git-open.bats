@@ -167,6 +167,11 @@ setup() {
   assert_output "https://github.com/paulirish/git-open/commit/${sha}"
 }
 
+@test "gh: git open --commit somecommithash" {
+  run ../git-open "--commit" "somecommithash"
+  assert_output "https://github.com/paulirish/git-open/commit/somecommithash"
+}
+
 @test "gh: git open --suffix anySuffix" {
   run ../git-open "--suffix" "anySuffix"
   assert_output "https://github.com/paulirish/git-open/anySuffix"
