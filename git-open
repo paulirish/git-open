@@ -256,7 +256,7 @@ case $( uname -s ) in
   MSYS*)    open='start';;
   CYGWIN*)  open='cygstart';;
   *)        # Try to detect WSL (Windows Subsystem for Linux)
-            if uname -r | grep -q Microsoft; then
+            if uname -r | grep -q -i Microsoft; then
               open='powershell.exe Start'
             else
               open='xdg-open'
