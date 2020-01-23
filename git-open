@@ -18,6 +18,8 @@ git open [remote] [branch]
   Available options are
 c,commit!     open current commit
 i,issue!      open issues page
+pulls!        open PRs page
+pull=         open PR page
 s,suffix=     append this suffix
 p,print!      just print the url
 "
@@ -29,6 +31,8 @@ SUBDIRECTORY_OK='Yes' . "$(git --exec-path)/git-sh-setup"
 # Defaults
 is_commit=0
 is_issue=0
+is_pulls=0
+pull_flag=""
 protocol="https"
 print_only=0
 suffix_flag=""
@@ -37,6 +41,8 @@ while test $# != 0; do
   case "$1" in
   --commit) is_commit=1;;
   --issue) is_issue=1;;
+  --pulls) is_pulls=1;;
+  --pull=*) pull_flag="$1";;
   --suffix=*) suffix_flag="$1";;
   --print) print_only=1;;
   --) shift; break ;;
@@ -47,6 +53,9 @@ done
 # parse suffix from suffix=value
 IFS='=' read -ra suffix_flag <<< "$suffix_flag"
 suffix=${suffix_flag[1]}
+
+IFS='=' read -ra pull_flag <<< "$pull_flag"
+pull=${pull_flag[1]}
 
 # are we in a git repo?
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
@@ -233,6 +242,15 @@ elif [[ "$domain" =~ amazonaws\.com$ ]]; then
   # Replace branch ref.
   # Ex. /tree/foobar -> foobar/--/
   providerBranchRef="${providerBranchRef##*/}/--/"
+fi
+
+if (( is_pulls )); then
+  # For issues, take the numbers and preprend 'issues/'
+  providerBranchRef="/pulls"
+fi
+
+if [ "$pull" ]; then
+  providerBranchRef="/pull/$pull"
 fi
 
 openurl="$protocol://$domain/$urlpath"
