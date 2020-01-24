@@ -245,11 +245,10 @@ elif [[ "$domain" =~ amazonaws\.com$ ]]; then
 fi
 
 if (( is_pulls )); then
-  # For issues, take the numbers and preprend 'issues/'
   providerBranchRef="/pulls"
 fi
 
-if [ "$pull" ]; then
+if [ -n "$pull" ]; then
   providerBranchRef="/pull/$pull"
 fi
 
