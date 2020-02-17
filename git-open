@@ -39,13 +39,13 @@ suffix_flag=""
 
 while test $# != 0; do
   case "$1" in
-  --commit) is_commit=1;;
-  --issue) is_issue=1;;
-  --pulls) is_pulls=1;;
-  --pull=*) pull_flag="$1";;
-  --suffix=*) suffix_flag="$1";;
-  --print) print_only=1;;
-  --) shift; break ;;
+    --commit) is_commit=1;;
+    --issue) is_issue=1;;
+    --pulls) is_pulls=1;;
+    --pull=*) pull_flag="$1";;
+    --suffix=*) suffix_flag="$1";;
+    --print) print_only=1;;
+    --) shift; break ;;
   esac
   shift
 done
@@ -89,31 +89,31 @@ function ssh_resolve() {
   ssh_found=true
   # Filter to only ssh_config lines that start with "Host" or "HostName"
   resolved=$(while read -r ssh_line; do
-    # Split each line by spaces, of the form:
-    # Host alias [alias...]
-    # Host regex
-    # HostName resolved.domain.com
-    read -r -a ssh_array <<<"${ssh_line}"
-    ssh_optcode="$(echo "${ssh_array[0]}" | tr '[:lower:]' '[:upper:]')"
-    if [[ $ssh_optcode == HOST ]]; then
-      # Host
-      ssh_found=false
-      # Iterate through aliases looking for a match
-      for ssh_index in $(seq 1 $((${#ssh_array[@]} - 1))); do
-        ssh_host=${ssh_array[$ssh_index]}
-        # shellcheck disable=SC2053
-        if [[ $domain == $ssh_host ]]; then
-          # Found a match, next HostName entry will be returned while matched
-          ssh_found=true
-          break
-        fi
-      done
-    elif $ssh_found && [[ $ssh_optcode == HOSTNAME ]]; then
-      # HostName, but only if ssh_found is true (the last Host entry matched)
-      # Replace all instances of %h with the Host alias
-      echo "${ssh_array[1]//%h/$domain}"
-    fi
-  done < <(grep -iE "^\\s*Host(Name)?\\s+" "$ssh_config"))
+               # Split each line by spaces, of the form:
+               # Host alias [alias...]
+               # Host regex
+               # HostName resolved.domain.com
+               read -r -a ssh_array <<<"${ssh_line}"
+               ssh_optcode="$(echo "${ssh_array[0]}" | tr '[:lower:]' '[:upper:]')"
+               if [[ $ssh_optcode == HOST ]]; then
+                 # Host
+                 ssh_found=false
+                 # Iterate through aliases looking for a match
+                 for ssh_index in $(seq 1 $((${#ssh_array[@]} - 1))); do
+                   ssh_host=${ssh_array[$ssh_index]}
+                   # shellcheck disable=SC2053
+                   if [[ $domain == $ssh_host ]]; then
+                     # Found a match, next HostName entry will be returned while matched
+                     ssh_found=true
+                     break
+                   fi
+                 done
+               elif $ssh_found && [[ $ssh_optcode == HOSTNAME ]]; then
+                 # HostName, but only if ssh_found is true (the last Host entry matched)
+                 # Replace all instances of %h with the Host alias
+                 echo "${ssh_array[1]//%h/$domain}"
+               fi
+             done < <(grep -iE "^\\s*Host(Name)?\\s+" "$ssh_config"))
   # Take only the last resolved hostname (multiple are overridden)
   tail -1 <<<"$resolved"
 }
@@ -255,15 +255,14 @@ fi
 openurl="$protocol://$domain/$urlpath"
 
 if (( is_commit )); then
-    sha=$(git rev-parse HEAD)
-    openurl="$openurl/commit/$sha"
-elif [[ $remote_ref != "master" ]]; then
-    # simplify URL for master
-    openurl="$openurl$providerBranchRef"
+  sha=$(git rev-parse HEAD)
+  openurl="$openurl/commit/$sha"
+else
+  openurl="$openurl$providerBranchRef"
 fi
 
 if [ "$suffix" ]; then
-    openurl="$openurl/$suffix"
+  openurl="$openurl/$suffix"
 fi
 
 # get current open browser command
@@ -273,11 +272,11 @@ case $( uname -s ) in
   MSYS*)    open='start';;
   CYGWIN*)  open='cygstart';;
   *)        # Try to detect WSL (Windows Subsystem for Linux)
-            if uname -r | grep -q -i Microsoft; then
-              open='powershell.exe Start'
-            else
-              open='xdg-open'
-            fi;;
+    if uname -r | grep -q -i Microsoft; then
+      open='powershell.exe Start'
+    else
+      open='xdg-open'
+    fi;;
 esac
 
 if (( print_only )); then
