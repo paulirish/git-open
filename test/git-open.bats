@@ -380,7 +380,7 @@ setup() {
   git remote set-url origin "https://bitbucket.org/guyzmo/git-repo.git"
   git checkout -B "bugfix/conftest_fix"
   run ../git-open
-  assert_output --partial "https://bitbucket.org/guyzmo/git-repo/src"
+  assert_output --partial "https://bitbucket.org/guyzmo/git-repo/branch"
   # BB appears to be fine with both literal or URL-encoded forward slash
   assert_output --partial "?at=bugfix/conftest_fix"
 }
