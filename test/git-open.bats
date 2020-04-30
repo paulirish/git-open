@@ -371,7 +371,7 @@ setup() {
   git checkout -B "devel"
   run ../git-open
   refute_output --partial "//kisom"
-  assert_output "https://bitbucket.org/kisom/consbri/src/branch/devel"
+  assert_output "https://bitbucket.org/kisom/consbri/branch/devel"
 }
 
 @test "bitbucket: open source view with a slash/branch" {
