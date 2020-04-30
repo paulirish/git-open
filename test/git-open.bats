@@ -355,7 +355,7 @@ setup() {
   git commit -m a
   git checkout mytag
   run ../git-open
-  assert_output "https://bitbucket.org/paulirish/crbug-extension/src?at=mytag"
+  assert_output "https://bitbucket.org/paulirish/crbug-extension/branch/mytag"
 }
 
 @test "bitbucket: non-origin remote" {
@@ -371,7 +371,7 @@ setup() {
   git checkout -B "devel"
   run ../git-open
   refute_output --partial "//kisom"
-  assert_output "https://bitbucket.org/kisom/consbri/src?at=devel"
+  assert_output "https://bitbucket.org/kisom/consbri/src/branch/devel"
 }
 
 @test "bitbucket: open source view with a slash/branch" {
