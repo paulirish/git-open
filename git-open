@@ -187,7 +187,7 @@ fi
 
 if [[ "$domain" == 'bitbucket.org' ]]; then
   # Bitbucket, see https://github.com/paulirish/git-open/issues/80 for why ?at is needed.
-  providerBranchRef="/src?at=$remote_ref"
+  providerBranchRef="/src/$remote_ref"
 elif [[ "${#pathargs[@]}" -ge 3 && ${pathargs[${#pathargs[@]} - 3]} == 'scm' ]]; then
   # Bitbucket server always has /scm/ as the third to last segment in the url path, e.g. /scm/ppp/test-repo.git
   # Anything before the 'scm' is part of the server's root context
