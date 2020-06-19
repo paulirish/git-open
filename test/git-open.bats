@@ -172,6 +172,11 @@ setup() {
   assert_output "https://github.com/paulirish/git-open/anySuffix"
 }
 
+@test "gh: git open --suffix anySuffix?hello=world" {
+  run ../git-open "--suffix" "anySuffix?hello=world"
+  assert_output "https://github.com/paulirish/git-open/anySuffix?hello=world"
+}
+
 @test "gh: gist" {
   git remote set-url origin "git@gist.github.com:2d84a6db1b41b4020685.git"
   run ../git-open
