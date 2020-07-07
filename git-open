@@ -46,7 +46,8 @@ done
 
 # parse suffix from suffix=value
 IFS='=' read -ra suffix_flag <<< "$suffix_flag"
-suffix=${suffix_flag[1]}
+function join_by { local IFS="$1"; shift; echo "$*"; }
+suffix=$(join_by "=" "${suffix_flag[@]:1}")
 
 # are we in a git repo?
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
@@ -143,7 +144,7 @@ else
   # Resolve sshconfig aliases
   if [[ -e "$ssh_config" ]]; then
     domain_resolv=$(ssh_resolve "$domain")
-    if [[ ! -z "$domain_resolv" ]]; then
+    if [[ -n "$domain_resolv" ]]; then
       domain="$domain_resolv"
     fi
   fi
