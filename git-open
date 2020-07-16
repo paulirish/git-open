@@ -240,7 +240,14 @@ openurl="$protocol://$domain/$urlpath"
 
 if (( is_commit )); then
     sha=$(git rev-parse HEAD)
-    openurl="$openurl/commit/$sha"
+    # commits path can be different for the domain
+    if [[ "$domain" == 'bitbucket.org' ]]; then
+      # bitbucket uses `/commits/...` (plural)
+      openurl="$openurl/commits/$sha"
+    else
+      # github and gitlab use `/commit/...` (singular)
+      openurl="$openurl/commit/$sha"
+    fi
 elif [[ $remote_ref != "master" ]]; then
     # simplify URL for master
     openurl="$openurl$providerBranchRef"
