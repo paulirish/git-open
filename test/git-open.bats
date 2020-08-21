@@ -360,7 +360,7 @@ setup() {
   git commit -m a
   git checkout mytag
   run ../git-open
-  assert_output "https://bitbucket.org/paulirish/crbug-extension/src?at=mytag"
+  assert_output "https://bitbucket.org/paulirish/crbug-extension/src/mytag"
 }
 
 @test "bitbucket: non-origin remote" {
@@ -376,7 +376,7 @@ setup() {
   git checkout -B "devel"
   run ../git-open
   refute_output --partial "//kisom"
-  assert_output "https://bitbucket.org/kisom/consbri/src?at=devel"
+  assert_output "https://bitbucket.org/kisom/consbri/src/devel"
 }
 
 @test "bitbucket: open source view with a slash/branch" {
@@ -385,9 +385,7 @@ setup() {
   git remote set-url origin "https://bitbucket.org/guyzmo/git-repo.git"
   git checkout -B "bugfix/conftest_fix"
   run ../git-open
-  assert_output --partial "https://bitbucket.org/guyzmo/git-repo/src"
-  # BB appears to be fine with both literal or URL-encoded forward slash
-  assert_output --partial "?at=bugfix/conftest_fix"
+  assert_output "https://bitbucket.org/guyzmo/git-repo/src/bugfix/conftest_fix"
 }
 
 @test "bitbucket: ssh:// clone urls" {
