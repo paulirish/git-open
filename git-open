@@ -54,7 +54,6 @@ suffix=$(join_by "=" "${suffix_flag[@]:1}")
 
 # parse file from file=value
 IFS='=' read -ra file_flag <<< "$file_flag"
-function join_by { local IFS="$1"; shift; echo "$*"; }
 file=$(join_by "=" "${file_flag[@]:1}")
 
 # are we in a git repo?
