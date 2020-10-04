@@ -1,5 +1,5 @@
-## [Version 2.1.0](https://github.com/:paulirish/git-open/releases/tag/v2.1.0) (2018-12-3)
-[Full changelog](https://github.com/:paulirish/git-open/compare/v2.0.0...v2.1.0)
+## [Version 2.1.0](https://github.com/paulirish/git-open/releases/tag/v2.1.0) (2018-12-3)
+[Full changelog](https://github.com/paulirish/git-open/compare/v2.0.0...v2.1.0)
 
 ### New features
 
@@ -11,14 +11,14 @@
 
 ### Bug fixes
 
-- Fix bug with open -i on default VSTS project repo: [`67b72ac`](https://github.com/:paulirish/git-open/commit/67b72ac), [`aea6e3e`](https://github.com/:paulirish/git-open/commit/aea6e3e)
-- Use ls-remote --get-url to get remote url: [`740222b`](https://github.com/:paulirish/git-open/commit/740222b)
-- Fix shellcheck: [`775361b`](https://github.com/:paulirish/git-open/commit/775361b)
-- Fix incompatability with bash < 4: [`895240f`](https://github.com/:paulirish/git-open/commit/895240f)
-- Swap uppercase/lowercase for ssh feature: [`995e915`](https://github.com/:paulirish/git-open/commit/995e915) ([#123](https://github.com/:paulirish/git-open/issues/123))
-- Remove openopt, allow spaces in $BROWSER: [`96c80ff`](https://github.com/:paulirish/git-open/commit/96c80ff)
-- readme: One liner install for oh-my-zsh: [`29434cd`](https://github.com/:paulirish/git-open/commit/29434cd)
-- deps: change markdownlint to markdownlint-cli: [`702b8a6`](https://github.com/:paulirish/git-open/commit/702b8a6), [`5b815cb`](https://github.com/:paulirish/git-open/commit/5b815cb)
+- Fix bug with open -i on default VSTS project repo: [`67b72ac`](https://github.com/paulirish/git-open/commit/67b72ac), [`aea6e3e`](https://github.com/paulirish/git-open/commit/aea6e3e)
+- Use ls-remote --get-url to get remote url: [`740222b`](https://github.com/paulirish/git-open/commit/740222b)
+- Fix shellcheck: [`775361b`](https://github.com/paulirish/git-open/commit/775361b)
+- Fix incompatability with bash < 4: [`895240f`](https://github.com/paulirish/git-open/commit/895240f)
+- Swap uppercase/lowercase for ssh feature: [`995e915`](https://github.com/paulirish/git-open/commit/995e915) ([#123](https://github.com/paulirish/git-open/issues/123))
+- Remove openopt, allow spaces in $BROWSER: [`96c80ff`](https://github.com/paulirish/git-open/commit/96c80ff)
+- readme: One liner install for oh-my-zsh: [`29434cd`](https://github.com/paulirish/git-open/commit/29434cd)
+- deps: change markdownlint to markdownlint-cli: [`702b8a6`](https://github.com/paulirish/git-open/commit/702b8a6), [`5b815cb`](https://github.com/paulirish/git-open/commit/5b815cb)
 
 
 ---
