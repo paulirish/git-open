@@ -472,6 +472,13 @@ setup() {
     assert_output "https://mybb.domain.com/root/context/projects/~first.last/repos/rrr/browse?at=refs/heads/develop"
 }
 
+@test "bitbucket: Selfhosted Bitbucket Server with ssh:// clone urls" {
+  # https://github.com/paulirish/git-open/pull/174
+  git remote set-url origin "ssh://git@bitbucket.domain.com/ppp/rrr.git"
+  run ../git-open
+  assert_output "https://bitbucket.domain.com/projects/ppp/repos/rrr"
+}
+
 
 ##
 ## GitLab

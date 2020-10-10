@@ -199,6 +199,15 @@ elif [[ "${#pathargs[@]}" -ge 3 && ${pathargs[${#pathargs[@]} - 3]} == 'scm' ]];
   pathargs=(${pathPref[@]} 'projects' ${pathargs[${#pathargs[@]} - 2]} 'repos' "${pathargs[@]:${#pathargs[@]} - 1}")
   IFS='/' urlpath="${pathargs[*]}"
   providerBranchRef="/browse?at=$remote_ref"
+elif [[ "$domain" == *"bitbucket"* ]] && [[ $gitprotocol == 'ssh' ]]; then
+  # bitbucket repo cloned with ssh will not have /scm/ segment in url path
+  # e.g. /ppp/test-repo.git
+
+  # Build the repo url starting with 'projects' and then keep the first argument, the string 'repos', and finally the rest of the arguments.
+  # shellcheck disable=SC2206
+  pathargs=('projects' ${pathargs[${#pathargs[@]} - 2]} 'repos' "${pathargs[@]:${#pathargs[@]} - 1}")
+  IFS='/' urlpath="${pathargs[*]}"
+  providerBranchRef="/browse?at=$remote_ref"
 elif [[ "${#pathargs[@]}" -ge '2' && ${pathargs[${#pathargs[@]} - 2]} == '_git' ]]; then
   # Visual Studio Team Services and Team Foundation Server always have /_git/ as the second to last segment in the url path
   if (( is_issue )); then
