@@ -177,7 +177,8 @@ IFS='/' read -r -a pathargs <<<"$urlpath"
 
 if (( is_issue )); then
   # For issues, take the numbers and preprend 'issues/'
-  providerBranchRef="/issues/${remote_ref//[^0-9]/}"
+  [[ $remote_ref =~ [0-9]+ ]]
+  providerBranchRef="/issues/${BASH_REMATCH[0]}"
 else
   # Make # and % characters url friendly
   #   github.com/paulirish/git-open/pull/24
