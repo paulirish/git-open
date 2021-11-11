@@ -259,7 +259,7 @@ case $( uname -s ) in
             if uname -r | grep -q -i Microsoft; then
               open='powershell.exe Start'
             else
-              open='xdg-open'
+              open='echo'
             fi;;
 esac
 
@@ -268,7 +268,7 @@ if (( print_only )); then
 fi
 
 # Allow printing the url if BROWSER=echo
-if [[ $BROWSER != "echo" ]]; then
+if [[ $BROWSER != "echo" ]] && [[ $BROWSER != "" ]]; then
   exec &>/dev/null
 fi
 
