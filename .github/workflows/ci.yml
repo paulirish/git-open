@@ -19,9 +19,12 @@ jobs:
       with:
         node-version: latest
 
+    - run: npm ci
+
+
     - run: npm run lint
     - run: npm run shellcheck
     - run: npm run unit
     - name: check if manpage needs a regen
-       run: cp git-open.1 git-open.old && npm run man && git diff --no-index ./git-open.old ./git-open.1
+      run: cp git-open.1 git-open.old && npm run man && git diff --no-index ./git-open.old ./git-open.1
 
