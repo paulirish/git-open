@@ -22,5 +22,6 @@ jobs:
     - run: npm run lint
     - run: npm run shellcheck
     - run: npm run unit
-    - run: npm run man && git diff
+    - name: check if manpage needs a regen
+       run: cp git-open.1 git-open.old && npm run man && git diff --no-index ./git-open.old ./git-open.1
 
