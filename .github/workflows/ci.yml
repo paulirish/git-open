@@ -21,6 +21,12 @@ jobs:
 
     - run: npm ci
 
+    - name: Setup BATS
+      uses: mig4/setup-bats@v1
+      with:
+        bats-version: 0.4.0
+    - run: git submodule update --init
+      name: pull in bats assertion libs
 
     - run: npm run lint
     - run: npm run shellcheck
