@@ -12,12 +12,12 @@ git open [remote-name] [branch-name]
 
 git open --commit
 git open -c
-   # Open the current commit in the repo website
+    # Open the current commit in the repo website
 
 git open --issue
 git open -i
-   # If this branch is named like issue/#123, this will open the corresponding
-   # issue in the repo website
+    # If this branch is named like issue/#123, this will open the corresponding
+    # issue in the repo website
 
 git open --print
 git open -p
@@ -93,7 +93,7 @@ for testing before adding it to your `.zshrc`.
 
 1. `git clone https://github.com/paulirish/git-open.git $ZSH_CUSTOM/plugins/git-open`
 1. Add `git-open` to your plugin list - edit `~/.zshrc` and change
-   `plugins=(...)` to `plugins=(... git-open)`
+    `plugins=(...)` to `plugins=(... git-open)`
 
 #### [Zgen](https://github.com/tarjoilija/zgen)
 

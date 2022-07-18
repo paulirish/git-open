@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request: # run on all PRs, not just PRs to a particular branch
+
+jobs:
+  basics:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: git clone
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 100
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: latest
+
+    - run: npm ci
+
+    - name: Setup BATS
+      uses: mig4/setup-bats@v1
+      with:
+        bats-version: 0.4.0  # This is the version i have locally. looks like an upgrade is in order, though…
+    - run: git submodule update --init
+      name: pull in bats assertion libs
+
+    - run: npm run lint
+    - run: npm run shellcheck
+    - run: npm run unit

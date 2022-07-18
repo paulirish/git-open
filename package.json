@@ -32,7 +32,7 @@
   },
   "man": "./git-open.1",
   "scripts": {
-    "lint:editorconfig": "eclint check git-open* readme* .travis.yml",
+    "lint:editorconfig": "eclint check ./git-open *.md *.yml",
     "lint:readme": "markdownlint --config markdownlint.json README.md",
     "lint:man": "markdownlint --config markdownlint.json git-open.1.md",
     "man": "marked-man --version \"git-open $npm_package_version\" --manual \"Git manual\" --section 1 git-open.1.md > git-open.1",
@@ -43,7 +43,9 @@
     "lint": "npm run lint:readme && npm run lint:man && npm run lint:editorconfig",
     "test": "npm run unit && npm run lint",
 
-    "watch": "find . -maxdepth 2 -iname '*bats' -o -iname 'git-open' | entr bats test/"
+    "watch": "find . -maxdepth 2 -iname '*bats' -o -iname 'git-open' | entr bats test/",
+
+    "prepublishOnly": "npm run man && npm run test"
   },
   "devDependencies": {
     "eclint": "^2.1.0",
