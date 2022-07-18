@@ -32,7 +32,7 @@
   },
   "man": "./git-open.1",
   "scripts": {
-    "lint:editorconfig": "eclint check git-open* readme* .travis.yml",
+    "lint:editorconfig": "eclint check ./git-open *.md *.yml",
     "lint:readme": "markdownlint --config markdownlint.json README.md",
     "lint:man": "markdownlint --config markdownlint.json git-open.1.md",
     "man": "marked-man --version \"git-open $npm_package_version\" --manual \"Git manual\" --section 1 git-open.1.md > git-open.1",
