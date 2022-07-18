@@ -522,6 +522,13 @@ setup() {
   assert_output "https://git.example.com:7000/XXX/YYY"
 }
 
+@test "gitlab: issue" {
+  git remote set-url origin "git@gitlab.example.com:user/repo"
+  git checkout -B "10-bump-up-to-v2.0"
+  run ../git-open "--issue"
+  assert_output "https://gitlab.example.com/user/repo/issues/10"
+}
+
 ##
 ## Visual Studio Team Services
 ##
