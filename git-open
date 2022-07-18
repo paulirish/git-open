@@ -245,7 +245,7 @@ if (( is_commit )); then
       # bitbucket uses `/commits/...` (plural)
       openurl="$openurl/commits/$sha"
     else
-      # github and gitlab use `/commit/...` (singular)
+      # github, gitlab, gitea, etc. use `/commit/...` (singular)
       openurl="$openurl/commit/$sha"
     fi
 elif [[ $remote_ref != "master" ]]; then
