@@ -230,7 +230,8 @@ setup() {
 
 @test "basic: http url scheme is preserved" {
   git remote set-url origin "http://github.com/user/repo.git"
-  run ../git-open
+  # ignore any local config like: `url.https://github.com/.insteadof=http://github.com/`
+  GIT_CONFIG_NOSYSTEM=1 run ../git-open
   assert_output "http://github.com/user/repo"
 }
 
