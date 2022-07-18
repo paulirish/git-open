@@ -24,13 +24,10 @@ jobs:
     - name: Setup BATS
       uses: mig4/setup-bats@v1
       with:
-        bats-version: 0.4.0
+        bats-version: 0.4.0  # This is the version i have locally. looks like an upgrade is in order, though…
     - run: git submodule update --init
       name: pull in bats assertion libs
 
     - run: npm run lint
     - run: npm run shellcheck
     - run: npm run unit
-    - name: check if manpage needs a regen
-      run: cp git-open.1 git-open.old && npm run man && git diff --no-index ./git-open.old ./git-open.1
-
