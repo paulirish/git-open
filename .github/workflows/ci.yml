@@ -19,10 +19,8 @@ jobs:
       with:
         node-version: latest
 
-    - run: npm run lint:package
-    - run: npm run lint:readme
-    - run: npm run lint:editorconfig
-    - run: npm run lint:man
-    - run: shellcheck git-open
-    - run: npm run man
-    - run: ./bats/bin/bats test/*.bats
+    - run: npm run lint
+    - run: npm run shellcheck
+    - run: npm run unit
+    - run: npm run man && git diff
+

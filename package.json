@@ -43,7 +43,9 @@
     "lint": "npm run lint:readme && npm run lint:man && npm run lint:editorconfig",
     "test": "npm run unit && npm run lint",
 
-    "watch": "find . -maxdepth 2 -iname '*bats' -o -iname 'git-open' | entr bats test/"
+    "watch": "find . -maxdepth 2 -iname '*bats' -o -iname 'git-open' | entr bats test/",
+
+    "prepublishOnly": "npm run man && npm run test"
   },
   "devDependencies": {
     "eclint": "^2.1.0",
