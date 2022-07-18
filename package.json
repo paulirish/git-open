@@ -1,6 +1,6 @@
 {
   "name": "git-open",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Type `git open` to open the GitHub/GitLab/Bitbucket homepage for a repository.",
   "author": "Paul Irish (http://paulirish.com/)",
   "license": "MIT",
@@ -36,15 +36,11 @@
     "lint:readme": "markdownlint --config markdownlint.json README.md",
     "lint:man": "markdownlint --config markdownlint.json git-open.1.md",
     "man": "marked-man --version \"git-open $npm_package_version\" --manual \"Git manual\" --section 1 git-open.1.md > git-open.1",
-
     "unit": "bats test/",
     "shellcheck": "shellcheck ./git-open",
-
     "lint": "npm run lint:readme && npm run lint:man && npm run lint:editorconfig",
     "test": "npm run unit && npm run lint",
-
     "watch": "find . -maxdepth 2 -iname '*bats' -o -iname 'git-open' | entr bats test/",
-
     "prepublishOnly": "npm run man && npm run test"
   },
   "devDependencies": {
