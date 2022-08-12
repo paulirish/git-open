@@ -58,6 +58,14 @@ setup() {
 	assert_output "http://example.com/example"
 }
 
+@test "url: simplification" {
+	git config --local url.http://example.com/.insteadOf ex:
+	git remote set-url origin ex:example.git
+	git checkout -B main
+	run ../git-open
+	assert_output "http://example.com/example"
+}
+
 ##
 ## GitHub
 ##

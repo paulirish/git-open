@@ -241,8 +241,8 @@ openurl="$protocol://$domain/$urlpath"
 if (( is_commit )); then
     sha=$(git rev-parse HEAD)
     openurl="$openurl/commit/$sha"
-elif [[ $remote_ref != "master" ]]; then
-    # simplify URL for master
+elif [[ $remote_ref != "master" && $remote_ref != "main" ]]; then
+    # simplify URL for master and main
     openurl="$openurl$providerBranchRef"
 fi
 
