@@ -23,8 +23,8 @@ git hosting services are supported.
   it will open the webpage with that issue. See `EXAMPLES` for more information. 
   This only works on GitHub, GitLab, Visual Studio Team Services and Team Foundation Server at the moment.
 
-`-d`, `--default-branch`
-  Open the repository as if you were in the default branch (`master`/`main`)
+`-b`, `--ignore-branch`
+  Just open the repository regardless of the currently checked out branch
 
 `-s`, `--suffix` some_suffix
   Append the given suffix to the url
@@ -64,10 +64,10 @@ https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
 
 
 ```sh
-git open --default-branch
+git open --ignore-branch
 ```
 
-It won't suffix the url with `/tree/CURRENT_BRANCH` even if you aren't currently on `master` or `main` branch, it opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/
+It won't suffix the url with `/tree/CURRENT_BRANCH` regardless of the currently checked out branch, it opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/
 
 ```sh
 git open --suffix pulls

@@ -70,7 +70,7 @@ setup() {
 	git config --local url.http://example.com/.insteadOf ex:
 	git remote set-url origin ex:example.git
 	git checkout -B development
-	run ../git-open -d
+	run ../git-open -b
 	assert_output "http://example.com/example"
 }
 
@@ -78,7 +78,7 @@ setup() {
 	git config --local url.http://example.com/.insteadOf ex:
 	git remote set-url origin ex:example.git
 	git checkout -B development
-	run ../git-open -d -s actions
+	run ../git-open -b -s actions
 	assert_output "http://example.com/example/actions"
 }
 

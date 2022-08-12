@@ -16,11 +16,11 @@ git open [remote] [branch]
   https://github.com/paulirish/git-open/
 
   Available options are
-c,commit!           open current commit
-i,issue!            open issues page
-s,suffix=           append this suffix
-p,print!            just print the url
-d,default-branch!   open the repo as if you were in the default branch (master/main)
+c,commit!         open current commit
+i,issue!          open issues page
+s,suffix=         append this suffix
+p,print!          just print the url
+b,ignore-branch!  just open the repo regardless of the currently checked out branch
 "
 
 # https://github.com/koalaman/shellcheck/wiki/SC1090
@@ -33,7 +33,7 @@ is_issue=0
 protocol="https"
 print_only=0
 suffix_flag=""
-use_default_branch=0
+ignore_branch=0
 
 while test $# != 0; do
   case "$1" in
@@ -41,7 +41,7 @@ while test $# != 0; do
   --issue) is_issue=1;;
   --suffix=*) suffix_flag="$1";;
   --print) print_only=1;;
-  --default-branch) use_default_branch=1;;
+  --ignore-branch) ignore_branch=1;;
   --) shift; break ;;
   esac
   shift
@@ -244,7 +244,7 @@ openurl="$protocol://$domain/$urlpath"
 if (( is_commit )); then
     sha=$(git rev-parse HEAD)
     openurl="$openurl/commit/$sha"
-elif [[ $remote_ref != "master" && $remote_ref != "main" && $use_default_branch != 1 ]]; then
+elif [[ $remote_ref != "master" && $remote_ref != "main" && $ignore_branch != 1 ]]; then
     # simplify URL for master and main
     openurl="$openurl$providerBranchRef"
 fi
