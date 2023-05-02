@@ -118,6 +118,20 @@ git config open.default.remote upstream
 This is equivalent to always typing `git open upstream`.
 
 
+### Gitea options
+
+To configure Gitea support you need to set the following option.
+
+`open.[gitdomain].forge`
+  The git forge present at the git domain. This only needs to be set for Gitea because it uses another branch URL format.
+
+**Example**
+
+```sh
+git config [--global] "open.https://gitea.internal.biz.forge" "gitea"
+```
+
+
 ### GitLab options
 
 To configure GitLab support (or other unique hosting situations) you may need to set some options.

@@ -168,6 +168,7 @@ function getConfig() {
 
 domain=$(getConfig "domain")
 protocol=$(getConfig "protocol")
+forge=$(getConfig "forge")
 
 # Remote ref to open
 remote_ref=${upstream_branch:-${branch:-$(git describe --tags --exact-match 2>/dev/null || git rev-parse HEAD)}}
@@ -183,7 +184,11 @@ else
   # Make # and % characters url friendly
   #   github.com/paulirish/git-open/pull/24
   remote_ref=${remote_ref//%/%25} remote_ref=${remote_ref//#/%23}
-  providerBranchRef="/tree/$remote_ref"
+  if [[ $forge == 'gitea' ]]; then
+    providerBranchRef="/src/branch/$remote_ref"
+  else
+    providerBranchRef="/tree/$remote_ref"
+  fi
 fi
 
 if [[ "$domain" == 'bitbucket.org' ]]; then
