@@ -92,8 +92,9 @@ for testing before adding it to your `.zshrc`.
 #### [Oh-My-Zsh](http://ohmyz.sh/)
 
 1. `git clone https://github.com/paulirish/git-open.git $ZSH_CUSTOM/plugins/git-open`
-1. Add `git-open` to your plugin list - edit `~/.zshrc` and change
+2. Add `git-open` to your plugin list - edit `~/.zshrc` and change
     `plugins=(...)` to `plugins=(... git-open)`
+3. `source ~/.zshrc`
 
 #### [Zgen](https://github.com/tarjoilija/zgen)
 
