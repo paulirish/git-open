@@ -151,7 +151,7 @@ Please provide examples of the URLs you are parsing with each PR.
 
 ### Testing:
 
-You'll need to install [bats](https://github.com/sstephenson/bats#installing-bats-from-source), the Bash automated testing system. It's also available as `brew install bats`
+You'll need to install [bats](https://github.com/bats-core/bats-core), the Bash automated testing system. It's also available as `brew install bats-core`
 
 ```sh
 git submodule update --init # pull in the assertion libraries

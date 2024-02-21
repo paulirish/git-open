@@ -58,6 +58,30 @@ setup() {
 	assert_output "http://example.com/example"
 }
 
+@test "url: simplification" {
+	git config --local url.http://example.com/.insteadOf ex:
+	git remote set-url origin ex:example.git
+	git checkout -B main
+	run ../git-open
+	assert_output "http://example.com/example"
+}
+
+@test "url: use default branch" {
+	git config --local url.http://example.com/.insteadOf ex:
+	git remote set-url origin ex:example.git
+	git checkout -B development
+	run ../git-open -b
+	assert_output "http://example.com/example"
+}
+
+@test "url: use-default with suffix" {
+	git config --local url.http://example.com/.insteadOf ex:
+	git remote set-url origin ex:example.git
+	git checkout -B development
+	run ../git-open -b -s actions
+	assert_output "http://example.com/example/actions"
+}
+
 ##
 ## GitHub
 ##
