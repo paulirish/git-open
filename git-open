@@ -263,7 +263,7 @@ case $( uname -s ) in
   CYGWIN*)  open='cygstart';;
   *)        # Try to detect WSL (Windows Subsystem for Linux)
             if uname -r | grep -q -i Microsoft; then
-              open='powershell.exe -NoProfile Start'
+              open='/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile Start'
             else
               open='xdg-open'
             fi;;
