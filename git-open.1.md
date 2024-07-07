@@ -23,6 +23,9 @@ git hosting services are supported.
   it will open the webpage with that issue. See `EXAMPLES` for more information. 
   This only works on GitHub, GitLab, Visual Studio Team Services and Team Foundation Server at the moment.
 
+`-b`, `--ignore-branch`
+  Just open the repository regardless of the currently checked out branch
+
 `-s`, `--suffix` some_suffix
   Append the given suffix to the url
 
@@ -58,6 +61,13 @@ git open --issue
 
 If branches use naming convention of `issues/#123`, it opens
 https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
+
+
+```sh
+git open --ignore-branch
+```
+
+It won't suffix the url with `/tree/CURRENT_BRANCH` regardless of the currently checked out branch, it opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/
 
 ```sh
 git open --suffix pulls
