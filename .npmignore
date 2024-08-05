@@ -1,0 +1,5 @@
+node_modules/
+sandboxrepo
+git-open.1
+bats-assert
+bats-support
