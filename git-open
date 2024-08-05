@@ -19,6 +19,7 @@ git open [remote] [branch]
 c,commit!     open current commit
 i,issue!      open issues page
 s,suffix=     append this suffix
+f,file=       append this file
 p,print!      just print the url
 "
 
@@ -32,12 +33,14 @@ is_issue=0
 protocol="https"
 print_only=0
 suffix_flag=""
+file_flag=""
 
 while test $# != 0; do
   case "$1" in
   --commit) is_commit=1;;
   --issue) is_issue=1;;
   --suffix=*) suffix_flag="$1";;
+  --file=*) file_flag="$1";;
   --print) print_only=1;;
   --) shift; break ;;
   esac
@@ -48,6 +51,10 @@ done
 IFS='=' read -ra suffix_flag <<< "$suffix_flag"
 function join_by { local IFS="$1"; shift; echo "$*"; }
 suffix=$(join_by "=" "${suffix_flag[@]:1}")
+
+# parse file from file=value
+IFS='=' read -ra file_flag <<< "$file_flag"
+file=$(join_by "=" "${file_flag[@]:1}")
 
 # are we in a git repo?
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
@@ -246,9 +253,18 @@ openurl="$protocol://$domain/$urlpath"
 if (( is_commit )); then
     sha=$(git rev-parse HEAD)
     openurl="$openurl/commit/$sha"
-elif [[ $remote_ref != "master" ]]; then
+elif [[ $remote_ref != "master" || "$file" ]]; then
     # simplify URL for master
     openurl="$openurl$providerBranchRef"
+fi
+
+if [ "$file" ]; then
+    absfile=$(git ls-tree --full-name --name-only $branch $file)
+    if [[ -z "$absfile" ]]; then
+      echo "File $file is not in repository" 1>&2
+      exit 1
+    fi
+    openurl="$openurl/$absfile"
 fi
 
 if [ "$suffix" ]; then
