@@ -89,13 +89,6 @@ start zsh, and periodically checking for updates to the git repository. You can
 also add the plugin to a running zsh with `antigen bundle paulirish/git-open`
 for testing before adding it to your `.zshrc`.
 
-#### [Oh-My-Bash](https://github.com/ohmybash/oh-my-bash)
-
-1. `git clone https://github.com/paulirish/git-open.git $OSH_CUSTOM/plugins/git-open`
-2. Add `git-open` to your plugin list - edit `~/.bashrc` and change
-    `plugins=(...)` to `plugins=(... git-open)`
-3. `source ~/.bashrc`
-
 #### [Oh-My-Zsh](http://ohmyz.sh/)
 
 1. `git clone https://github.com/paulirish/git-open.git $ZSH_CUSTOM/plugins/git-open`
@@ -113,6 +106,15 @@ check for updates to the git repository.
 #### [zplug](https://github.com/zplug/zplug)
 
 `zplug "paulirish/git-open", as:plugin`
+
+### Bash
+
+#### [Oh-My-Bash](https://github.com/ohmybash/oh-my-bash)
+
+1. `git clone https://github.com/paulirish/git-open.git $OSH_CUSTOM/plugins/git-open`
+2. Add `git-open` to your plugin list - edit `~/.bashrc` and change
+    `plugins=(...)` to `plugins=(... git-open)`
+3. `source ~/.bashrc`
 
 ## Supported remote repositories
 
