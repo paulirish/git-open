@@ -626,6 +626,30 @@ setup() {
   assert_output "Issue feature does not supported on AWS Code Commit."
 }
 
+##
+## cnb.cool
+##
+
+@test "cnb: https url" {
+  git remote set-url origin "https://cnb.cool/repos/repo"
+  git checkout -B "master"
+  run ../git-open
+  assert_output "https://cnb.cool/repos/repo/-/tree/master"
+}
+
+@test "cnb: branch " {
+  git remote set-url origin "https://cnb.cool/repos/repo"
+  git checkout -B "mybranch"
+  run ../git-open
+  assert_output "https://cnb.cool/repos/repo/-/tree/mybranch"
+}
+
+@test "cnb: issue" {
+  git remote set-url origin "https://cnb.cool/repos/repo"
+  git checkout -B "issues/10"
+  run ../git-open "--issue"
+  assert_output "https://cnb.cool/repos/repo/-/issues/10"
+}
 
 teardown() {
   cd ..
