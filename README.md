@@ -128,6 +128,7 @@ git-open can automatically guess the corresponding repository page for remotes
 - Visual Studio Team Services
 - Team Foundation Server (on-premises)
 - AWS Code Commit
+- cnb.cool
 
 ## Configuration 
 

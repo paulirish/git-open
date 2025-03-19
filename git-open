@@ -246,8 +246,16 @@ elif [[ "$domain" =~ amazonaws\.com$ ]]; then
   # Replace branch ref.
   # Ex. /tree/foobar -> foobar/--/
   providerBranchRef="${providerBranchRef##*/}/--/"
+elif [[ "$domain" =~ cnb\.cool$ ]]; then
+  # cnb.cool
+  # Replace URL path.
+  # Ex. repos/example -> repos/example/-
+  urlpath="$urlpath/-"
+  if [[ $remote_ref = "master" ]]; then
+    # repos/example/tree/master -> repos/example/-/tree/master
+    urlpath="$urlpath$providerBranchRef"
+  fi
 fi
-
 openurl="$protocol://$domain/$urlpath"
 
 if (( is_commit )); then
