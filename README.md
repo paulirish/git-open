@@ -57,6 +57,12 @@ The preferred way of installation is to simply add the `git-open` script
 somewhere into your path (e.g. add the directory to your `PATH` environment
 or copy `git-open` into an existing included path like `/usr/local/bin`).
 
+Update `~/.gitconfig`
+```
+[alias]
+  open = !git-open
+```
+
 ### Install via NPM:
 
 ```sh
