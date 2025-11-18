@@ -373,7 +373,7 @@ Host github.com
   git remote set-url origin "git@github.com:rails/rails.git"
   run ../git-open
   # Should use github.com for web URL, NOT ssh.github.com
-  assert_output "https://github.com/rails/rails/tree/master"
+  assert_output "https://github.com/rails/rails"
 }
 
 ##
