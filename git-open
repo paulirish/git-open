@@ -16,7 +16,7 @@ git open [remote] [branch]
   https://github.com/paulirish/git-open/
 
   Available options are
-c,commit!     open current commit
+c,commit=     open current commit
 i,issue!      open issues page
 s,suffix=     append this suffix
 f,file=       append this file
@@ -34,10 +34,11 @@ protocol="https"
 print_only=0
 suffix_flag=""
 file_flag=""
+commit_hash=""
 
 while test $# != 0; do
   case "$1" in
-  --commit) is_commit=1;;
+  --commit=*)  is_commit=1;commit_hash="$1";;
   --issue) is_issue=1;;
   --suffix=*) suffix_flag="$1";;
   --file=*) file_flag="$1";;
@@ -259,7 +260,7 @@ fi
 openurl="$protocol://$domain/$urlpath"
 
 if (( is_commit )); then
-    sha=$(git rev-parse HEAD)
+ sha="${commit_hash:-$(git rev-parse HEAD)}"
     openurl="$openurl/commit/$sha"
 elif [[ $remote_ref != "master" || "$file" ]]; then
     # simplify URL for master
