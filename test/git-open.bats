@@ -356,6 +356,26 @@ setup() {
   assert_output "https://override.zero.com/user/repo"
 }
 
+@test "sshconfig: ssh subdomain endpoints should not be used for web URLs" {
+  # When SSH config maps github.com -> ssh.github.com (for SSH over HTTPS port 443),
+  # the web URL should still use github.com, not ssh.github.com
+  # See: https://docs.github.com/en/authentication/troubleshooting-ssh/using-ssh-over-the-https-port
+  create_ssh_sandbox
+
+  # Add github.com -> ssh.github.com mapping to SSH config
+  echo "
+Host github.com
+  HostName ssh.github.com
+  Port 443
+  User git
+" >> $ssh_config
+
+  git remote set-url origin "git@github.com:rails/rails.git"
+  run ../git-open
+  # Should use github.com for web URL, NOT ssh.github.com
+  assert_output "https://github.com/rails/rails"
+}
+
 ##
 ## Bitbucket
 ##
