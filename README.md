@@ -62,6 +62,11 @@ or copy `git-open` into an existing included path like `/usr/local/bin`).
 ```sh
 npm install --global git-open
 ```
+### Fig
+
+Install `git-open` with [Fig](https://fig.io) with one click.
+
+<a href="https://fig.io/plugins/other/git-open" target="_blank"><img src="https://fig.io/badges/install-with-fig.svg" /></a>
 
 ### Windows Powershell
 
