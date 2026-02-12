@@ -167,6 +167,44 @@ setup() {
   assert_output "https://github.com/paulirish/git-open/commit/${sha}"
 }
 
+@test "gh: git open --Commit=sha (valid)" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  # Create a new commit to have a specific SHA
+  echo "content" > testfile
+  git add testfile
+  git commit -m "specific commit"
+  sha=$(git rev-parse HEAD)
+  run ../git-open "--Commit=${sha}"
+  assert_output "https://github.com/paulirish/git-open/commit/${sha}"
+}
+
+@test "gh: git open -C sha (valid)" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  echo "content2" > testfile2
+  git add testfile2
+  git commit -m "specific commit 2"
+  sha=$(git rev-parse HEAD)
+  run ../git-open "-C" "${sha}"
+  assert_output "https://github.com/paulirish/git-open/commit/${sha}"
+}
+
+@test "gh: git open --Commit=HEAD~1 (relative ref)" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  sha_parent=$(git rev-parse HEAD)
+  echo "content3" > testfile3
+  git add testfile3
+  git commit -m "child commit"
+  run ../git-open "--Commit=HEAD~1"
+  assert_output "https://github.com/paulirish/git-open/commit/${sha_parent}"
+}
+
+@test "gh: git open --Commit=invalid (invalid ref)" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  run ../git-open "--Commit=nonexistent_ref"
+  [ "$status" -eq 1 ]
+  assert_output "Commit nonexistent_ref not found"
+}
+
 @test "gh: git open --suffix anySuffix" {
   run ../git-open "--suffix" "anySuffix"
   assert_output "https://github.com/paulirish/git-open/anySuffix"

@@ -17,6 +17,7 @@ git open [remote] [branch]
 
   Available options are
 c,commit!     open current commit
+C,Commit=     open specific commit
 i,issue!      open issues page
 s,suffix=     append this suffix
 f,file=       append this file
@@ -27,8 +28,11 @@ p,print!      just print the url
 # shellcheck source=/dev/null
 SUBDIRECTORY_OK='Yes' . "$(git --exec-path)/git-sh-setup"
 
+function join_by { local IFS="$1"; shift; echo "$*"; }
+
 # Defaults
 is_commit=0
+specific_commit=""
 is_issue=0
 protocol="https"
 print_only=0
@@ -38,6 +42,10 @@ file_flag=""
 while test $# != 0; do
   case "$1" in
   --commit) is_commit=1;;
+  --Commit=*)
+    IFS='=' read -ra specific_commit_flag <<< "$1"
+    specific_commit=$(join_by "=" "${specific_commit_flag[@]:1}")
+    ;;
   --issue) is_issue=1;;
   --suffix=*) suffix_flag="$1";;
   --file=*) file_flag="$1";;
@@ -258,7 +266,14 @@ elif [[ "$domain" =~ cnb\.cool$ ]]; then
 fi
 openurl="$protocol://$domain/$urlpath"
 
-if (( is_commit )); then
+if [[ -n "$specific_commit" ]]; then
+    sha=$(git rev-parse --verify "$specific_commit" 2>/dev/null)
+    if [[ -z "$sha" ]]; then
+      echo "Commit $specific_commit not found" 1>&2
+      exit 1
+    fi
+    openurl="$openurl/commit/$sha"
+elif (( is_commit )); then
     sha=$(git rev-parse HEAD)
     openurl="$openurl/commit/$sha"
 elif [[ $remote_ref != "master" || "$file" ]]; then
