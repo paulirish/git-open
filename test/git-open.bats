@@ -248,6 +248,14 @@ setup() {
   assert_output "http://github.com/user/repo"
 }
 
+@test "basic: open.default.remote configuration" {
+  git remote set-url origin "git@github.com:paulirish/git-open.git"
+  git remote add upstream "git@github.com:upstreamorg/repo.git"
+  git config --local open.default.remote upstream
+  run ../git-open
+  assert_output "https://github.com/upstreamorg/repo"
+}
+
 ##
 ## SSH config
 ##
