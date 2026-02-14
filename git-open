@@ -279,6 +279,9 @@ if [ "$suffix" ]; then
     openurl="$openurl/$suffix"
 fi
 
+# get browser from git config, with URL-specific matching
+browser=$(getConfig "browser")
+
 # get current open browser command
 case $( uname -s ) in
   Darwin)   open='open';;
@@ -298,4 +301,4 @@ if (( print_only )); then
 fi
 
 # open it in a browser
-${BROWSER:-$open} "$openurl"
+eval "${BROWSER:-${browser:-$open}}" \"\$openurl\"

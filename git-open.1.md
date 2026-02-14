@@ -158,6 +158,34 @@ git config [--global] "open.https://git.internal.biz.protocol" "http"
 ```
 
 
+### Browser options
+
+By default, `git open` uses your system's default browser (or the `BROWSER` environment variable if set). You can configure a specific browser globally or per URL pattern using git config's URL matching.
+
+`open.browser`
+  The default browser command to use for opening URLs.
+
+`open.[gitdomain].browser`
+  The browser command to use for URLs matching the given domain/path pattern. The most specific match wins.
+
+This is useful when you want to open different repositories in different browsers (e.g., work repos in Edge, personal repos in Safari).
+
+**Example**
+
+```sh
+# Default: open in Safari
+git config --global open.browser "open -a Safari"
+
+# Company repos: open in Edge
+git config --global "open.https://github.com/company-org.browser" "open -a 'Microsoft Edge'"
+
+# Self-hosted GitLab: open in Firefox
+git config --global "open.https://gitlab.internal.biz.browser" "open -a Firefox"
+```
+
+The `BROWSER` environment variable, if set, takes priority over all git config browser settings.
+
+
 ## DEBUGGING
 
 You can run `git-open` in `echo` mode, which doesn't open your browser, but just prints the URL to stdout:
