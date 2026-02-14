@@ -659,6 +659,56 @@ setup() {
   assert_output "https://cnb.cool/repos/repo/-/issues/10"
 }
 
+##
+## Browser configuration
+##
+
+@test "browser: default browser via open.browser config" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  git checkout -B "master"
+  git config --local open.browser "echo"
+  unset BROWSER
+  run ../git-open
+  assert_output "https://github.com/user/repo"
+}
+
+@test "browser: URL-specific browser via open.<url>.browser config" {
+  git remote set-url origin "git@github.com:company-org/repo.git"
+  git checkout -B "master"
+  git config --local "open.https://github.com/company-org.browser" "echo URL_MATCH"
+  unset BROWSER
+  run ../git-open
+  assert_output "URL_MATCH https://github.com/company-org/repo"
+}
+
+@test "browser: URL-specific overrides default browser config" {
+  git remote set-url origin "git@github.com:company-org/repo.git"
+  git checkout -B "master"
+  git config --local open.browser "echo DEFAULT"
+  git config --local "open.https://github.com/company-org.browser" "echo OVERRIDE"
+  unset BROWSER
+  run ../git-open
+  assert_output "OVERRIDE https://github.com/company-org/repo"
+}
+
+@test "browser: non-matching URL falls back to default browser config" {
+  git remote set-url origin "git@github.com:personal/repo.git"
+  git checkout -B "master"
+  git config --local open.browser "echo DEFAULT"
+  git config --local "open.https://github.com/company-org.browser" "echo COMPANY"
+  unset BROWSER
+  run ../git-open
+  assert_output "DEFAULT https://github.com/personal/repo"
+}
+
+@test "browser: BROWSER env var takes priority over config" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  git checkout -B "master"
+  git config --local open.browser "echo CONFIG"
+  BROWSER="echo" run ../git-open
+  assert_output "https://github.com/user/repo"
+}
+
 teardown() {
   cd ..
   rm -rf "$foldername"
