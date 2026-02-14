@@ -701,6 +701,15 @@ setup() {
   assert_output "DEFAULT https://github.com/personal/repo"
 }
 
+@test "browser: handles quoted arguments in browser command" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  git checkout -B "master"
+  git config --local open.browser "echo 'spaced arg'"
+  unset BROWSER
+  run ../git-open
+  assert_output "spaced arg https://github.com/user/repo"
+}
+
 @test "browser: BROWSER env var takes priority over config" {
   git remote set-url origin "git@github.com:user/repo.git"
   git checkout -B "master"

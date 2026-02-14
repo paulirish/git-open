@@ -301,4 +301,4 @@ if (( print_only )); then
 fi
 
 # open it in a browser
-${BROWSER:-${browser:-$open}} "$openurl"
+eval "${BROWSER:-${browser:-$open}}" \"\$openurl\"
