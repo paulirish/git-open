@@ -16,7 +16,7 @@ git open [remote] [branch]
   https://github.com/paulirish/git-open/
 
   Available options are
-c,commit!     open current commit
+c,commit?     open current commit or specific hash
 i,issue!      open issues page
 s,suffix=     append this suffix
 f,file=       append this file
@@ -29,15 +29,33 @@ SUBDIRECTORY_OK='Yes' . "$(git --exec-path)/git-sh-setup"
 
 # Defaults
 is_commit=0
+commit_hash=""
 is_issue=0
 protocol="https"
 print_only=0
 suffix_flag=""
 file_flag=""
 
+# parse arguments
+# git-sh-setup's parseopt is very limited, so we handle commit hash manually if provided
+# check if the first arg after options or if any arg looks like a hash when --commit is used
+# but git-sh-setup already consumed some? no, we call it after.
+
+# Actually, let's just use a simple loop before git-sh-setup if we want to be fancy,
+# but git-sh-setup is meant to handle the OPTIONS_SPEC.
+
+# Let's try to see if we can just use the arguments directly.
+# git-sh-setup's `eval "$(echo "$OPTIONS_SPEC" | git rev-parse --parseopt -- "$@")"` is what people usually do.
+
 while test $# != 0; do
   case "$1" in
-  --commit) is_commit=1;;
+  --commit)
+    is_commit=1
+    ;;
+  --commit=*)
+    is_commit=1
+    commit_hash="${1#*=}"
+    ;;
   --issue) is_issue=1;;
   --suffix=*) suffix_flag="$1";;
   --file=*) file_flag="$1";;
@@ -259,7 +277,7 @@ fi
 openurl="$protocol://$domain/$urlpath"
 
 if (( is_commit )); then
-    sha=$(git rev-parse HEAD)
+    sha=${commit_hash:-$(git rev-parse HEAD)}
     openurl="$openurl/commit/$sha"
 elif [[ $remote_ref != "master" || "$file" ]]; then
     # simplify URL for master

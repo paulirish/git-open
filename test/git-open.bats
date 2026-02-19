@@ -167,6 +167,12 @@ setup() {
   assert_output "https://github.com/paulirish/git-open/commit/${sha}"
 }
 
+@test "gh: git open --commit=HASH" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  run ../git-open "--commit=abcdef1234567890"
+  assert_output "https://github.com/paulirish/git-open/commit/abcdef1234567890"
+}
+
 @test "gh: git open --suffix anySuffix" {
   run ../git-open "--suffix" "anySuffix"
   assert_output "https://github.com/paulirish/git-open/anySuffix"
