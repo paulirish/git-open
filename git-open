@@ -298,4 +298,4 @@ if (( print_only )); then
 fi
 
 # open it in a browser
-${BROWSER:-$open} "$openurl"
+"${BROWSER:-$open}" "$openurl"
