@@ -3,7 +3,7 @@
 
 ## SYNOPSIS
 
-`git open` [--issue] [--commit] [--suffix some_suffix] [remote-name] [branch-name]
+`git open` [--issue] [--commit] [--pull-request] [--path] [--suffix some_suffix] [--file some_file] [remote-name] [branch-name]
 
 
 ## DESCRIPTION
@@ -15,13 +15,39 @@ git hosting services are supported.
 ## OPTIONS
 
 `-c`, `--commit`
-  Open the current commit. See `EXAMPLES` for more information. 
+  Open the current commit. See `EXAMPLES` for more information.
   Only tested with GitHub & GitLab.
 
 `-i`, `--issue`
-  Open the current issue. When the name of the current branch matches the right pattern, 
-  it will open the webpage with that issue. See `EXAMPLES` for more information. 
+  Open the current issue. When the name of the current branch matches the right pattern,
+  it will open the webpage with that issue. See `EXAMPLES` for more information.
   This only works on GitHub, GitLab, Visual Studio Team Services and Team Foundation Server at the moment.
+
+  Supported branch name formats:
+  - `issue/123`, `issues/123`
+  - `bugfix-123`, `bugfix/123`
+  - `feature-123`, `feature/123`
+  - `fix-123`, `fix/123`
+  - `hotfix-123`, `hotfix/123`
+  - `#123` (just the issue number with hash)
+
+`-r`, `--pull-request`
+  Open the pull requests / merge requests page for the repository.
+  The URL format is automatically determined based on the git hosting service:
+  - GitHub: `/pulls`
+  - GitLab: `/-/merge_requests`
+  - Bitbucket: `/pull-requests`
+  - Azure DevOps: `/_git/pullrequests`
+  - cnb.cool: `/-/merge_requests`
+
+`--path`
+  Open the current directory path in the repo website. This uses the current
+  working directory relative to the repository root to construct the URL.
+  Useful when you want to browse the current folder in the browser.
+
+`-f`, `--file` some_file
+  Append the given file path to the URL. The file path is relative to the
+  repository root. Use `--path` to automatically use the current directory.
 
 `-s`, `--suffix` some_suffix
   Append the given suffix to the url
@@ -56,8 +82,27 @@ It opens https://github.com/PROVIDED_REMOTE_USER/CURRENT_REPO/tree/PROVIDED_BRAN
 git open --issue
 ```
 
-If branches use naming convention of `issues/#123`, it opens
+If branches use naming convention of `issues/#123`, `bugfix-123`, `feature/456`, etc., it opens
 https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
+
+```sh
+git open --pull-request
+```
+
+It opens the URL https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/pulls (GitHub)
+or https://gitlab.example.com/user/repo/-/merge_requests (GitLab)
+
+```sh
+git open --path
+```
+
+It opens the URL https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/tree/CURRENT_BRANCH/current/directory
+
+```sh
+git open --file README.md
+```
+
+It opens the URL https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/tree/CURRENT_BRANCH/README.md
 
 ```sh
 git open --suffix pulls

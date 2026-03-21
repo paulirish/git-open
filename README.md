@@ -18,13 +18,23 @@ git open --issue
 git open -i
     # If this branch is named like issue/#123, this will open the corresponding
     # issue in the repo website
+    # Supports multiple formats: issue/123, bugfix-123, #123, feature/123, fix-123, etc.
+
+git open --pull-request
+git open -r
+    # Open the pull requests / merge requests page for the repository
+    # Supports GitHub, GitLab, Bitbucket, Azure DevOps, and cnb.cool
+
+git open --path
+    # Open the current directory path in the repo website
+    # Useful when you want to browse the current folder in the browser
 
 git open --print
 git open -p
     # Only print the url at the terminal, but don't open it
 ```
 
-(`git open` works with these [hosted repo providers](#supported-remote-repositories), `git open --issue` currently only works with GitHub, Visual Studio Team Services and Team Foundation Server)
+(`git open` works with these [hosted repo providers](#supported-remote-repositories), `git open --issue` currently only works with GitHub, GitLab, Visual Studio Team Services and Team Foundation Server)
 
 ### Examples
 
@@ -39,14 +49,24 @@ $ git open someremote somebranch
 # opens https://github.com/PROVIDED_REMOTE_USER/CURRENT_REPO/tree/PROVIDED_BRANCH
 
 $ git open --issue
-# If branches use naming convention of issues/#123,
+# If branches use naming convention of issues/#123, bugfix-456, feature-789, etc.
 # opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/issues/123
+
+$ git open --pull-request
+# opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/pulls (GitHub)
+# or https://gitlab.example.com/user/repo/-/merge_requests (GitLab)
+
+$ git open --path
+# opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/tree/CURRENT_BRANCH/current/directory
 
 $ git open --print
 # prints https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/tree/CURRENT_BRANCH
 
 $ git open --suffix pulls
 # opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/pulls
+
+$ git open --file README.md
+# opens https://github.com/TRACKED_REMOTE_USER/CURRENT_REPO/tree/CURRENT_BRANCH/README.md
 ```
 
 ## Installation
