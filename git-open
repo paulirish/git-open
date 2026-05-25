@@ -191,11 +191,17 @@ else
   # Make # and % characters url friendly
   #   github.com/paulirish/git-open/pull/24
   remote_ref=${remote_ref//%/%25} remote_ref=${remote_ref//#/%23}
-  if [[ $forge == 'gitea' ]]; then
-    providerBranchRef="/src/branch/$remote_ref"
-  else
-    providerBranchRef="/tree/$remote_ref"
-  fi
+  case "$forge" in
+    gitea|forgejo|codeberg)
+      providerBranchRef="/src/branch/$remote_ref"
+      ;;
+    gogs)
+      providerBranchRef="/src/$remote_ref"
+      ;;
+    *)
+      providerBranchRef="/tree/$remote_ref"
+      ;;
+  esac
 fi
 
 if [[ "$domain" == 'bitbucket.org' ]]; then

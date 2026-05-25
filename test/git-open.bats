@@ -559,6 +559,42 @@ setup() {
 }
 
 ##
+## Gitea / Forgejo / Codeberg / Gogs
+##
+
+@test "forge: codeberg branch" {
+  git remote set-url origin "git@codeberg.org:user/repo.git"
+  git config --local "open.https://codeberg.org.forge" "codeberg"
+  git checkout -B "mybranch"
+  run ../git-open
+  assert_output "https://codeberg.org/user/repo/src/branch/mybranch"
+}
+
+@test "forge: gitea branch" {
+  git remote set-url origin "git@gitea.example.com:user/repo.git"
+  git config --local "open.https://gitea.example.com.forge" "gitea"
+  git checkout -B "mybranch"
+  run ../git-open
+  assert_output "https://gitea.example.com/user/repo/src/branch/mybranch"
+}
+
+@test "forge: forgejo branch" {
+  git remote set-url origin "git@forgejo.example.com:user/repo.git"
+  git config --local "open.https://forgejo.example.com.forge" "forgejo"
+  git checkout -B "mybranch"
+  run ../git-open
+  assert_output "https://forgejo.example.com/user/repo/src/branch/mybranch"
+}
+
+@test "forge: gogs branch" {
+  git remote set-url origin "http://localhost:3000/user/repo.git"
+  git config --local "open.http://localhost:3000.forge" "gogs"
+  git checkout -B "mybranch"
+  run ../git-open
+  assert_output "http://localhost:3000/user/repo/src/mybranch"
+}
+
+##
 ## Visual Studio Team Services
 ##
 

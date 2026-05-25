@@ -127,10 +127,14 @@ git-open can automatically guess the corresponding repository page for remotes
 - GitLab custom hosted (see below)
 - bitbucket.org
 - Atlassian Bitbucket Server (formerly _Atlassian Stash_)
+- Gitea, Forgejo, Codeberg, and Gogs (see below)
 - Visual Studio Team Services
 - Team Foundation Server (on-premises)
 - AWS Code Commit
 - cnb.cool
+
+For Gitea, Forgejo, Codeberg, and Gogs instances, set `open.[gitdomain].forge`
+to the matching forge name so `git-open` uses the appropriate branch URL format.
 
 ## Configuration 
 
@@ -199,4 +203,3 @@ Copyright Jason McCreary & Paul Irish. Licensed under MIT.
 - **2016-07-23** - Readme: fix oh-my-zsh install instructions
 - **2016-07-22** - 1.1.0 shipped. update and add linters for package.json, readme.
 - **2016-07-11** - Readme formatting and installation instructions updated. Changelog started
-

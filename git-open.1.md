@@ -90,6 +90,7 @@ on the following git hosting services:
 - GitLab CE/EE (self hosted GitLab, see `CONFIGURATION`)
 - bitbucket.org
 - Atlassian Bitbucket Server (formerly _Atlassian Stash_)
+- Gitea, Forgejo, Codeberg, and Gogs (see `CONFIGURATION`)
 - Visual Studio Team Services
 - Team Foundation Server (on-premises)
 
@@ -118,17 +119,19 @@ git config open.default.remote upstream
 This is equivalent to always typing `git open upstream`.
 
 
-### Gitea options
+### Forge options
 
-To configure Gitea support you need to set the following option.
+To configure Gitea, Forgejo, Codeberg or Gogs support you need to set the following option.
 
 `open.[gitdomain].forge`
-  The git forge present at the git domain. This only needs to be set for Gitea because it uses another branch URL format.
+  The git forge present at the git domain. This only needs to be set for hosts that do not use the default `/tree/<branch>` branch URL format.
 
 **Example**
 
 ```sh
 git config [--global] "open.https://gitea.internal.biz.forge" "gitea"
+git config [--global] "open.https://codeberg.org.forge" "codeberg"
+git config [--global] "open.http://localhost:3000.forge" "gogs"
 ```
 
 
