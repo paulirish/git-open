@@ -18,8 +18,10 @@ git open [remote] [branch]
   Available options are
 c,commit!     open current commit
 i,issue!      open issues page
+r,pull-request!  open pull request page
 s,suffix=     append this suffix
 f,file=       append this file
+path!         open current directory path
 p,print!      just print the url
 "
 
@@ -30,17 +32,22 @@ SUBDIRECTORY_OK='Yes' . "$(git --exec-path)/git-sh-setup"
 # Defaults
 is_commit=0
 is_issue=0
+is_pull_request=0
 protocol="https"
 print_only=0
 suffix_flag=""
 file_flag=""
+path_flag=""
 
 while test $# != 0; do
   case "$1" in
   --commit) is_commit=1;;
   --issue) is_issue=1;;
+  --pull-request) is_pull_request=1;;
+  -r) is_pull_request=1;;
   --suffix=*) suffix_flag="$1";;
   --file=*) file_flag="$1";;
+  --path) path_flag=1;;
   --print) print_only=1;;
   --) shift; break ;;
   esac
@@ -52,14 +59,26 @@ IFS='=' read -ra suffix_flag <<< "$suffix_flag"
 function join_by { local IFS="$1"; shift; echo "$*"; }
 suffix=$(join_by "=" "${suffix_flag[@]:1}")
 
-# parse file from file=value
-IFS='=' read -ra file_flag <<< "$file_flag"
-file=$(join_by "=" "${file_flag[@]:1}")
-
 # are we in a git repo?
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
   echo "Not a git repository." 1>&2
   exit 1
+fi
+
+# parse file from file=value
+IFS='=' read -ra file_flag <<< "$file_flag"
+file=$(join_by "=" "${file_flag[@]:1}")
+
+# handle --path: use current directory relative to repo root
+path_suffix=""
+if [[ "$path_flag" == "1" ]]; then
+  repo_root=$(git rev-parse --show-toplevel)
+  current_dir=$(pwd)
+  if [[ "$current_dir" != "$repo_root" ]]; then
+    # Get relative path from repo root
+    rel_path="${current_dir#"$repo_root"/}"
+    path_suffix="$rel_path"
+  fi
 fi
 
 # choose remote. priority to: provided argument, default in config, detected tracked remote, 'origin'
@@ -183,10 +202,47 @@ remote_ref=${upstream_branch:-${branch:-$(git describe --tags --exact-match 2>/d
 # Split arguments on '/'
 IFS='/' read -r -a pathargs <<<"$urlpath"
 
+# Extract issue number from branch name
+# Supports formats: issue/123, bugfix-123, #123, issues/123, feature/123, fix-123, etc.
+function extract_issue_number() {
+  local branch_name="$1"
+  local issue_num=""
+  
+  # Try various patterns: issue/123, bugfix-123, #123, etc.
+  if [[ "$branch_name" =~ (^|[-/])(issues?|bugfix|feature|fix|hotfix)?[-/]?[#]?([0-9]+) ]]; then
+    issue_num="${BASH_REMATCH[3]}"
+  elif [[ "$branch_name" =~ ^#?([0-9]+)$ ]]; then
+    # Just a number like #123 or 123
+    issue_num="${BASH_REMATCH[1]}"
+  fi
+  
+  echo "$issue_num"
+}
+
 if (( is_issue )); then
-  # For issues, take the numbers and preprend 'issues/'
-  [[ $remote_ref =~ [0-9]+ ]]
-  providerBranchRef="/issues/${BASH_REMATCH[0]}"
+  issue_number=$(extract_issue_number "$remote_ref")
+  if [[ -z "$issue_number" ]]; then
+    echo "Could not extract issue number from branch name: $remote_ref" 1>&2
+    echo "Supported formats: issue/123, bugfix-123, #123, 123, etc." 1>&2
+    exit 1
+  fi
+  providerBranchRef="/issues/$issue_number"
+elif (( is_pull_request )); then
+  # Generate pull request URL based on platform
+  if [[ "$domain" == 'github.com' || "$domain" == *'github'* ]]; then
+    providerBranchRef="/pulls"
+  elif [[ "$domain" == 'gitlab.com' || "$domain" == *'gitlab'* || "$forge" == 'gitlab' ]]; then
+    providerBranchRef="/-/merge_requests"
+  elif [[ "$domain" == 'bitbucket.org' || "$domain" == *'bitbucket'* ]]; then
+    providerBranchRef="/pull-requests"
+  elif [[ "$domain" == *'visualstudio.com'* || "$domain" == *'azure.com'* || "$domain" == *'dev.azure.com'* ]]; then
+    providerBranchRef="/_git/pullrequests"
+  elif [[ "$domain" =~ cnb\.cool$ ]]; then
+    providerBranchRef="/-/merge_requests"
+  else
+    # Default to GitHub-style /pulls
+    providerBranchRef="/pulls"
+  fi
 else
   # Make # and % characters url friendly
   #   github.com/paulirish/git-open/pull/24
@@ -198,7 +254,11 @@ else
   fi
 fi
 
-if [[ "$domain" == 'bitbucket.org' ]]; then
+# Skip provider-specific branch ref modifications for pull-request only
+# (issue handling is provider-specific and needs to be processed below)
+if (( is_pull_request )); then
+  : # Do nothing, keep the providerBranchRef set earlier
+elif [[ "$domain" == 'bitbucket.org' ]]; then
   providerBranchRef="/src/$remote_ref"
 elif [[ "${#pathargs[@]}" -ge 3 && ${pathargs[${#pathargs[@]} - 3]} == 'scm' ]]; then
   # Bitbucket server always has /scm/ as the third to last segment in the url path, e.g. /scm/ppp/test-repo.git
@@ -257,12 +317,18 @@ elif [[ "$domain" =~ amazonaws\.com$ ]]; then
   providerBranchRef="${providerBranchRef##*/}/--/"
 elif [[ "$domain" =~ cnb\.cool$ ]]; then
   # cnb.cool
-  # Replace URL path.
-  # Ex. repos/example -> repos/example/-
-  urlpath="$urlpath/-"
-  if [[ $remote_ref = "master" ]]; then
-    # repos/example/tree/master -> repos/example/-/tree/master
-    urlpath="$urlpath$providerBranchRef"
+  if (( is_issue || is_pull_request )); then
+    # For issue and pull-request, add the path prefix to urlpath
+    # providerBranchRef already starts with /issues/ or /-/merge_requests
+    urlpath="$urlpath/-"
+  else
+    # Replace URL path.
+    # Ex: repos/example -> repos/example/-
+    urlpath="$urlpath/-"
+    if [[ $remote_ref = "master" ]]; then
+      # repos/example/tree/master -> repos/example/-/tree/master
+      urlpath="$urlpath$providerBranchRef"
+    fi
   fi
 fi
 openurl="$protocol://$domain/$urlpath"
@@ -270,7 +336,13 @@ openurl="$protocol://$domain/$urlpath"
 if (( is_commit )); then
     sha=$(git rev-parse HEAD)
     openurl="$openurl/commit/$sha"
-elif [[ $remote_ref != "master" || "$file" ]]; then
+elif (( is_pull_request )); then
+    # For pull requests, just add the PR path
+    openurl="$openurl$providerBranchRef"
+elif (( is_issue )); then
+    # For issues, just add the issue path
+    openurl="$openurl$providerBranchRef"
+elif [[ $remote_ref != "master" || "$file" || "$path_suffix" ]]; then
     # simplify URL for master
     openurl="$openurl$providerBranchRef"
 fi
@@ -282,6 +354,11 @@ if [ "$file" ]; then
       exit 1
     fi
     openurl="$openurl/$absfile"
+fi
+
+# Add path_suffix from --path option
+if [ "$path_suffix" ]; then
+    openurl="$openurl/$path_suffix"
 fi
 
 if [ "$suffix" ]; then

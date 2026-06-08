@@ -666,6 +666,140 @@ setup() {
   assert_output "https://cnb.cool/repos/repo/-/issues/10"
 }
 
+##
+## Enhanced --issue with multiple branch name formats
+##
+
+@test "gh: git open --issue with bugfix- prefix" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  git checkout -B "bugfix-123"
+  run ../git-open "--issue"
+  assert_output "https://github.com/paulirish/git-open/issues/123"
+}
+
+@test "gh: git open --issue with feature/ prefix" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  git checkout -B "feature/456"
+  run ../git-open "--issue"
+  assert_output "https://github.com/paulirish/git-open/issues/456"
+}
+
+@test "gh: git open --issue with fix- prefix" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  git checkout -B "fix-789"
+  run ../git-open "--issue"
+  assert_output "https://github.com/paulirish/git-open/issues/789"
+}
+
+@test "gh: git open --issue with hotfix- prefix" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  git checkout -B "hotfix-999"
+  run ../git-open "--issue"
+  assert_output "https://github.com/paulirish/git-open/issues/999"
+}
+
+@test "gh: git open --issue with # prefix" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  git checkout -B "#42"
+  run ../git-open "--issue"
+  assert_output "https://github.com/paulirish/git-open/issues/42"
+}
+
+@test "gh: git open --issue error when no issue number found" {
+  git remote set-url origin "github.com:paulirish/git-open.git"
+  git checkout -B "some-random-branch"
+  run ../git-open "--issue"
+  [ "$status" -eq 1 ]
+  assert_output --partial "Could not extract issue number from branch name"
+  assert_output --partial "Supported formats: issue/123, bugfix-123, #123, 123, etc."
+}
+
+##
+## --pull-request tests
+##
+
+@test "gh: git open --pull-request" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  run ../git-open "--pull-request"
+  assert_output "https://github.com/user/repo/pulls"
+}
+
+@test "gh: git open -r (short option)" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  run ../git-open "-r"
+  assert_output "https://github.com/user/repo/pulls"
+}
+
+@test "gitlab: git open --pull-request" {
+  git remote set-url origin "git@gitlab.com:user/repo.git"
+  run ../git-open "--pull-request"
+  assert_output "https://gitlab.com/user/repo/-/merge_requests"
+}
+
+@test "gitlab: git open -r (short option)" {
+  git remote set-url origin "git@gitlab.com:user/repo.git"
+  run ../git-open "-r"
+  assert_output "https://gitlab.com/user/repo/-/merge_requests"
+}
+
+@test "bitbucket: git open --pull-request" {
+  git remote set-url origin "git@bitbucket.org:user/repo.git"
+  run ../git-open "--pull-request"
+  assert_output "https://bitbucket.org/user/repo/pull-requests"
+}
+
+@test "bitbucket: git open -r (short option)" {
+  git remote set-url origin "git@bitbucket.org:user/repo.git"
+  run ../git-open "-r"
+  assert_output "https://bitbucket.org/user/repo/pull-requests"
+}
+
+@test "cnb: git open --pull-request" {
+  git remote set-url origin "https://cnb.cool/repos/repo"
+  run ../git-open "--pull-request"
+  assert_output "https://cnb.cool/repos/repo/-/merge_requests"
+}
+
+@test "cnb: git open -r (short option)" {
+  git remote set-url origin "https://cnb.cool/repos/repo"
+  run ../git-open "-r"
+  assert_output "https://cnb.cool/repos/repo/-/merge_requests"
+}
+
+##
+## --path tests
+##
+
+@test "gh: git open --path in root directory" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  run ../git-open "--path"
+  assert_output "https://github.com/user/repo"
+}
+
+@test "gh: git open --path in subdirectory" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  mkdir -p subdir/nested
+  # Create a file in the directory so git tracks it
+  touch subdir/nested/.gitkeep
+  git add subdir
+  git commit -m "add subdir" -q
+  # Run from the subdirectory with explicit cd
+  run bash -c 'cd subdir/nested && "$0" --path' "$BATS_TEST_DIRNAME/../git-open"
+  assert_output "https://github.com/user/repo/tree/master/subdir/nested"
+}
+
+@test "gh: git open --path combined with branch" {
+  git remote set-url origin "git@github.com:user/repo.git"
+  git checkout -B "feature-branch"
+  mkdir -p src/components
+  touch src/components/.gitkeep
+  git add src
+  git commit -m "add src dir" -q
+  # Run from the subdirectory with explicit cd
+  run bash -c 'cd src/components && "$0" --path' "$BATS_TEST_DIRNAME/../git-open"
+  assert_output "https://github.com/user/repo/tree/feature-branch/src/components"
+}
+
 teardown() {
   cd ..
   rm -rf "$foldername"
