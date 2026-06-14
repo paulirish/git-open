@@ -157,6 +157,11 @@ else
   fi
 fi
 
+# Normalize GitHub's SSH gateway hostname back to github.com for URL generation.
+# ssh.github.com is used when connecting via SSH over port 443 (GitHub's SSH-over-HTTPS gateway),
+# but the generated URL should still point to github.com.
+domain=${domain//ssh\.github\.com/github.com}
+
 # Trim "/" from beginning of URL; "/" and ".git" from end of URL
 urlpath=${urlpath#/} urlpath=${urlpath%/} urlpath=${urlpath%.git}
 
