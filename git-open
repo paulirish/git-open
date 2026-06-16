@@ -152,7 +152,13 @@ else
   if [[ -e "$ssh_config" ]]; then
     domain_resolv=$(ssh_resolve "$domain")
     if [[ -n "$domain_resolv" ]]; then
-      domain="$domain_resolv"
+      # Don't use ssh.* subdomains for web URLs (e.g., ssh.github.com)
+      if [[ $domain != ssh.* && $domain_resolv == ssh.* ]]; then
+        # Keep the original domain instead of using ssh.* subdomain
+        :
+      else
+        domain="$domain_resolv"
+      fi
     fi
   fi
 fi
