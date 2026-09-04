@@ -385,6 +385,13 @@ setup() {
   assert_output "https://bitbucket.org/paulirish/crbug-extension/src/mytag"
 }
 
+@test "bitbucket: commit" {
+  git remote set-url origin "git@bitbucket.org:paulirish/crbug-extension.git"
+  sha=$(git rev-parse HEAD)
+  run ../git-open "--commit"
+  assert_output "https://bitbucket.org/paulirish/crbug-extension/commits/${sha}"
+}
+
 @test "bitbucket: non-origin remote" {
   # https://github.com/paulirish/git-open/pull/4
   git remote add bbclone "git@bitbucket.org:rwhitbeck/git-open.git"
@@ -401,13 +408,14 @@ setup() {
   assert_output "https://bitbucket.org/kisom/consbri/src/devel"
 }
 
-@test "bitbucket: open source view with a slash/branch" {
+@test "bitbucket: slash branch source view via ?at=" {
   # https://github.com/paulirish/git-open/pull/26
   # see https://github.com/paulirish/git-open/issues/80 for feat/branchname issues
+  # /src/bugfix/conftest_fix 404s (Bitbucket reads 'bugfix' as the ref), so browse HEAD?at=<branch>
   git remote set-url origin "https://bitbucket.org/guyzmo/git-repo.git"
   git checkout -B "bugfix/conftest_fix"
   run ../git-open
-  assert_output "https://bitbucket.org/guyzmo/git-repo/src/bugfix/conftest_fix"
+  assert_output "https://bitbucket.org/guyzmo/git-repo/src/HEAD/?at=bugfix%2Fconftest_fix"
 }
 
 @test "bitbucket: ssh:// clone urls" {
