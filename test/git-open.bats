@@ -398,7 +398,7 @@ setup() {
   git checkout -B "devel"
   run ../git-open
   refute_output --partial "//kisom"
-  assert_output "https://bitbucket.org/kisom/consbri/src/devel"
+  assert_output "https://bitbucket.org/kisom/consbri/branch/devel"
 }
 
 @test "bitbucket: open source view with a slash/branch" {
@@ -407,7 +407,7 @@ setup() {
   git remote set-url origin "https://bitbucket.org/guyzmo/git-repo.git"
   git checkout -B "bugfix/conftest_fix"
   run ../git-open
-  assert_output "https://bitbucket.org/guyzmo/git-repo/src/bugfix/conftest_fix"
+  assert_output "https://bitbucket.org/guyzmo/git-repo/branch/bugfix/conftest_fix"
 }
 
 @test "bitbucket: ssh:// clone urls" {
