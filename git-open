@@ -157,6 +157,15 @@ else
   fi
 fi
 
+# Normalize known SSH host aliases to their web URL hosts.
+# These are the SSH-over-HTTPS endpoints used when port 22 is blocked,
+# and their web URLs live on the regular domains.
+# e.g. git@ssh.github.com:owner/repo.git should open https://github.com/owner/repo
+case $domain in
+  ssh.github.com) domain='github.com' ;;
+  altssh.gitlab.com) domain='gitlab.com' ;;
+esac
+
 # Trim "/" from beginning of URL; "/" and ".git" from end of URL
 urlpath=${urlpath#/} urlpath=${urlpath%/} urlpath=${urlpath%.git}
 

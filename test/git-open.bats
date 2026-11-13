@@ -137,6 +137,24 @@ setup() {
   assert_output "https://github.com/user/repo"
 }
 
+@test "gh: ssh-over-443 endpoint (ssh.github.com) with scp-like syntax" {
+  git remote set-url origin "git@ssh.github.com:user/repo.git"
+  run ../git-open
+  assert_output "https://github.com/user/repo"
+}
+
+@test "gh: ssh-over-443 endpoint (ssh://git@ssh.github.com:443)" {
+  git remote set-url origin "ssh://git@ssh.github.com:443/user/repo.git"
+  run ../git-open
+  assert_output "https://github.com/user/repo"
+}
+
+@test "gitlab: ssh-over-443 endpoint (altssh.gitlab.com)" {
+  git remote set-url origin "ssh://git@altssh.gitlab.com:443/user/repo.git"
+  run ../git-open
+  assert_output "https://gitlab.com/user/repo"
+}
+
 @test "gh: git protocol origin" {
   git remote set-url origin "git://github.com/user/repo.git"
   git checkout -B "master"
